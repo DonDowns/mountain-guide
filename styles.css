@@ -1539,3 +1539,53 @@ body{background-image:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--i
 .campfire-mode .lodging-contact a{
   color:#ffd9cb;
 }
+
+
+/* Version 7.2 — photo-verified gear inventory */
+.pack-section .pack-item-meta .gear-badge.conditional{
+  white-space:nowrap;
+}
+.gear-row small{
+  line-height:1.35;
+}
+
+
+/* Version 7.3 — transcript-verified climb history */
+.milestone-strip{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:14px;
+}
+.milestone-strip span{
+  min-height:68px;
+  padding:10px 11px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  color:var(--muted);
+  background:var(--paper);
+  font-size:12px;
+}
+.milestone-strip b{
+  display:block;
+  margin-bottom:4px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.milestone-badge{
+  background:color-mix(in srgb,var(--gold) 20%,var(--cream));
+}
+.ascent-row p b{
+  color:var(--ink);
+}
+@media(max-width:720px){
+  .milestone-strip{grid-template-columns:1fr}
+}
+.campfire-mode .milestone-strip span,
+.campfire-mode .milestone-badge{
+  background:#2b0b07;
+  border-color:rgba(255,106,60,.24);
+  color:#ffd9cb;
+}

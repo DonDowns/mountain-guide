@@ -96,3 +96,17 @@ VERSION 7.1.4 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v7.1.4 Lodging Contact and Directions
+
+
+VERSION 7.2 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.2 Photo Gear Integration
+
+
+VERSION 7.3 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.3 Transcript Climb History

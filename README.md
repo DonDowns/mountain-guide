@@ -139,3 +139,21 @@ number and booking credentials private.
 GitHub commit message:
 
 `Deploy Mountain Guide v7.1.4 Lodging Contact and Directions`
+
+
+## Version 7.2
+
+Version 7.2 integrates the reviewed photo-verified gear inventory into the Gear Locker, adds a one-time saved-locker refresh for existing gear IDs, corrects optional gear weight behavior, and updates summit partner records from Don’s latest corrections.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.2 Photo Gear Integration`
+
+
+## Version 7.3
+
+Version 7.3 incorporates Don’s transcript from his 14ers.com climb review, correcting first/second climb milestones, partners, combo climbs, summit memories, conditions, and gear-worn notes.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.3 Transcript Climb History`
