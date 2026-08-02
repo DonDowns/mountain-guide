@@ -1,22 +1,85 @@
 {
+  "id": "./",
   "name": "Don Downs Mountain Guide",
   "short_name": "Mountain Guide",
-  "start_url": "./",
+  "description": "A field-ready Colorado mountain guide with live summit forecasts, trip intelligence, checklists, 14er tracking and offline access.",
+  "start_url": "./?source=homescreen",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#eef2f5",
-  "theme_color": "#17324D",
-  "description": "Mobile expedition guide, 14er tracker, gear checklist, and field reference.",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#071923",
+  "theme_color": "#0b2b3d",
+  "categories": [
+    "travel",
+    "navigation",
+    "sports"
+  ],
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Trip Intelligence",
+      "short_name": "Weather",
+      "description": "Open live forecasts and current-condition review tools.",
+      "url": "./#intelligence",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Expedition Today",
+      "short_name": "Today",
+      "description": "Open the current expedition day.",
+      "url": "./#expedition",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Gear Checklist",
+      "short_name": "Gear",
+      "description": "Open persistent approach and summit checklists.",
+      "url": "./#gear",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Emergency Plan",
+      "short_name": "Emergency",
+      "description": "Open communication and turnaround guidance.",
+      "url": "./#emergency",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

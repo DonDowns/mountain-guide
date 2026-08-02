@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#E8A956"/><stop offset=".35" stop-color="#7BA7B8"/><stop offset="1" stop-color="#102C3D"/></linearGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#386C7F"/><stop offset="1" stop-color="#071923"/></linearGradient>
+<filter id="soft"><feGaussianBlur stdDeviation="20"/></filter>
+</defs>
+<rect width="1800" height="900" fill="url(#sky)"/>
+<circle cx="1375" cy="175" r="92" fill="#FFD894" opacity=".92"/>
+<ellipse cx="1375" cy="175" rx="150" ry="100" fill="#FFD894" opacity=".16" filter="url(#soft)"/>
+<path d="M0 560 L240 290 L420 455 L720 120 L920 470 L1120 220 L1350 500 L1540 300 L1800 525 L1800 900 L0 900Z" fill="#EDF3F3"/>
+<path d="M0 620 L290 390 L480 560 L770 235 L965 555 L1170 345 L1380 590 L1560 420 L1800 600 L1800 900 L0 900Z" fill="#7B98A4"/>
+<path d="M0 690 L320 515 L565 650 L830 420 L1080 660 L1320 510 L1800 680 L1800 900 L0 900Z" fill="#21485B"/>
+<path d="M0 650 C330 625 580 690 880 655 C1190 620 1480 690 1800 640 L1800 900 L0 900Z" fill="url(#water)"/>
+<path d="M590 900 C690 820 785 750 900 670 C835 760 785 830 750 900Z" fill="#D7A04B" opacity=".82"/>
+</svg>
