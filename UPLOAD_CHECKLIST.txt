@@ -19,3 +19,24 @@ VERSION 6.2 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v6.2 Daily Formation Edition
+
+
+VERSION 6.3 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v6.3 AI Companion Edition
+
+
+VERSION 6.5.1 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v6.5.1 Safety Language Fix
+
+
+VERSION 6.6 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v6.6 Gear Locker and Pack Builder

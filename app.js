@@ -68,16 +68,407 @@ function countdown(){
 }
 setInterval(countdown,30000);countdown();
 
-const boxes=[...document.querySelectorAll('input[type=checkbox][data-save]')];
+
+// Version 6.6 — reusable Personal Gear Locker and Smart Pack Builder.
+const GEAR_LOCKER_KEY='ddmg-v6-6-gear-locker';
+const PACK_STATE_KEY='ddmg-v6-6-pack-state';
+const PACK_PROFILE_KEY='ddmg-v6-6-pack-profile';
+const CUSTOM_PACK_KEY='ddmg-v6-6-custom-pack';
+
+const GEAR_CATEGORIES=[
+ ['packs','Packs'],['shelter','Shelter'],['sleep','Sleep'],['clothing','Clothing'],
+ ['navigation','Navigation & electronics'],['water','Water'],['food','Food & kitchen'],
+ ['safety','Safety'],['vehicle','Vehicle & lodging'],['personal','Personal']
+];
+const GEAR_STATUSES=[
+ ['owned','Owned'],['rent','Rent'],['borrow','Borrow'],['shared','Shared / assigned'],
+ ['conditional','Conditions-dependent'],['verify','Verify before trip']
+];
+const LOCATION_LABELS={
+ worn:'Wear / immediate access',main:'Main pack',summit:'Summit or day pack',
+ vehicle:'Vehicle / lodging',shared:'Shared group gear',conditional:'Conditional'
+};
+
+const BASE_GEAR=[
+ {id:'paragon60',name:'Gregory Paragon 60',category:'packs',status:'owned',location:'main',weightOz:null,note:'Primary overnight backpack.'},
+ {id:'flash18',name:'REI Flash 18',category:'packs',status:'owned',location:'summit',weightOz:null,note:'Packs flat inside the main backpack; used for summit day.'},
+ {id:'ospreyManta',name:'Osprey Manta day pack',category:'packs',status:'owned',location:'summit',weightOz:null,note:'Reusable day-hike and hydration-pack option.'},
+
+ {id:'sweetSuite2',name:'Sierra Designs Sweet Suite 2 tent',category:'shelter',status:'owned',location:'main',weightOz:null,note:'Primary backpacking shelter for Lake Como.'},
+ {id:'tepui2',name:'Tepui two-person rooftop tent',category:'shelter',status:'owned',location:'vehicle',weightOz:null,note:'Exact model not recorded. Optional vehicle-camp shelter carried on the Audi Q5.'},
+ {id:'tepuiHardware',name:'Tepui ladder and mounting hardware',category:'shelter',status:'verify',location:'vehicle',weightOz:null,note:'Confirm all mounting components before a rooftop-camping trip.'},
+ {id:'roofSystemCheck',name:'Audi Q5 roof system and rated-load verification',category:'vehicle',status:'verify',location:'vehicle',weightOz:null,note:'Confirm vehicle, crossbar, mounting, and tent limits for the exact setup.'},
+
+ {id:'sleepingBag20',name:'20°F down sleeping bag',category:'sleep',status:'rent',location:'main',weightOz:null,note:'Rent for Lake Como; pack inside a waterproof liner.'},
+ {id:'insulatedPad',name:'Insulated sleeping pad, approximately R-4+',category:'sleep',status:'rent',location:'main',weightOz:null,note:'Rent for Lake Como.'},
+ {id:'pillow',name:'Compact camp pillow or clothing-stuff sack',category:'sleep',status:'conditional',location:'main',weightOz:null,note:'Comfort item; not required if clothing serves as a pillow.'},
+
+ {id:'hikingFootwear',name:'Hiking footwear',category:'clothing',status:'owned',location:'worn',weightOz:null,note:'Broken in and appropriate for the route.'},
+ {id:'hikingClothes',name:'Hiking base layer and pants or shorts',category:'clothing',status:'owned',location:'worn',weightOz:null,note:'Primary moving layer.'},
+ {id:'rainShell',name:'Rain shell',category:'clothing',status:'owned',location:'main',weightOz:null,note:'Accessible without unpacking the entire backpack.'},
+ {id:'puffy',name:'Insulated puffy jacket',category:'clothing',status:'owned',location:'main',weightOz:null,note:'Summit and camp insulation.'},
+ {id:'fleece',name:'Fleece or active midlayer',category:'clothing',status:'owned',location:'main',weightOz:null,note:'Moving and camp layer.'},
+ {id:'beanie',name:'Warm beanie',category:'clothing',status:'owned',location:'main',weightOz:null,note:''},
+ {id:'gloves',name:'Warm gloves',category:'clothing',status:'owned',location:'main',weightOz:null,note:''},
+ {id:'drySocks',name:'Dry camp socks and spare hiking socks',category:'clothing',status:'owned',location:'main',weightOz:null,note:'Keep one pair dry for camp and sleep.'},
+ {id:'sunHat',name:'Sun hat',category:'clothing',status:'owned',location:'worn',weightOz:null,note:''},
+ {id:'sunglasses',name:'Sunglasses',category:'clothing',status:'owned',location:'worn',weightOz:null,note:'High-altitude eye protection.'},
+ {id:'campShoes',name:'Camp or lodging footwear',category:'clothing',status:'conditional',location:'vehicle',weightOz:null,note:'Comfort item; vehicle or lodging bag.'},
+
+ {id:'phoneOffline',name:'Phone with offline maps and route pages',category:'navigation',status:'owned',location:'worn',weightOz:null,note:'Download before leaving service.'},
+ {id:'routeScreens',name:'Route screenshots, GPX, and key route photographs',category:'navigation',status:'owned',location:'summit',weightOz:0,note:'Stored offline on the phone; print critical pages when useful.'},
+ {id:'garmin965',name:'Garmin Forerunner 965',category:'navigation',status:'owned',location:'worn',weightOz:null,note:'Course loaded; Hiking activity for standard Class 1–3 routes.'},
+ {id:'inreach',name:'Garmin inReach',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Charged, active plan confirmed, attached high on a shoulder strap.'},
+ {id:'headlamp',name:'Primary headlamp',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Required for alpine starts.'},
+ {id:'headlampBackup',name:'Backup headlamp or tested spare battery',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Independent backup for pre-dawn travel.'},
+ {id:'powerBank',name:'Power bank',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Charged before departure.'},
+ {id:'chargingCables',name:'Phone, Garmin, and inReach charging cables',category:'navigation',status:'owned',location:'vehicle',weightOz:null,note:'Keep travel and camp charging needs distinct.'},
+ {id:'paperEmergency',name:'Printed emergency and communication card',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Offline redundancy.'},
+
+ {id:'hydrationReservoir',name:'Hydration reservoir and bottles',category:'water',status:'owned',location:'main',weightOz:null,note:'Total capacity 2–3 L for summit use.'},
+ {id:'waterFilter',name:'Water filter',category:'water',status:'owned',location:'main',weightOz:null,note:'Do not split critical water-treatment capability.'},
+ {id:'vehicleWater',name:'Vehicle reserve water',category:'water',status:'owned',location:'vehicle',weightOz:null,note:'Travel, trailhead, and post-hike reserve.'},
+ {id:'electrolytes',name:'Electrolyte mix',category:'water',status:'owned',location:'main',weightOz:null,note:'Use in one bottle or reservoir according to the trip plan.'},
+
+ {id:'trailFuel',name:'Trail food: granola bars and trail mix',category:'food',status:'owned',location:'main',weightOz:null,note:'Trail mix preference: nuts, M&Ms, and raisins. Target 150–250 kcal per hour on summit days.'},
+ {id:'dehydratedMeals',name:'Dehydrated camp dinners',category:'food',status:'owned',location:'main',weightOz:null,note:'One per planned camp dinner plus only the margin the itinerary warrants.'},
+ {id:'breakfastFood',name:'Backpacking breakfast',category:'food',status:'owned',location:'main',weightOz:null,note:'Target approximately 300–500 kcal before moving.'},
+ {id:'spoonMug',name:'Long spoon and insulated mug',category:'food',status:'owned',location:'main',weightOz:null,note:''},
+ {id:'sharedStove',name:"Friend's stove",category:'food',status:'shared',location:'shared',weightOz:null,note:'Confirm the assigned carrier and fuel compatibility.'},
+ {id:'sharedFuel',name:'Stove fuel',category:'food',status:'shared',location:'shared',weightOz:null,note:'Confirm quantity and carrier with the stove owner.'},
+ {id:'cooler',name:'Vehicle cooler and post-hike food',category:'food',status:'conditional',location:'vehicle',weightOz:null,note:'Vehicle and lodging support, not carried to camp.'},
+
+ {id:'firstAid',name:'Compact first-aid and blister kit',category:'safety',status:'owned',location:'main',weightOz:null,note:'Personal kit; group plan should not depend on one inaccessible kit.'},
+ {id:'emergencyBivy',name:'Emergency bivy or blanket',category:'safety',status:'owned',location:'summit',weightOz:null,note:''},
+ {id:'helmet',name:'Climbing helmet',category:'safety',status:'owned',location:'main',weightOz:null,note:'Carry for Class 3 terrain and rockfall exposure.'},
+ {id:'poles',name:'Trekking poles',category:'safety',status:'borrow',location:'main',weightOz:null,note:'Borrow or rent for the loaded Lake Como approach.'},
+ {id:'microspikes',name:'Microspikes',category:'safety',status:'conditional',location:'conditional',weightOz:null,note:'Add only when current route conditions warrant traction.'},
+ {id:'iceAxe',name:'Ice axe',category:'safety',status:'conditional',location:'conditional',weightOz:null,note:'Add only when snow conditions, route, and competence warrant it.'},
+ {id:'repairKit',name:'Small repair kit and tape',category:'safety',status:'owned',location:'main',weightOz:null,note:'Shelter, pad, and pack field repair.'},
+ {id:'sunscreenLip',name:'Sunscreen and SPF lip protection',category:'safety',status:'owned',location:'worn',weightOz:null,note:'High-altitude sun exposure.'},
+
+ {id:'audiQ5',name:'Audi Q5',category:'vehicle',status:'owned',location:'vehicle',weightOz:0,note:'Default travel vehicle. Do not assume it is the correct vehicle for the roughest portion of Lake Como Road.'},
+ {id:'vehicleKeys',name:'Audi keys and deliberate spare-key plan',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:'Keep the spare with a different responsible adult when practical.'},
+ {id:'fuelTopOff',name:'Fuel topped off before remote travel',category:'vehicle',status:'verify',location:'vehicle',weightOz:0,note:''},
+ {id:'lodgingBag',name:'Separate lodging and travel bag',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:'Keep it separate from the intact backpacking system.'},
+ {id:'cleanClothes',name:'Clean return clothes',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:''},
+ {id:'toiletriesMeds',name:'Toiletries and personal medications',category:'personal',status:'owned',location:'vehicle',weightOz:null,note:'Keep essential medication accessible and protected.'},
+ {id:'walletId',name:'Wallet, identification, and permits or waiver copy',category:'personal',status:'owned',location:'worn',weightOz:null,note:'Keep sensitive confirmation details outside the public app.'},
+ {id:'lindseyWaiver',name:'Mount Lindsey waiver confirmation saved offline',category:'personal',status:'verify',location:'vehicle',weightOz:0,note:'Reconfirm current access requirements before departure.'},
+ {id:'groupShelterPlan',name:'Group shelter and critical-gear assignment confirmed',category:'safety',status:'shared',location:'shared',weightOz:0,note:'Do not split critical shelter, water treatment, or emergency capability without an explicit plan.'}
+];
+
+const PACK_PRESETS={
+ 'lake-como-2026':{
+  title:'Lake Como 2026',
+  description:'Complete travel, backpacking, camp, Blanca–Ellingwood, and Mount Lindsey packing plan for August 19–25.',
+  note:'<b>Current expedition:</b> the Audi Q5 is the default travel vehicle, but the actual Lake Como Road approach vehicle and parking point remain governed by clearance and the group plan. The Sierra Designs tent is the carried shelter. The Tepui rooftop tent remains an optional vehicle-camp item.',
+  sections:[
+   {id:'worn',title:'Wear & immediate access',subtitle:'Start the trip with these usable, not buried.',items:[
+    'hikingFootwear','hikingClothes','sunHat','sunglasses','sunscreenLip','phoneOffline','garmin965','walletId'
+   ]},
+   {id:'main',title:'Gregory Paragon 60 — approach to camp',subtitle:'Backpacking shelter, sleep system, layers, water, food, and emergency redundancy.',items:[
+    'paragon60','sweetSuite2','sleepingBag20','insulatedPad','flash18','rainShell','puffy','fleece','beanie','gloves','drySocks',
+    'headlamp','headlampBackup','inreach','powerBank','waterFilter','hydrationReservoir','electrolytes','poles','firstAid',
+    'emergencyBivy','helmet','routeScreens','paperEmergency','repairKit','dehydratedMeals','breakfastFood','trailFuel','spoonMug'
+   ]},
+   {id:'summit',title:'REI Flash 18 — summit repack',subtitle:'Confirm again after camp is established; these checks represent the actual summit loadout.',items:[
+    'flash18','hydrationReservoir','trailFuel','electrolytes','rainShell','puffy','beanie','gloves','headlamp','inreach',
+    'phoneOffline','garmin965','firstAid','emergencyBivy','routeScreens','helmet','sunscreenLip','sunglasses'
+   ]},
+   {id:'vehicle',title:'Audi Q5, lodging & return',subtitle:'Travel and recovery gear that does not belong in the backpacking load.',items:[
+    'audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','lodgingBag','cleanClothes','campShoes',
+    'toiletriesMeds','cooler','lindseyWaiver'
+   ]},
+   {id:'shared',title:'Shared / assigned — confirm the carrier',subtitle:'An assignment is not complete until the person and item are explicit.',items:[
+    'sharedStove','sharedFuel','groupShelterPlan'
+   ]},
+   {id:'conditional',title:'Conditional — decide from actual trip needs',subtitle:'Visible for deliberate decisions but excluded from required completion.',items:[
+    {id:'tepui2',required:false,note:'Optional vehicle-camp shelter; not the Lake Como backpacking shelter.'},
+    {id:'tepuiHardware',required:false},
+    {id:'roofSystemCheck',required:false},
+    {id:'microspikes',required:false},
+    {id:'iceAxe',required:false},
+    {id:'pillow',required:false}
+   ]}
+  ]
+ },
+ 'fourteener-day':{
+  title:'Colorado 14er Summit Day',
+  description:'Reusable early-start day-hike template for standard summer routes.',
+  note:'<b>Template:</b> starts with the Osprey Manta, personal navigation, water, weather layers, food, and emergency redundancy. Add traction only from current route conditions.',
+  sections:[
+   {id:'worn',title:'Wear & immediate access',subtitle:'On body or reachable without unpacking.',items:['hikingFootwear','hikingClothes','sunHat','sunglasses','sunscreenLip','phoneOffline','garmin965','walletId']},
+   {id:'summit',title:'Osprey Manta — summit day',subtitle:'Standard high-country day loadout.',items:['ospreyManta','hydrationReservoir','trailFuel','electrolytes','rainShell','puffy','beanie','gloves','headlamp','headlampBackup','inreach','firstAid','emergencyBivy','routeScreens','helmet']},
+   {id:'vehicle',title:'Vehicle & return',subtitle:'Trailhead and post-hike support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','cleanClothes','campShoes','chargingCables']},
+   {id:'conditional',title:'Conditions-dependent',subtitle:'Do not add automatically.',items:[{id:'microspikes',required:false},{id:'iceAxe',required:false},{id:'poles',required:false}]}
+  ]
+ },
+ 'overnight-summit':{
+  title:'Overnight Backpack + Summit',
+  description:'Reusable one- or two-night backpacking template with a separate summit pack.',
+  note:'<b>Template:</b> mirrors the Lake Como carry system without the destination-specific travel and waiver items.',
+  sections:[
+   {id:'worn',title:'Wear & immediate access',subtitle:'Moving layer and navigation.',items:['hikingFootwear','hikingClothes','sunHat','sunglasses','sunscreenLip','phoneOffline','garmin965','walletId']},
+   {id:'main',title:'Main backpack',subtitle:'Shelter, sleep, food, layers, water, and redundancy.',items:['paragon60','sweetSuite2','sleepingBag20','insulatedPad','flash18','rainShell','puffy','fleece','beanie','gloves','drySocks','headlamp','headlampBackup','inreach','powerBank','waterFilter','hydrationReservoir','electrolytes','poles','firstAid','emergencyBivy','helmet','routeScreens','paperEmergency','repairKit','dehydratedMeals','breakfastFood','trailFuel','spoonMug']},
+   {id:'summit',title:'Summit pack',subtitle:'Repack after camp is established.',items:['flash18','hydrationReservoir','trailFuel','electrolytes','rainShell','puffy','beanie','gloves','headlamp','inreach','phoneOffline','garmin965','firstAid','emergencyBivy','routeScreens','helmet','sunscreenLip','sunglasses']},
+   {id:'shared',title:'Shared / assigned',subtitle:'Confirm the carrier.',items:['sharedStove','sharedFuel','groupShelterPlan']},
+   {id:'conditional',title:'Conditions-dependent',subtitle:'Decide from current route and weather information.',items:[{id:'microspikes',required:false},{id:'iceAxe',required:false},{id:'pillow',required:false}]}
+  ]
+ },
+ 'rooftop-camp':{
+  title:'Audi Q5 + Tepui Rooftop Camp',
+  description:'Reusable vehicle-camping preset centered on the Audi Q5 and two-person Tepui rooftop tent.',
+  note:'<b>Vehicle-camp template:</b> verify the exact Tepui model, Audi roof configuration, crossbars, mounting hardware, and all applicable load limits before use.',
+  sections:[
+   {id:'vehicle',title:'Audi Q5 & rooftop system',subtitle:'Vehicle and tent system.',items:['audiQ5','vehicleKeys','fuelTopOff','roofSystemCheck','tepui2','tepuiHardware','vehicleWater','chargingCables']},
+   {id:'sleep',title:'Sleep & camp comfort',subtitle:'Vehicle-camping sleep system.',items:['sleepingBag20','insulatedPad','pillow','beanie','drySocks','headlamp']},
+   {id:'food',title:'Food & water',subtitle:'Vehicle-camp meals and cleanup.',items:['cooler','vehicleWater','sharedStove','sharedFuel','spoonMug','electrolytes']},
+   {id:'personal',title:'Personal & day use',subtitle:'Travel, hygiene, and day-hike support.',items:['lodgingBag','cleanClothes','campShoes','toiletriesMeds','walletId','ospreyManta','phoneOffline','garmin965','inreach','firstAid']}
+  ]
+ },
+ 'travel-lodging':{
+  title:'Mountain Travel + Lodging',
+  description:'Simple road-trip and lodging template when no overnight backpack is required.',
+  note:'<b>Travel template:</b> preserves the Audi Q5, navigation, hydration, clean return gear, and personal essentials without loading backpacking equipment.',
+  sections:[
+   {id:'vehicle',title:'Audi Q5',subtitle:'Vehicle readiness and travel support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','cooler']},
+   {id:'personal',title:'Lodging & personal',subtitle:'Separate from hiking equipment.',items:['lodgingBag','cleanClothes','campShoes','toiletriesMeds','walletId']},
+   {id:'day',title:'Optional day-hike kit',subtitle:'Use when the itinerary includes a hike.',items:[{id:'ospreyManta',required:false},{id:'hydrationReservoir',required:false},{id:'rainShell',required:false},{id:'puffy',required:false},{id:'headlamp',required:false},{id:'phoneOffline',required:false},{id:'garmin965',required:false},{id:'firstAid',required:false}]}
+  ]
+ }
+};
+
+function categoryLabel(id){return GEAR_CATEGORIES.find(x=>x[0]===id)?.[1]||id}
+function statusLabel(id){return GEAR_STATUSES.find(x=>x[0]===id)?.[1]||id}
+function normalizePackEntry(entry){return typeof entry==='string'?{id:entry,required:true}:{required:true,...entry}}
+function buildGearLocker(){
+ const saved=safeParse(storageGet(GEAR_LOCKER_KEY),{});
+ const locker={};
+ BASE_GEAR.forEach(item=>locker[item.id]={...item,...(saved[item.id]||{})});
+ Object.entries(saved).forEach(([id,item])=>{if(!locker[id])locker[id]=item});
+ return locker
+}
+let gearLocker=buildGearLocker();
+let packState=safeParse(storageGet(PACK_STATE_KEY),{});
+let packProfileId=PACK_PRESETS[storageGet(PACK_PROFILE_KEY)]?storageGet(PACK_PROFILE_KEY):'lake-como-2026';
+let customPack=safeParse(storageGet(CUSTOM_PACK_KEY),{});
+
+function saveGearLocker(){storageSet(GEAR_LOCKER_KEY,JSON.stringify(gearLocker))}
+function savePackState(){storageSet(PACK_STATE_KEY,JSON.stringify(packState))}
+function saveCustomPack(){storageSet(CUSTOM_PACK_KEY,JSON.stringify(customPack))}
+function packKey(profileId,sectionId,itemId){return `${profileId}:${sectionId}:${itemId}`}
+function profileSections(profileId=packProfileId){
+ const base=PACK_PRESETS[profileId]?.sections||[];
+ const additions=customPack[profileId]||[];
+ return base.map(section=>({
+  ...section,
+  items:[
+   ...section.items,
+   ...additions.filter(x=>x.sectionId===section.id).map(x=>({id:x.itemId,required:x.required!==false,custom:true}))
+  ]
+ }))
+}
+function packCounts(){
+ let total=0,checked=0,knownWeightOz=0,unknown=0,sourceActions=new Set();
+ profileSections().forEach(section=>section.items.map(normalizePackEntry).forEach(entry=>{
+  const item=gearLocker[entry.id];if(!item)return;
+  if(entry.required){
+   total++;
+   if(packState[packKey(packProfileId,section.id,entry.id)])checked++;
+  }
+  if(Number.isFinite(Number(item.weightOz))&&Number(item.weightOz)>0)knownWeightOz+=Number(item.weightOz);
+  else if(entry.required&&item.weightOz!==0)unknown++;
+  if(['rent','borrow','shared','verify'].includes(item.status))sourceActions.add(entry.id);
+ }));
+ return {total,checked,knownWeightOz,unknown,sourceActions:sourceActions.size}
+}
+function ouncesLabel(oz){
+ if(!oz)return '—';
+ const lb=Math.floor(oz/16),rem=Math.round((oz-lb*16)*10)/10;
+ return lb?`${lb} lb${rem?` ${rem} oz`:''}`:`${rem} oz`
+}
+function migrateLegacyPacking(){
+ if(storageGet('ddmg-v6-6-migrated')==='1')return;
+ const legacy=safeParse(storageGet(CHECK_KEY),{});
+ const map={
+  paragon:'paragon60',tent:'sweetSuite2',bag:'sleepingBag20',pad:'insulatedPad',
+  flash:'flash18',layers:'rainShell',warm:'beanie',headlamp:'headlamp',
+  inreach:'inreach',water:'hydrationReservoir',poles:'poles',
+  summitwater:'hydrationReservoir',food:'trailFuel',shell:'rainShell',
+  hatgloves:'gloves',summitlamp:'headlamp',summitinreach:'inreach',
+  offline:'phoneOffline',garmin:'garmin965',firstaid:'firstAid',
+  bivy:'emergencyBivy',screens:'routeScreens'
+ };
+ Object.entries(map).forEach(([oldKey,itemId])=>{
+  if(!legacy[oldKey])return;
+  profileSections('lake-como-2026').forEach(section=>{
+   if(section.items.map(normalizePackEntry).some(x=>x.id===itemId)){
+    packState[packKey('lake-como-2026',section.id,itemId)]=true;
+   }
+  });
+ });
+ savePackState();storageSet('ddmg-v6-6-migrated','1')
+}
+
+function renderPackBuilder(){
+ const profile=PACK_PRESETS[packProfileId];
+ const select=document.getElementById('packProfile');
+ if(!select)return;
+ select.innerHTML=Object.entries(PACK_PRESETS).map(([id,p])=>`<option value="${escapeHtml(id)}">${escapeHtml(p.title)}</option>`).join('');
+ select.value=packProfileId;
+ document.getElementById('packProfileTitle').textContent=profile.title;
+ document.getElementById('packProfileDescription').textContent=profile.description;
+ document.getElementById('packContextNote').innerHTML=profile.note;
+ const sections=document.getElementById('packSections');
+ sections.innerHTML=profileSections().map(section=>{
+  let known=0,unknown=0;
+  const rows=section.items.map(normalizePackEntry).map(entry=>{
+   const item=gearLocker[entry.id];if(!item)return '';
+   if(Number(item.weightOz)>0)known+=Number(item.weightOz);else if(entry.required&&item.weightOz!==0)unknown++;
+   const key=packKey(packProfileId,section.id,entry.id),checked=!!packState[key];
+   const note=entry.note||item.note||'';
+   const weight=Number(item.weightOz)>0?ouncesLabel(Number(item.weightOz)):'';
+   return `<label class="pack-item">
+    <input type="checkbox" data-pack-check="${escapeHtml(key)}" ${checked?'checked':''}>
+    <span class="pack-item-main"><b>${escapeHtml(item.name)}</b>${note?`<small>${escapeHtml(note)}</small>`:''}</span>
+    <span class="pack-item-meta">
+      <span class="gear-badge ${entry.required?'required':'conditional'}">${entry.required?'Required':'Optional'}</span>
+      <span class="gear-badge ${escapeHtml(item.status)}">${escapeHtml(statusLabel(item.status))}</span>
+      ${weight?`<span class="gear-badge">${escapeHtml(weight)}</span>`:''}
+    </span>
+   </label>`
+  }).join('');
+  const weightText=known?`${ouncesLabel(known)} known${unknown?` · ${unknown} unknown`:''}`:(unknown?`${unknown} weights unknown`:'No carried weight');
+  return `<article class="pack-section">
+   <div class="pack-section-head"><div><h3>${escapeHtml(section.title)}</h3><p>${escapeHtml(section.subtitle||'')}</p></div><span class="pack-section-weight">${escapeHtml(weightText)}</span></div>
+   <div class="pack-list">${rows}</div>
+  </article>`
+ }).join('');
+ renderPackSummary();
+ renderCustomSectionOptions()
+}
+function renderPackSummary(){
+ const c=packCounts(),pct=c.total?Math.round(c.checked/c.total*100):0;
+ const packed=document.getElementById('packPackedSummary');if(!packed)return;
+ packed.textContent=`${c.checked} / ${c.total}`;
+ document.getElementById('packPackedLabel').textContent=`${pct}% packed or confirmed`;
+ document.getElementById('packProgressBar').style.width=`${pct}%`;
+ document.getElementById('packWeightSummary').textContent=ouncesLabel(c.knownWeightOz);
+ document.getElementById('packWeightLabel').textContent=c.unknown?`${c.unknown} required weight${c.unknown===1?'':'s'} not recorded`:'all listed weights recorded';
+ document.getElementById('packSourceSummary').textContent=String(c.sourceActions);
+}
+function renderGearLocker(){
+ const wrap=document.getElementById('gearLocker');if(!wrap)return;
+ const q=(document.getElementById('gearSearch')?.value||'').trim().toLowerCase();
+ const category=document.getElementById('gearCategoryFilter')?.value||'';
+ const items=Object.values(gearLocker).filter(item=>{
+  const hay=`${item.name} ${categoryLabel(item.category)} ${item.note||''}`.toLowerCase();
+  return (!q||hay.includes(q))&&(!category||item.category===category)
+ }).sort((a,b)=>categoryLabel(a.category).localeCompare(categoryLabel(b.category))||a.name.localeCompare(b.name));
+ if(!items.length){wrap.innerHTML='<div class="gear-empty">No gear matches this filter.</div>';return}
+ wrap.innerHTML=items.map(item=>`<article class="gear-row" data-gear-id="${escapeHtml(item.id)}">
+  <div class="gear-row-title"><b>${escapeHtml(item.name)}</b><small>${escapeHtml(categoryLabel(item.category))}${item.note?` · ${escapeHtml(item.note)}`:''}</small></div>
+  <label><span>Availability</span><select data-gear-status>${GEAR_STATUSES.map(([id,label])=>`<option value="${id}" ${item.status===id?'selected':''}>${escapeHtml(label)}</option>`).join('')}</select></label>
+  <label class="gear-default-location"><span>Default place</span><select data-gear-location>${Object.entries(LOCATION_LABELS).map(([id,label])=>`<option value="${id}" ${item.location===id?'selected':''}>${escapeHtml(label)}</option>`).join('')}</select></label>
+  <label><span>Weight oz</span><input data-gear-weight min="0" step="0.1" type="number" value="${Number.isFinite(Number(item.weightOz))&&item.weightOz!==null?escapeHtml(item.weightOz):''}" placeholder="—"></label>
+  ${item.custom?'<button class="gear-delete" data-delete-gear type="button">Delete</button>':'<span></span>'}
+ </article>`).join('')
+}
+function renderGearSelects(){
+ const catFilter=document.getElementById('gearCategoryFilter');
+ catFilter.innerHTML='<option value="">All categories</option>'+GEAR_CATEGORIES.map(([id,label])=>`<option value="${id}">${escapeHtml(label)}</option>`).join('');
+ document.getElementById('customGearCategory').innerHTML=GEAR_CATEGORIES.map(([id,label])=>`<option value="${id}">${escapeHtml(label)}</option>`).join('');
+ document.getElementById('customGearStatus').innerHTML=GEAR_STATUSES.map(([id,label])=>`<option value="${id}">${escapeHtml(label)}</option>`).join('')
+}
+function renderCustomSectionOptions(){
+ const select=document.getElementById('customGearSection');if(!select)return;
+ select.innerHTML=profileSections().map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.title)}</option>`).join('')
+}
+function addCustomGear(event){
+ event.preventDefault();
+ const name=document.getElementById('customGearName').value.trim();
+ if(!name){toast('Enter a gear name');return}
+ const id=`custom-${Date.now()}`;
+ const weightRaw=document.getElementById('customGearWeight').value;
+ gearLocker[id]={
+  id,name,custom:true,
+  category:document.getElementById('customGearCategory').value,
+  status:document.getElementById('customGearStatus').value,
+  location:document.getElementById('customGearSection').value||'main',
+  weightOz:weightRaw===''?null:Number(weightRaw),
+  note:document.getElementById('customGearNote').value.trim()
+ };
+ if(!customPack[packProfileId])customPack[packProfileId]=[];
+ customPack[packProfileId].push({sectionId:document.getElementById('customGearSection').value,itemId:id,required:true});
+ saveGearLocker();saveCustomPack();event.target.reset();renderGearLocker();renderPackBuilder();readiness();renderNextAction();toast('Gear item saved')
+}
+function deleteCustomGear(id){
+ const item=gearLocker[id];if(!item?.custom)return;
+ if(!confirm(`Delete "${item.name}" from the Gear Locker and all presets?`))return;
+ delete gearLocker[id];
+ Object.keys(customPack).forEach(profile=>customPack[profile]=customPack[profile].filter(x=>x.itemId!==id));
+ Object.keys(packState).forEach(key=>{if(key.endsWith(`:${id}`))delete packState[key]});
+ saveGearLocker();saveCustomPack();savePackState();renderGearLocker();renderPackBuilder();readiness();renderNextAction()
+}
+function resetActivePack(){
+ if(!confirm(`Clear packed/confirmed checks for ${PACK_PRESETS[packProfileId].title}?`))return;
+ Object.keys(packState).forEach(key=>{if(key.startsWith(`${packProfileId}:`))delete packState[key]});
+ savePackState();renderPackBuilder();readiness();renderNextAction()
+}
+function setupGearBuilder(){
+ migrateLegacyPacking();renderGearSelects();renderPackBuilder();renderGearLocker();
+ document.getElementById('packProfile').addEventListener('change',event=>{
+  packProfileId=event.target.value;storageSet(PACK_PROFILE_KEY,packProfileId);
+  renderPackBuilder();readiness();renderNextAction()
+ });
+ document.getElementById('packSections').addEventListener('change',event=>{
+  const key=event.target.dataset.packCheck;if(!key)return;
+  packState[key]=event.target.checked;savePackState();renderPackSummary();readiness();renderNextAction()
+ });
+ document.getElementById('gearSearch').addEventListener('input',renderGearLocker);
+ document.getElementById('gearCategoryFilter').addEventListener('change',renderGearLocker);
+ document.getElementById('gearLocker').addEventListener('change',event=>{
+  const row=event.target.closest('[data-gear-id]');if(!row)return;
+  const item=gearLocker[row.dataset.gearId];if(!item)return;
+  if(event.target.matches('[data-gear-status]'))item.status=event.target.value;
+  if(event.target.matches('[data-gear-location]'))item.location=event.target.value;
+  if(event.target.matches('[data-gear-weight]'))item.weightOz=event.target.value===''?null:Number(event.target.value);
+  saveGearLocker();renderPackBuilder();readiness()
+ });
+ document.getElementById('gearLocker').addEventListener('click',event=>{
+  const button=event.target.closest('[data-delete-gear]');if(!button)return;
+  deleteCustomGear(button.closest('[data-gear-id]').dataset.gearId)
+ });
+ document.getElementById('customGearForm').addEventListener('submit',addCustomGear);
+ document.getElementById('resetActivePack').addEventListener('click',resetActivePack);
+ document.getElementById('exportGearBackup').addEventListener('click',exportData);
+ document.getElementById('importGearBackup').addEventListener('click',()=>document.getElementById('importBackupFile').click());
+ document.getElementById('importBackupFile').addEventListener('change',event=>importBackupFile(event.target.files?.[0]))
+}
+
+
+const staticBoxes=[...document.querySelectorAll('input[type=checkbox][data-save]')];
 const saved=safeParse(storageGet(CHECK_KEY),{});
-boxes.forEach((b,i)=>{const k=b.dataset.save||i;b.checked=!!saved[k];b.addEventListener('change',()=>{saved[k]=b.checked;storageSet(CHECK_KEY,JSON.stringify(saved));readiness();renderNextAction()})});
+staticBoxes.forEach((b,i)=>{const k=b.dataset.save||i;b.checked=!!saved[k];b.addEventListener('change',()=>{saved[k]=b.checked;storageSet(CHECK_KEY,JSON.stringify(saved));readiness();renderNextAction()})});
 function readiness(){
- const pct=boxes.length?Math.round(boxes.filter(b=>b.checked).length/boxes.length*100):0;
- document.getElementById('readyPct').textContent=pct+'%';document.getElementById('readyBar').style.width=pct+'%';
+ const pack=packCounts();
+ const checked=pack.checked+staticBoxes.filter(b=>b.checked).length;
+ const total=pack.total+staticBoxes.length;
+ const pct=total?Math.round(checked/total*100):0;
+ const pctEl=document.getElementById('readyPct'),bar=document.getElementById('readyBar');
+ if(pctEl)pctEl.textContent=pct+'%';if(bar)bar.style.width=pct+'%';
  return pct
 }
 readiness();
-function resetChecks(){if(confirm('Clear all saved packing and communication checkmarks?')){boxes.forEach(b=>b.checked=false);storageRemove(CHECK_KEY);readiness();renderNextAction()}}
+function resetChecks(){
+ if(confirm('Clear the active packing preset and communication checkmarks?')){
+  staticBoxes.forEach(b=>b.checked=false);
+  Object.keys(saved).forEach(k=>delete saved[k]);storageRemove(CHECK_KEY);
+  Object.keys(packState).forEach(key=>{if(key.startsWith(`${packProfileId}:`))delete packState[key]});
+  savePackState();renderPackBuilder();readiness();renderNextAction()
+ }
+}
 
 function renderPeaks(filter=''){
  const q=filter.toLowerCase(),wrap=document.getElementById('peakList');
@@ -89,9 +480,48 @@ const journal=document.getElementById('journalText');
 journal.value=storageGet(JOURNAL_KEY)||'';
 journal.addEventListener('input',()=>storageSet(JOURNAL_KEY,journal.value));
 function exportData(){
- const data={exported:new Date().toISOString(),checks:safeParse(storageGet(CHECK_KEY),{}),intelligenceChecks:safeParse(storageGet(INTEL_CHECK_KEY),{}),reportReviews:safeParse(storageGet(REVIEW_KEY),{}),savedWeather:safeParse(storageGet(WEATHER_KEY),{}),selectedWeather:selectedWeatherId,weatherMode,journal:storageGet(JOURNAL_KEY)||''};
+ const data={
+  schema:'don-downs-mountain-guide-backup-v6-6',
+  exported:new Date().toISOString(),
+  checks:safeParse(storageGet(CHECK_KEY),{}),
+  intelligenceChecks:safeParse(storageGet(INTEL_CHECK_KEY),{}),
+  reportReviews:safeParse(storageGet(REVIEW_KEY),{}),
+  savedWeather:safeParse(storageGet(WEATHER_KEY),{}),
+  selectedWeather:selectedWeatherId,
+  weatherMode,
+  journal:storageGet(JOURNAL_KEY)||'',
+  gearLocker,
+  packState,
+  packProfile:packProfileId,
+  customPack
+ };
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');
- a.href=URL.createObjectURL(blob);a.download='mountain-guide-backup.json';a.click();URL.revokeObjectURL(a.href)
+ a.href=URL.createObjectURL(blob);a.download=`mountain-guide-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)
+}
+async function importBackupFile(file){
+ if(!file)return;
+ try{
+  const data=JSON.parse(await file.text());
+  if(!data||typeof data!=='object')throw new Error('Invalid backup');
+  if(!confirm('Import this backup and replace saved app data on this device?'))return;
+  if(data.checks)storageSet(CHECK_KEY,JSON.stringify(data.checks));
+  if(data.intelligenceChecks)storageSet(INTEL_CHECK_KEY,JSON.stringify(data.intelligenceChecks));
+  if(data.reportReviews)storageSet(REVIEW_KEY,JSON.stringify(data.reportReviews));
+  if(data.savedWeather)storageSet(WEATHER_KEY,JSON.stringify(data.savedWeather));
+  if(data.selectedWeather)storageSet(WEATHER_SELECTED_KEY,data.selectedWeather);
+  if(data.weatherMode)storageSet(WEATHER_MODE_KEY,data.weatherMode);
+  if(typeof data.journal==='string')storageSet(JOURNAL_KEY,data.journal);
+  if(data.gearLocker)storageSet(GEAR_LOCKER_KEY,JSON.stringify(data.gearLocker));
+  if(data.packState)storageSet(PACK_STATE_KEY,JSON.stringify(data.packState));
+  if(data.packProfile&&PACK_PRESETS[data.packProfile])storageSet(PACK_PROFILE_KEY,data.packProfile);
+  if(data.customPack)storageSet(CUSTOM_PACK_KEY,JSON.stringify(data.customPack));
+  toast('Backup imported — reloading');
+  setTimeout(()=>location.reload(),500)
+ }catch(error){
+  console.error(error);toast('That file is not a valid Mountain Guide backup')
+ }finally{
+  const input=document.getElementById('importBackupFile');if(input)input.value=''
+ }
 }
 function clearJournal(){if(confirm('Clear the saved journal on this device?')){journal.value='';storageRemove(JOURNAL_KEY)}}
 
@@ -122,7 +552,22 @@ function buildTripSummary(spec,periods,alerts,sourceUpdatedAt){
  if(!temps.length)return {available:false,horizonEnd:availableDates.at(-1)||null,alerts:alertNames,sourceUpdatedAt,reason:'temperature-data-unavailable'};
  const conditions=[...new Set(target.map(p=>p.condition).filter(Boolean))].slice(0,3);
  const step=Math.max(1,Math.floor(target.length/4));
- return {available:true,minTemp:Math.min(...temps),maxTemp:Math.max(...temps),maxPop:pops.length?Math.max(...pops):null,maxWind:winds.length?Math.max(...winds):0,conditions,samples:target.filter((_,i)=>i%step===0).slice(0,4),alerts:alertNames,sourceUpdatedAt}
+ const firstRisk=scanFirstRisk(target);
+ return {available:true,minTemp:Math.min(...temps),maxTemp:Math.max(...temps),maxPop:pops.length?Math.max(...pops):null,maxWind:winds.length?Math.max(...winds):0,conditions,samples:target.filter((_,i)=>i%step===0).slice(0,4),alerts:alertNames,sourceUpdatedAt,firstRisk}
+}
+// First hour in the summit window whose listed weather crosses a hard-decision threshold.
+// Computed while online and stored, so the turnaround check works offline at camp.
+function scanFirstRisk(periods){
+ const hit=periods.find(p=>{
+  const s=(p.condition||'').toLowerCase();
+  return /thunder|storm|lightning/.test(s)||(Number.isFinite(p.pop)&&p.pop>=40)||(Number.isFinite(p.windMph)&&p.windMph>=30)
+ });
+ if(!hit)return null;
+ const reasons=[];const s=(hit.condition||'').toLowerCase();
+ if(/thunder|storm|lightning/.test(s))reasons.push('thunderstorm wording');
+ if(Number.isFinite(hit.pop)&&hit.pop>=40)reasons.push(hit.pop+'% precip');
+ if(Number.isFinite(hit.windMph)&&hit.windMph>=30)reasons.push(hit.windMph+' mph wind');
+ return {startTime:hit.startTime,reason:reasons.join(', ')}
 }
 async function fetchJson(url){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
@@ -372,17 +817,185 @@ function mtTime(date){return new Intl.DateTimeFormat('en-US',{timeZone:'America/
 function focusSpec(id=focusObjectiveId){return FOCUS_OBJECTIVES[id]||FOCUS_OBJECTIVES.blanca}
 function lightData(id=focusObjectiveId){const obj=focusSpec(id),loc=locationById(obj.weatherId),t=sunTimes(obj.date,loc.lat,loc.lon);return {...t,obj,loc}}
 function renderLightBoard(id=focusObjectiveId){const x=lightData(id);document.getElementById('lightObjective').value=id;document.getElementById('lightBoardTitle').textContent=`${x.obj.label} · ${new Intl.DateTimeFormat('en-US',{weekday:'long',timeZone:'America/Denver'}).format(new Date(x.obj.date+'T12:00:00-06:00'))}`;document.getElementById('lightDawn').textContent=mtTime(x.dawn);document.getElementById('lightSunrise').textContent=mtTime(x.sunrise);document.getElementById('lightSunset').textContent=mtTime(x.sunset);document.getElementById('lightContext').textContent=`${x.loc.name} · ${x.loc.elevationFt.toLocaleString()} ft · Mountain Time. Astronomical flat-horizon times, not terrain-adjusted usable light.`;if(id==='blanca'){document.getElementById('sunMetric').textContent=mtTime(x.dawn);document.getElementById('sunMetricNote').textContent='Astronomical civil dawn · flat horizon · Aug 23'}}
-function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; surrounding ridges can delay direct light and summit elevation can shift observed sunrise.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
-function openFocus(id){if(id&&FOCUS_OBJECTIVES[id])focusObjectiveId=id;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderFocus();const overlay=document.getElementById('focusOverlay');overlay.hidden=false;document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('focusObjective').focus(),0)}
-function closeFocus(){document.getElementById('focusOverlay').hidden=true;document.body.style.overflow=''}
+// Parse an objective turnaround label ('11:30 AM') to a decimal Mountain-Time hour.
+function turnHour(label){const m=String(label).match(/(\d+):(\d+)\s*(AM|PM)/i);if(!m)return null;let h=+m[1]%12;if(/pm/i.test(m[3]))h+=12;return h+(+m[2])/60}
+// Compare the stored first-risk hour against the planned turnaround. Never returns "safe".
+function turnaroundCheck(obj,item){
+ const trip=item?.trip;
+ if(!item?.fetchedAt||!trip)return {level:'none',text:'No saved forecast yet. Refresh while online to carry the turnaround check offline.'};
+ if(!trip.available)return {level:'none',text:'Summit day is outside the NWS hourly horizon. The turnaround still governs — this check activates once the forecast reaches the trip.'};
+ const risk=trip.firstRisk;
+ if(!risk)return {level:'none',text:`The saved forecast does not list a thunderstorm, ≥40% precipitation, or ≥30 mph wind threshold before or around the ${obj.turn} turnaround. That is not an all-clear — actual sky, cloud growth, wind, terrain, pace, and the group still govern the decision.`};
+ const rp=denverParts(risk.startTime),riskH=rp.hour+rp.minute/60,turn=turnHour(obj.turn);
+ const ap=rp.hour>=12?'PM':'AM',h12=rp.hour%12||12,clock=`${h12}:${String(rp.minute).padStart(2,'0')} ${ap}`;
+ if(turn==null)return {level:'watch',text:`Forecast risk (${risk.reason}) is listed around ${clock}. Compare it against your turnaround and favor the earlier time.`};
+ const diff=riskH-turn,mag=Math.abs(diff),hh=Math.floor(mag),mm=Math.round((mag-hh)*60),span=`${hh?hh+'h ':''}${mm?mm+'m':''}`.trim()||'under an hour';
+ if(diff>=1)return {level:'watch',text:`Forecast risk (${risk.reason}) first appears ${clock}, about ${span} after your ${obj.turn} turnaround. Margin is thin — consider turning earlier.`};
+ if(diff>=0)return {level:'warn',text:`Forecast risk (${risk.reason}) appears ${clock}, right at your ${obj.turn} turnaround. Little or no margin — plan to be descending before this.`};
+ return {level:'danger',text:`Forecast risk (${risk.reason}) appears ${clock}, BEFORE your ${obj.turn} turnaround. The listed weather turns before your planned turnaround — reconsider the start time or the objective.`};
+}
+function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; in the basin, plan on headlamps well past sunrise — direct light over the east ridge comes considerably later.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;const tc=turnaroundCheck(obj,item),tcEl=document.getElementById('focusTurnCheck');if(tcEl){tcEl.dataset.level=tc.level;tcEl.textContent=tc.text}document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
+function openFocus(id){if(id&&FOCUS_OBJECTIVES[id])focusObjectiveId=id;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderFocus();startFocusCountdown();const overlay=document.getElementById('focusOverlay');overlay.hidden=false;document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('focusObjective').focus(),0)}
+function closeFocus(){document.getElementById('focusOverlay').hidden=true;document.body.style.overflow='';stopFocusCountdown()}
+
+// Turnaround countdown — a discipline timer against your OWN fixed turnaround
+// clock, not a weather trigger. Runs only while the Focus panel is open; no
+// background code and no notifications. Every prompt hands the decision back.
+let focusCountdownTimer=null;
+function turnInstant(obj){
+ // Build the objective's turnaround as a Mountain-Time instant. MDT is -06:00 in August.
+ const t=turnHour(obj.turn);if(t==null)return null;
+ const h=Math.floor(t),m=Math.round((t-h)*60);
+ return new Date(`${obj.date}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00-06:00`);
+}
+function renderCountdown(){
+ const el=document.getElementById('focusCountdown');if(!el)return;
+ const obj=focusSpec(),turn=turnInstant(obj);
+ if(!turn){el.hidden=true;return}
+ const mins=(turn.getTime()-Date.now())/60000;
+ // Only show inside a sensible same-day window (from 6h before to 3h after the turnaround).
+ if(mins>360||mins<-180){el.hidden=true;return}
+ el.hidden=false;
+ const past=mins<0,am=Math.abs(mins),hh=Math.floor(am/60),mm=Math.floor(am%60);
+ const span=`${hh?hh+'h ':''}${mm}m`;
+ let level,text;
+ if(past){level='past';text=`You are ${span} PAST your ${obj.turn} agreed turnaround. Are you descending? If not, why not?`}
+ else if(mins<=15){level='now';text=`${span} to your ${obj.turn} turnaround. What do cloud growth, your pace, and the group tell you to do now?`}
+ else if(mins<=30){level='warn';text=`${span} to your ${obj.turn} turnaround. What do the weather, your pace, and the group say about turning before the deadline?`}
+ else if(mins<=60){level='watch';text=`${span} to your ${obj.turn} turnaround. Where are you now, and how much margin do you truly have?`}
+ else{level='idle';text=`${span} to your ${obj.turn} agreed turnaround. What do the sky and your actual progress say about the margin?`}
+ el.dataset.level=level;el.textContent=text;
+}
+function startFocusCountdown(){stopFocusCountdown();renderCountdown();focusCountdownTimer=setInterval(renderCountdown,30000)}
+function stopFocusCountdown(){if(focusCountdownTimer){clearInterval(focusCountdownTimer);focusCountdownTimer=null}}
 function toggleCampfire(){document.documentElement.classList.toggle('campfire-mode');const on=document.documentElement.classList.contains('campfire-mode');storageSet(CAMPFIRE_KEY,on?'1':'0');document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'});toast(on?'Night-vision display enabled':'Standard display restored')}
-function setupV6(){if(storageGet(CAMPFIRE_KEY)==='1')document.documentElement.classList.add('campfire-mode');toggleCampfireStateText();renderLightBoard();renderFocus();document.getElementById('lightObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});document.getElementById('focusObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});['openFocusHero','openFocusSection','focusFab'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openFocus()));document.getElementById('closeFocus').addEventListener('click',closeFocus);document.getElementById('focusOverlay').addEventListener('click',e=>{if(e.target.id==='focusOverlay')closeFocus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('focusOverlay').hidden)closeFocus()});['campfireHero','toggleCampfireSection','focusCampfire'].forEach(id=>document.getElementById(id)?.addEventListener('click',toggleCampfire));document.getElementById('focusToday').addEventListener('click',()=>{closeFocus();document.getElementById(focusSpec().dayId)?.scrollIntoView({behavior:'smooth',block:'start'})});document.getElementById('focusRefresh').addEventListener('click',async()=>{const id=focusSpec().weatherId;if(!navigator.onLine){toast('Offline — showing saved forecast');return}try{await refreshLocation(id,{force:true});renderFocus();toast('Focus forecast refreshed')}catch{}});const revealObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.08}):null;document.querySelectorAll('main>section').forEach((s,i)=>{if(i>0){s.classList.add('reveal');if(revealObserver)revealObserver.observe(s);else s.classList.add('visible')}})}
+function setupV6(){if(storageGet(CAMPFIRE_KEY)==='1')document.documentElement.classList.add('campfire-mode');toggleCampfireStateText();renderLightBoard();renderFocus();document.getElementById('lightObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});document.getElementById('focusObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus();renderCountdown()});['openFocusHero','openFocusSection','focusFab'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openFocus()));document.getElementById('closeFocus').addEventListener('click',closeFocus);document.getElementById('focusOverlay').addEventListener('click',e=>{if(e.target.id==='focusOverlay')closeFocus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('focusOverlay').hidden)closeFocus()});['campfireHero','toggleCampfireSection','focusCampfire'].forEach(id=>document.getElementById(id)?.addEventListener('click',toggleCampfire));document.getElementById('focusToday').addEventListener('click',()=>{closeFocus();document.getElementById(focusSpec().dayId)?.scrollIntoView({behavior:'smooth',block:'start'})});document.getElementById('focusRefresh').addEventListener('click',async()=>{const id=focusSpec().weatherId;if(!navigator.onLine){toast('Offline — showing saved forecast');return}try{await refreshLocation(id,{force:true});renderFocus();toast('Focus forecast refreshed')}catch{}});const revealObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.08}):null;document.querySelectorAll('main>section').forEach((s,i)=>{if(i>0){s.classList.add('reveal');if(revealObserver)revealObserver.observe(s);else s.classList.add('visible')}})}
 function toggleCampfireStateText(){const on=document.documentElement.classList.contains('campfire-mode');document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'})}
+
+
+
+// Version 6.3 — safe AI companion.
+// This public GitHub Pages app never contains an API key. It prepares a
+// context-aware prompt, copies it locally, and opens ChatGPT for the user.
+const AI_DRAFT_KEY='ddmg-v6-ai-draft';
+
+function aiSelectedObjective(){
+ const obj=focusSpec();
+ return `${obj.label}; planned start ${obj.start}; turnaround/exit ${obj.turn}; ${obj.intent}`;
+}
+function aiWeatherSummary(){
+ const spec=locationById(selectedWeatherId),item=weatherStore[selectedWeatherId];
+ if(!item?.current)return `${spec.name}: no saved forecast is available on this device.`;
+ const c=item.current,flags=planningFlags(item).map(x=>x.label).join('; ');
+ return [
+  `${spec.name} (${spec.elevationFt.toLocaleString()} ft)`,
+  `${c.temp}°F, ${c.condition}`,
+  `wind ${c.windDirection||'—'} ${c.windMph||0} mph`,
+  `${Number.isFinite(c.pop)?c.pop+'% precipitation probability':'precipitation probability unknown'}`,
+  `forecast fetched ${formatStamp(item.fetchedAt,true)}`,
+  `planning flags: ${flags}`
+ ].join(' · ');
+}
+function aiContextText(){
+ const includeContext=document.getElementById('aiIncludeContext')?.checked;
+ const includeWeather=document.getElementById('aiIncludeWeather')?.checked;
+ if(!includeContext)return 'No Mountain Guide context selected. Treat this as a general question.';
+ const nextTitle=document.getElementById('nextActionTitle')?.textContent?.trim()||'Not available';
+ const nextText=document.getElementById('nextActionText')?.textContent?.trim()||'';
+ const lines=[
+  'MOUNTAIN GUIDE CONTEXT',
+  'App: Don Downs Mountain Guide, Version 6.6',
+  'Trip: Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026',
+  `Selected objective: ${aiSelectedObjective()}`,
+  `Readiness: ${readiness()}% of saved gear and communication checks`,
+  `Next app action: ${nextTitle}${nextText?' — '+nextText:''}`,
+  'Standing rule: weather is evidence, not permission; actual sky, wind, terrain, access, and group condition govern decisions.'
+ ];
+ if(includeWeather)lines.push(`Saved weather: ${aiWeatherSummary()}`);
+ else lines.push('Saved weather: not included.');
+ return lines.join('\n');
+}
+function aiPreparedPrompt(){
+ const question=document.getElementById('aiQuestion')?.value?.trim()||'';
+ const context=aiContextText();
+ return `${context}
+
+USER QUESTION
+${question}
+
+RESPONSE STANDARD
+Be concise but complete. Separate observed app data from inference. State uncertainty. Do not present AI output as rescue guidance, medical clearance, route authorization, or a go/no-go mountain decision.`;
+}
+function renderAiPreview(){
+ const preview=document.getElementById('aiContextPreview');
+ const status=document.getElementById('aiContextStatus');
+ const includeContext=document.getElementById('aiIncludeContext')?.checked;
+ const includeWeather=document.getElementById('aiIncludeWeather');
+ if(includeWeather)includeWeather.disabled=!includeContext;
+ if(preview)preview.textContent=aiContextText();
+ if(status)status.textContent=includeContext
+  ?`Selected objective, ${readiness()}% readiness, next action${includeWeather?.checked?', and saved weather':''}.`
+  :'General-question mode; Mountain Guide context will not be included.';
+}
+function openAi(){
+ const overlay=document.getElementById('aiOverlay');
+ overlay.hidden=false;
+ document.body.style.overflow='hidden';
+ const off=document.getElementById('aiOfflineNote');if(off)off.hidden=navigator.onLine;
+ renderAiPreview();
+ setTimeout(()=>document.getElementById('aiQuestion')?.focus(),0);
+}
+function closeAi(){
+ document.getElementById('aiOverlay').hidden=true;
+ document.body.style.overflow='';
+}
+async function copyAiPrompt(){
+ const prompt=aiPreparedPrompt();
+ const question=document.getElementById('aiQuestion')?.value?.trim();
+ if(!question){toast('Enter a question first');document.getElementById('aiQuestion')?.focus();return false}
+ try{
+  await navigator.clipboard.writeText(prompt);
+ }catch{
+  const area=document.createElement('textarea');
+  area.value=prompt;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';
+  document.body.appendChild(area);area.select();
+  const ok=document.execCommand('copy');area.remove();
+  if(!ok){toast('Could not copy the question');return false}
+ }
+ toast('Question and context copied');
+ return true
+}
+function setupAi(){
+ const question=document.getElementById('aiQuestion');
+ question.value=storageGet(AI_DRAFT_KEY)||'';
+ document.getElementById('aiFab').addEventListener('click',openAi);
+ document.getElementById('closeAi').addEventListener('click',closeAi);
+ document.getElementById('aiOverlay').addEventListener('click',e=>{if(e.target.id==='aiOverlay')closeAi()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('aiOverlay').hidden)closeAi()});
+ question.addEventListener('input',()=>storageSet(AI_DRAFT_KEY,question.value));
+ document.querySelectorAll('[data-ai-prompt]').forEach(button=>button.addEventListener('click',()=>{
+  const general=button.dataset.aiGeneral==='true';
+  document.getElementById('aiIncludeContext').checked=!general;
+  question.value=button.dataset.aiPrompt||'';
+  storageSet(AI_DRAFT_KEY,question.value);
+  renderAiPreview();
+  question.focus();
+ }));
+ ['aiIncludeContext','aiIncludeWeather'].forEach(id=>document.getElementById(id).addEventListener('change',renderAiPreview));
+ document.getElementById('aiCopyOnly').addEventListener('click',copyAiPrompt);
+ document.getElementById('aiOpenChat').addEventListener('click',async()=>{
+  if(!await copyAiPrompt())return;
+  const opened=window.open('https://chatgpt.com/','_blank','noopener,noreferrer');
+  if(!opened)toast('Question copied — open ChatGPT and paste it');
+  else{closeAi();toast('Paste the copied question into ChatGPT')}
+ });
+ renderAiPreview();
+}
 
 document.documentElement.classList.remove('field-mode');storageRemove('ddmg-v3-field');
 document.getElementById('nextActionPrimary').addEventListener('click',runNextAction);
 document.getElementById('shareStatusBtn').addEventListener('click',shareStatus);
 document.getElementById('shareIntelBtn').addEventListener('click',shareStatus);
 const initialNav=document.querySelector('.bottom-nav a.active');if(initialNav)initialNav.setAttribute('aria-current','page');
-setupWeatherWidget();setupInstallNudge();setupBottomNav();
-renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();
+setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();
+renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();setupAi();

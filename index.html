@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: an elegant offline Colorado expedition companion with live summit forecasts, sunlight intelligence, trip focus, checklists and a personal 14er record." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: an offline Colorado expedition companion with live summit forecasts, Summit Focus, a reusable personal Gear Locker, smart trip packing presets, formation and a personal 14er record." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -209,7 +209,7 @@
 <article class="route-profile"><div class="route-profile-head"><div><span>03</span><h3>Mount Lindsey</h3></div><small>Schematic out-and-back</small></div><svg aria-label="Schematic Mount Lindsey climb and return" role="img" viewbox="0 0 520 150"><path class="profile-fill" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132 V142 H10Z"></path><path class="profile-line" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132"></path><circle cx="10" cy="132" r="5"></circle><circle cx="365" cy="18" r="5"></circle><circle cx="510" cy="132" r="5"></circle><text x="10" y="148">Trailhead</text><text x="325" y="13">14,055 ft</text><text x="455" y="148">Return</text></svg><p>Access and the signed ranch waiver are part of the route, not administrative afterthoughts.</p></article>
 </div>
 <div class="grid g3 route-summary-grid">
-<div class="card soft"><h3>Lake Como approach</h3><p>Operate from an 8,000–8,800 ft parking assumption. Do not force a loaded Forester higher.</p></div>
+<div class="card soft"><h3>Lake Como approach</h3><p>Operate from an 8,000–8,800 ft parking assumption. Do not force the approach vehicle higher than clearance and conditions support.</p></div>
 <div class="card soft"><h3>Blanca + Ellingwood</h3><p>About 7 miles and roughly 3,000 ft from camp. Traverse only if weather, rock and every climber support it.</p></div>
 <div class="card soft"><h3>Mount Lindsey</h3><p>About 8.25 miles and 3,500 ft. Reconfirm current access, waiver and private-property rules.</p></div>
 </div>
@@ -221,36 +221,97 @@
 <a class="link" href="https://www.mountlindseywaiver.com/" rel="noopener" target="_blank">Required Mount Lindsey waiver<small>Complete before the hike and save confirmation</small></a>
 <a class="link" href="https://www.14ers.org/peaks/sangre-de-cristo-range/mount-lindsey/" rel="noopener" target="_blank">Mount Lindsey stewardship<small>Colorado Fourteeners Initiative</small></a>
 </div></section>
-<section id="gear"><div class="section-head"><div><div class="kicker">Carry system</div><h2>Gear, food and readiness</h2></div><p>Checkmarks persist on this device and drive the readiness percentage on the dashboard.</p></div>
-<div class="grid g2">
-<details open=""><summary>Gregory Paragon 60 — Approach</summary><div class="detail-body checks">
-<label><input data-save="paragon" type="checkbox"/>Gregory Paragon 60 fitted and loaded</label>
-<label><input data-save="tent" type="checkbox"/>Sierra Designs Sweet Suite 2 tent</label>
-<label><input data-save="bag" type="checkbox"/>Rented 20°F sleeping bag in waterproof liner</label>
-<label><input data-save="pad" type="checkbox"/>Rented insulated pad, R-value about 4+</label>
-<label><input data-save="flash" type="checkbox"/>REI Flash 18 packed flat</label>
-<label><input data-save="layers" type="checkbox"/>Rain shell, puffy and fleece</label>
-<label><input data-save="warm" type="checkbox"/>Beanie, gloves and dry socks</label>
-<label><input data-save="headlamp" type="checkbox"/>Headlamp and backup power</label>
-<label><input data-save="inreach" type="checkbox"/>Garmin inReach attached high on strap</label>
-<label><input data-save="water" type="checkbox"/>Filter and 2–3 L capacity</label>
-<label><input data-save="poles" type="checkbox"/>Borrowed or rented trekking poles</label>
-</div></details>
-<details open=""><summary>REI Flash 18 — Summit</summary><div class="detail-body checks">
-<label><input data-save="summitwater" type="checkbox"/>2–3 L water</label>
-<label><input data-save="food" type="checkbox"/>150–250 kcal per hour</label>
-<label><input data-save="shell" type="checkbox"/>Rain shell and puffy</label>
-<label><input data-save="hatgloves" type="checkbox"/>Beanie and gloves</label>
-<label><input data-save="summitlamp" type="checkbox"/>Headlamp</label>
-<label><input data-save="summitinreach" type="checkbox"/>Garmin inReach</label>
-<label><input data-save="offline" type="checkbox"/>Phone with offline maps</label>
-<label><input data-save="garmin" type="checkbox"/>Garmin 965</label>
-<label><input data-save="firstaid" type="checkbox"/>Compact first aid and blister kit</label>
-<label><input data-save="bivy" type="checkbox"/>Emergency bivy or blanket</label>
-<label><input data-save="screens" type="checkbox"/>Route screenshots</label>
-</div></details>
+<section id="gear">
+<div class="section-head">
+<div>
+<div class="kicker">Reusable equipment system</div>
+<h2>Gear Locker &amp; Smart Pack Builder</h2>
 </div>
-<div class="toolbar" style="margin-top:12px"><button onclick="resetChecks()">Reset saved checks</button><button onclick="exportData()">Export app backup</button></div>
+<p>Your gear is stored once, then reused across trip presets. Lake Como is the first complete trip profile rather than a one-off checklist.</p>
+</div>
+<div class="gear-principle">
+<span aria-hidden="true">↻</span>
+<div>
+<b>One locker. Multiple trips.</b>
+<p>Choose a preset, confirm the items assigned to each stage, and refine weights or ownership over time. Checkmarks and gear details remain on this device and are included in exported backups.</p>
+</div>
+</div>
+<details class="gear-panel" open="">
+<summary>Smart Pack Builder</summary>
+<div class="detail-body">
+<div class="pack-builder-controls">
+<label>
+<span>Trip preset</span>
+<select id="packProfile"></select>
+</label>
+<div class="pack-profile-copy">
+<b id="packProfileTitle">Lake Como 2026</b>
+<p id="packProfileDescription"></p>
+</div>
+</div>
+<div class="pack-context-note" id="packContextNote"></div>
+<div class="pack-summary-grid">
+<div class="pack-summary-card">
+<small>Required confirmations</small>
+<strong id="packPackedSummary">0 / 0</strong>
+<span id="packPackedLabel">packed or confirmed</span>
+</div>
+<div class="pack-summary-card">
+<small>Known carried weight</small>
+<strong id="packWeightSummary">—</strong>
+<span id="packWeightLabel">record weights in the Gear Locker</span>
+</div>
+<div class="pack-summary-card">
+<small>Source actions</small>
+<strong id="packSourceSummary">0</strong>
+<span>rent, borrow, share, or verify</span>
+</div>
+</div>
+<div aria-label="Packing completion" class="pack-progress">
+<span id="packProgressBar"></span>
+</div>
+<div class="pack-sections" id="packSections"></div>
+<div class="toolbar gear-toolbar">
+<button id="resetActivePack" type="button">Reset this preset</button>
+<button id="exportGearBackup" type="button">Export gear &amp; app backup</button>
+<button id="importGearBackup" type="button">Import backup</button>
+<input accept="application/json" hidden="" id="importBackupFile" type="file"/>
+</div>
+</div>
+</details>
+<details class="gear-panel">
+<summary>Personal Gear Locker</summary>
+<div class="detail-body">
+<div class="locker-intro">
+<p>These are reusable records, not a packing list. Update ownership and weights once; future presets inherit the information.</p>
+<div class="locker-filters">
+<input aria-label="Search gear locker" id="gearSearch" placeholder="Search gear, category, or note…"/>
+<select aria-label="Filter gear category" id="gearCategoryFilter">
+<option value="">All categories</option>
+</select>
+</div>
+</div>
+<div class="gear-locker" id="gearLocker"></div>
+</div>
+</details>
+<details class="gear-panel">
+<summary>Add Personal Gear</summary>
+<div class="detail-body">
+<form class="custom-gear-form" id="customGearForm">
+<label><span>Item name</span><input id="customGearName" maxlength="80" placeholder="Example: winter overmitts" required=""/></label>
+<label><span>Category</span><select id="customGearCategory"></select></label>
+<label><span>Availability</span><select id="customGearStatus"></select></label>
+<label><span>Weight, ounces</span><input id="customGearWeight" min="0" placeholder="Optional" step="0.1" type="number"/></label>
+<label><span>Add to active preset</span><select id="customGearSection"></select></label>
+<label class="custom-gear-note"><span>Note</span><input id="customGearNote" maxlength="140" placeholder="Optional use, fit, or packing note"/></label>
+<button class="intel-primary" type="submit">Save gear item</button>
+</form>
+</div>
+</details>
+<div class="gear-safety-note">
+<span aria-hidden="true">!</span>
+<p><b>Vehicle and rooftop-tent note:</b> the Audi Q5 is recorded as the default travel vehicle, and the Tepui two-person rooftop tent is available for vehicle camping. The exact tent model and roof-system ratings are not recorded; verify the vehicle, crossbar, mounting-hardware, and tent limits before use. The rooftop tent is not a substitute for the backpacking shelter carried to Lake Como.</p>
+</div>
 </section>
 <section id="weather"><div class="section-head"><div><div class="kicker">Forecast discipline</div><h2>Weather center</h2></div><p>Replace planning values with live forecasts at seven days, 72 hours and the evening before each objective.</p></div>
 <div class="grid g3">
@@ -288,7 +349,7 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 6.2 · Daily Formation Edition · Refined Alpine Edition<br/><span class="status"><span class="dot"></span><span id="net2">Private data omitted from public deployment</span></span></div>
+<div class="footer">Don Downs Mountain Guide · Version 6.6</div>
 </main>
 <div class="focus-overlay" hidden="" id="focusOverlay">
 <section aria-labelledby="focusTitle" aria-modal="true" class="focus-sheet" role="dialog">
@@ -296,9 +357,11 @@
 <label class="focus-select-label" for="focusObjective">Objective</label>
 <select class="focus-select" id="focusObjective"><option value="blanca">Blanca + Ellingwood · Sunday</option><option value="lake">Lake Como approach · Saturday</option><option value="lindsey">Mount Lindsey · Monday</option></select>
 <div class="focus-critical">
-<div><small>Start</small><b id="focusStart">4:15 AM</b></div><div><small>Astronomical dawn</small><b id="focusLight">—</b></div><div><small>Turn / exit</small><b id="focusTurn">11:30 AM</b></div>
+<div><small>Start</small><b id="focusStart">4:15 AM</b></div><div><small>Astronomical dawn</small><b id="focusLight">—</b></div><div class="focus-turn-primary"><small>Turn / exit</small><b id="focusTurn">11:30 AM</b></div>
 </div>
 <p class="focus-light-note" id="focusLightNote">Flat-horizon time; surrounding terrain may materially change when usable light reaches the route.</p>
+<div aria-live="polite" class="focus-countdown" data-level="idle" hidden="" id="focusCountdown"></div>
+<div aria-live="polite" class="focus-turncheck" data-level="none" id="focusTurnCheck">Refresh while online to activate the turnaround check.</div>
 <div aria-live="polite" class="focus-weather-card" id="focusWeather"><span class="weather-pulse"></span><div><b>Loading saved forecast…</b><small>Refresh when online.</small></div></div>
 <div class="focus-route"><div class="kicker">Field intent</div><h3 id="focusIntent">Below exposed terrain by late morning.</h3><p id="focusRouteText">The traverse is optional; group comfort and conditions decide the sequence.</p></div>
 <div class="focus-links" id="focusLinks"></div>
@@ -306,6 +369,33 @@
 <div class="focus-bottom"><button class="intel-primary" id="focusRefresh" type="button">Refresh selected weather</button><button id="focusToday" type="button">Open full day</button></div>
 </section>
 </div>
+<div class="ai-overlay" hidden="" id="aiOverlay">
+<section aria-labelledby="aiTitle" aria-modal="true" class="ai-sheet" role="dialog">
+<div class="ai-sheet-top">
+<div><div class="kicker">Needs a signal — planning aid</div><h2 id="aiTitle">Ask AI (online)</h2><p>Builds a question from your live app context and hands it to ChatGPT. This needs cell or Wi-Fi — it will not work in the field. On the mountain, use Summit Focus, the saved forecast, and the emergency plan instead.</p></div>
+<button aria-label="Close Ask AI" class="close-ai" id="closeAi" type="button">×</button>
+</div>
+<div class="ai-offline-note" hidden="" id="aiOfflineNote"><span aria-hidden="true">⚠</span><div><b>You appear to be offline.</b> This feature can't reach ChatGPT right now. Your question will still be copied so you can send it once you have signal.</div></div>
+<div class="ai-context-status"><span aria-hidden="true">✦</span><div><b>Mountain Guide context is available</b><small id="aiContextStatus">Selected objective, readiness, next action, and optional saved weather.</small></div></div>
+<div aria-label="Suggested AI questions" class="ai-quick-prompts">
+<button data-ai-prompt="Interpret the saved forecast for the selected objective. Identify the most important planning flags, uncertainty, and what I should verify outside the app." type="button">Interpret weather</button>
+<button data-ai-prompt="Explain the key terrain, route-finding, and exposure considerations for the selected objective's standard route, and what conditions would make it more dangerous. This is background reading, not authorization." type="button">Route background</button>
+<button data-ai-prompt="Based on the current Mountain Guide context, what should I review or prepare next?" type="button">What next?</button>
+<button data-ai-general="true" data-ai-prompt="" type="button">General question</button>
+</div>
+<label class="ai-question-label" for="aiQuestion">Your question</label>
+<textarea id="aiQuestion" maxlength="2000" placeholder="Example: What does the rising precipitation probability mean for our planned turnaround?" rows="6"></textarea>
+<div class="ai-options">
+<label><input checked="" id="aiIncludeContext" type="checkbox"/> Include current app context</label>
+<label><input checked="" id="aiIncludeWeather" type="checkbox"/> Include saved weather</label>
+</div>
+<details class="ai-preview"><summary>Review the context that will be copied</summary><pre id="aiContextPreview"></pre></details>
+<div class="ai-actions"><button class="intel-primary" id="aiOpenChat" type="button">Copy &amp; open ChatGPT</button><button id="aiCopyOnly" type="button">Copy question only</button></div>
+<p class="ai-privacy"><b>How this works:</b> the app builds your question locally and copies it — it never sends anything by itself and holds no API key. You paste and send it in ChatGPT, which needs a signal. Nothing here reaches ChatGPT until you send it.</p>
+<div class="ai-safety"><span aria-hidden="true">!</span><p><b>AI is a planning aid, not a safety clearance.</b> Do not rely on it for rescue, diagnosis, navigation, access permission, or a go/no-go mountain decision.</p></div>
+</section>
+</div>
+<div class="ai-fab-wrap"><button aria-label="Ask AI online" class="ai-fab" id="aiFab" type="button"><span aria-hidden="true">✦</span><small>Ask</small></button></div>
 <div class="focus-fab-wrap"><button aria-label="Open Summit Focus" class="focus-fab" id="focusFab" type="button"><span>⌁</span><small>Focus</small></button></div>
 <nav aria-label="Primary app navigation" class="bottom-nav">
 <a class="active" data-nav="home" href="#home"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3z"></path></svg><span>Home</span></a>

@@ -37,3 +37,30 @@ Version 6.2 adds matched morning and evening Scripture/reflection cards to every
 Commit message:
 
 `Deploy Mountain Guide v6.2 Daily Formation Edition`
+
+
+## Version 6.3
+
+Version 6.3 adds a lower-right Ask AI companion. It prepares a privacy-conscious, context-aware prompt and opens ChatGPT without embedding an API key in the public site.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v6.3 AI Companion Edition`
+
+
+## Version 6.5.1
+
+Safety-language correction: the forecast comparison never presents a green/check-mark all-clear, and every turnaround countdown prompt ends with a question.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v6.5.1 Safety Language Fix`
+
+
+## Version 6.6
+
+Version 6.6 adds a reusable Personal Gear Locker, smart packing presets, custom gear, optional weight tracking, and gear-aware backup/import.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v6.6 Gear Locker and Pack Builder`
