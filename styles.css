@@ -999,3 +999,356 @@ body{background-image:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--i
   background:#2b0b07;
   border-color:rgba(255,106,60,.28);
 }
+
+
+/* Version 7.0 — Phase 2 Colorado Summit Ledger */
+.summit-ledger{scroll-margin-top:82px}
+.ledger-overview{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);
+  gap:22px;
+  padding:22px;
+  margin-bottom:16px;
+}
+.ledger-eyebrow{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.ledger-big-number{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin:9px 0;
+}
+.ledger-big-number strong{
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(46px,8vw,76px);
+  font-weight:500;
+  line-height:.9;
+}
+.ledger-big-number span{color:var(--muted);font-weight:800}
+.ledger-meter,.mini-meter{
+  overflow:hidden;
+  height:10px;
+  border-radius:99px;
+  background:color-mix(in srgb,var(--line) 60%,transparent);
+}
+.ledger-meter span,.mini-meter i{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--blue),var(--gold));
+}
+.ledger-stat-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:12px;
+}
+.ledger-stat-row b{color:var(--ink)}
+.ledger-focus{
+  padding:17px;
+  border-radius:18px;
+  background:var(--ice);
+}
+.ledger-focus h3{margin:4px 0 7px}
+.ledger-focus p{color:var(--muted)}
+.ledger-controls{
+  display:grid;
+  grid-template-columns:minmax(180px,1fr) minmax(150px,.55fr) minmax(170px,.65fr) auto;
+  gap:12px;
+  align-items:end;
+  padding:16px;
+  margin-bottom:16px;
+}
+.ledger-controls label span{
+  display:block;
+  margin:0 0 5px;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.ledger-controls input,.ledger-controls select{
+  width:100%;
+  min-height:44px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px 11px;
+  color:var(--ink);
+  background:var(--paper);
+  font:inherit;
+}
+.range-summary{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:16px;
+}
+.range-card{
+  min-height:126px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  text-align:left;
+  color:var(--ink);
+  background:var(--paper);
+  box-shadow:var(--shadow-soft);
+}
+.range-card span{display:block;color:var(--muted);font-size:11px;font-weight:900}
+.range-card strong{display:block;margin:7px 0;font-family:Georgia,"Times New Roman",serif;font-size:30px}
+.range-card small{display:block;margin-top:7px;color:var(--muted)}
+.mini-meter{height:6px}
+.summit-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:11px;
+}
+.summit-card{
+  min-height:150px;
+  padding:15px;
+  border:1px solid var(--line);
+  border-top:5px solid var(--line);
+  border-radius:17px;
+  background:var(--paper);
+  box-shadow:var(--shadow-soft);
+}
+.summit-card.status-completed{border-top-color:var(--blue)}
+.summit-card.status-planned{border-top-color:var(--gold)}
+.summit-card.status-remaining{border-top-color:#88959b}
+.summit-card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+.summit-status,.summit-rank{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.status-completed .summit-status{color:var(--blue)}
+.status-planned .summit-status{color:#9b6810}
+.summit-card h3{margin:12px 0 4px;font-size:18px}
+.summit-card p{margin:0 0 10px;color:var(--muted);font-size:12px}
+.summit-card small{color:var(--muted);line-height:1.35}
+.ledger-note{
+  margin-top:15px;
+  padding:13px 15px;
+  border-left:5px solid var(--blue);
+  border-radius:14px;
+  color:var(--muted);
+  background:var(--ice);
+}
+.empty-state{
+  grid-column:1/-1;
+  padding:28px;
+  border:1px dashed var(--line);
+  border-radius:16px;
+  color:var(--muted);
+  text-align:center;
+}
+@media(max-width:980px){
+ .range-summary,.summit-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .ledger-overview{grid-template-columns:1fr}
+ .ledger-controls{grid-template-columns:1fr 1fr}
+ .range-summary,.summit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bottom-nav a{font-size:9px}
+}
+@media(max-width:470px){
+ .ledger-controls,.range-summary,.summit-grid{grid-template-columns:1fr}
+ .summit-card{min-height:0}
+}
+.campfire-mode .ledger-focus,
+.campfire-mode .ledger-note{
+  color:#ffd9cb;background:#2b0b07;border-color:rgba(255,106,60,.35)
+}
+.campfire-mode .ledger-controls input,
+.campfire-mode .ledger-controls select,
+.campfire-mode .range-card,
+.campfire-mode .summit-card{
+  color:#fff2ec;background:#200806;border-color:rgba(255,106,60,.24)
+}
+
+
+/* Version 7.1 — completed climb history and route reference details */
+.summit-card{
+  width:100%;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.summit-card:focus-visible{
+  outline:4px solid color-mix(in srgb,var(--gold) 55%,transparent);
+  outline-offset:3px;
+}
+.summit-card-facts{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:11px;
+}
+.summit-card-facts b{color:var(--ink);font-size:13px}
+.summit-open{
+  display:block;
+  margin-top:12px;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:900;
+}
+.summit-detail-overlay[hidden]{display:none!important}
+.summit-detail-overlay{
+  position:fixed;
+  inset:0;
+  z-index:130;
+  overflow:auto;
+  padding:20px;
+  background:rgba(1,9,14,.88);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.summit-detail-viewer{
+  max-width:780px;
+  margin:20px auto;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:24px;
+  color:var(--ink);
+  background:var(--paper);
+  box-shadow:0 32px 90px rgba(0,0,0,.48);
+}
+.summit-detail-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+  padding-bottom:15px;
+  border-bottom:1px solid var(--line);
+}
+.summit-detail-top h2{
+  margin:3px 0 4px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(31px,6vw,50px);
+  font-weight:500;
+  letter-spacing:-.035em;
+}
+.summit-detail-top p{margin:0;color:var(--muted)}
+.summit-detail-top .story-close{
+  color:white;
+  background:var(--ink);
+}
+.summit-detail-section{padding:18px 0 2px}
+.summit-detail-section+.summit-detail-section{
+  margin-top:14px;
+  border-top:1px solid var(--line);
+}
+.ascent-list{display:grid;gap:10px;margin-top:10px}
+.ascent-row{
+  position:relative;
+  padding:13px 14px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--cream);
+}
+.ascent-row>div{display:flex;justify-content:space-between;gap:12px}
+.ascent-row span{color:var(--muted);text-align:right}
+.ascent-row p{margin:7px 0 0;color:var(--muted)}
+.ascent-row em{
+  display:inline-block;
+  margin-top:7px;
+  color:#93650d;
+  font-size:10px;
+  font-style:normal;
+  font-weight:950;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.route-facts{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin-top:10px;
+}
+.route-facts span{
+  min-height:82px;
+  padding:11px;
+  border-radius:14px;
+  color:var(--muted);
+  background:var(--ice);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.route-facts b{
+  display:block;
+  margin-bottom:5px;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.25;
+  text-transform:none;
+  letter-spacing:0;
+}
+.route-note{
+  margin:12px 0 0;
+  padding:11px 13px;
+  border-left:4px solid var(--gold);
+  border-radius:11px;
+  color:var(--muted);
+  background:var(--cream);
+}
+.route-disclaimer{color:var(--muted);font-size:11px}
+.route-link{
+  display:inline-block;
+  margin-top:5px;
+  font-weight:900;
+}
+@media(max-width:620px){
+ .summit-detail-overlay{padding:0}
+ .summit-detail-viewer{
+  min-height:100%;
+  margin:0;
+  padding:calc(17px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));
+  border:0;border-radius:0
+ }
+ .route-facts{grid-template-columns:1fr 1fr}
+ .ascent-row>div{display:block}
+ .ascent-row span{display:block;margin-top:3px;text-align:left}
+}
+.campfire-mode .summit-detail-viewer{
+  color:#fff2ec;background:#160604;border-color:rgba(255,106,60,.3)
+}
+.campfire-mode .ascent-row,
+.campfire-mode .route-facts span,
+.campfire-mode .route-note{
+  color:#ffd9cb;background:#2b0b07;border-color:rgba(255,106,60,.24)
+}
+
+
+/* Version 7.1.1 — historical outing classification */
+.outing-badge{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:9px;
+  padding:8px 10px;
+  border-radius:11px;
+  background:var(--ice);
+  color:var(--muted);
+  font-size:11px;
+}
+.outing-badge b{flex:none;color:var(--ink);font-size:12px}
+.campfire-mode .outing-badge{background:#2b0b07;color:#ffd9cb}

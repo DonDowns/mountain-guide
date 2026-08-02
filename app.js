@@ -1,3 +1,4 @@
+const COLORADO_SUMMITS=[{"name":"Grays Peak","range":"Front Range","status":"completed","ranked":true,"elevation":14275,"route":"North Slopes","difficulty":"Class 1","miles":7.5,"gain":3000,"url":"https://www.14ers.com/route.php?route=gray1","ascents":[{"date":"2011-09-24","partners":"Not recorded","solo":false}]},{"name":"Torreys Peak","range":"Front Range","status":"completed","ranked":true,"elevation":14272,"route":"South Slopes","difficulty":"Class 1","miles":7.75,"gain":3000,"url":"https://www.14ers.com/route.php?route=torr2","ascents":[{"date":"2011-09-24","partners":"Not recorded","solo":false}]},{"name":"Mount Blue Sky","range":"Front Range","status":"completed","ranked":true,"elevation":14268,"route":"West Ridge from Summit Lake","difficulty":"Class 2","miles":5.5,"gain":2000,"url":"https://www.14ers.com/route.php?route=evan2","ascents":[{"date":"2014-07-19","partners":"Caleb Downs, Dan Downs, and several friends","solo":false,"outingName":"Bierstadt–Sawtooth–Mount Evans traverse","outingClass":"Class 3","note":"Climbed when the mountain was still named Mount Evans, during the Bierstadt–Sawtooth–Mount Evans traverse. The Sawtooth made the overall outing Class 3."}]},{"name":"Longs Peak","range":"Front Range","status":"completed","ranked":true,"elevation":14259,"route":"Keyhole Route","difficulty":"Class 3","miles":14.5,"gain":5100,"url":"https://www.14ers.com/route.php?route=long1","ascents":[{"date":"2011-09-04","partners":"Solo","solo":true}]},{"name":"Pikes Peak","range":"Front Range","status":"completed","ranked":true,"elevation":14109,"route":"East Slopes","difficulty":"Class 1","miles":24,"gain":7600,"url":"https://www.14ers.com/route.php?route=pikeeast","ascents":[{"date":"2019-10-02","partners":"Caleb Downs and a friend from Johnstown","solo":false}]},{"name":"Mount Bierstadt","range":"Front Range","status":"completed","ranked":true,"elevation":14066,"route":"West Slopes","difficulty":"Class 2","miles":7.25,"gain":2850,"url":"https://www.14ers.com/route.php?route=bier1","ascents":[{"date":"2014-07-19","partners":"Caleb Downs, Dan Downs, and several friends","solo":false,"outingName":"Bierstadt–Sawtooth–Mount Evans traverse","outingClass":"Class 3","note":"Completed as part of the Bierstadt–Sawtooth–Mount Evans traverse. Bierstadt and Mount Evans were Class 2 summit terrain; the Sawtooth made the overall outing Class 3."}]},{"name":"Quandary Peak","range":"Tenmile Range","status":"completed","ranked":true,"elevation":14272,"route":"East Ridge","difficulty":"Class 1","miles":6.75,"gain":3450,"url":"https://www.14ers.com/route.php?route=quan1","ascents":[{"date":"2015-08-29","partners":"Not recorded","solo":false}]},{"name":"Mount Lincoln","range":"Mosquito Range","status":"completed","ranked":true,"elevation":14293,"route":"West Ridge","difficulty":"Class 2","miles":6,"gain":2600,"url":"https://www.14ers.com/route.php?route=linc1","ascents":[{"date":"2014-09-02","partners":"Not recorded","solo":false}]},{"name":"Mount Cameron","range":"Mosquito Range","status":"completed","ranked":false,"elevation":14248,"route":"West Ridge","difficulty":"Class 2","miles":4.75,"gain":2250,"url":"https://www.14ers.com/route.php?route=came1","ascents":[{"date":"2014-09-02","partners":"Not recorded","solo":false}]},{"name":"Mount Bross","range":"Mosquito Range","status":"completed","ranked":true,"elevation":14178,"route":"West Slopes","difficulty":"Class 2","miles":3.25,"gain":2250,"url":"https://www.14ers.com/route.php?route=bros2","ascents":[{"date":"2014-09-02","partners":"Not recorded","solo":false}]},{"name":"Mount Democrat","range":"Mosquito Range","status":"completed","ranked":true,"elevation":14154,"route":"East Slope","difficulty":"Class 2","miles":4,"gain":2150,"url":"https://www.14ers.com/route.php?route=demo1","ascents":[{"date":"2014-09-02","partners":"Not recorded","solo":false}]},{"name":"Mount Sherman","range":"Mosquito Range","status":"completed","ranked":true,"elevation":14043,"route":"Southwest Ridge","difficulty":"Class 1","miles":5.25,"gain":2100,"url":"https://www.14ers.com/route.php?route=sher1","ascents":[{"date":"2015-09-08","partners":"Solo","solo":true}]},{"name":"Mount Elbert","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14438,"route":"Northeast Ridge","difficulty":"Class 1","miles":9.75,"gain":4500,"url":"https://www.14ers.com/route.php?route=elbe1","ascents":[{"date":"2016-08-20","partners":"Not recorded","solo":false}]},{"name":"Mount Massive","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14427,"route":"East Slopes","difficulty":"Class 2","miles":13.75,"gain":4500,"url":"https://www.14ers.com/route.php?route=mass1","ascents":[{"date":"2016-07-30","partners":"Caleb Downs","solo":false}]},{"name":"Mount Harvard","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14424,"route":"South Slopes","difficulty":"Class 2","miles":13.75,"gain":4600,"url":"https://www.14ers.com/route.php?route=harv1","ascents":[{"date":"2016-10-16","partners":"Not recorded","solo":false}]},{"name":"La Plata Peak","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14344,"route":"Northwest Ridge","difficulty":"Class 2","miles":9.25,"gain":4400,"url":"https://www.14ers.com/route.php?route=lapl1","ascents":[{"date":"2019-08-24","partners":"Not recorded","solo":false}]},{"name":"Mount Antero","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14271,"route":"West Slopes","difficulty":"Class 2","miles":15.5,"gain":5200,"url":"https://www.14ers.com/route.php?route=ante1","ascents":[{"date":"2020-06-27","partners":"Not recorded","solo":false}]},{"name":"Mount Shavano","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14230,"route":"East Slopes","difficulty":"Class 2","miles":10,"gain":4500,"url":"https://www.14ers.com/route.php?route=shav1","ascents":[{"date":"2016-08-27","partners":"David Harbin","solo":false}]},{"name":"Mount Belford","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14202,"route":"Northwest Ridge","difficulty":"Class 2","miles":8,"gain":4500,"url":"https://www.14ers.com/route.php?route=belf1","ascents":[{"date":"2019-09-14","partners":"Not recorded","solo":false}]},{"name":"Mount Princeton","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14200,"route":"East Slopes","difficulty":"Class 2","miles":6.5,"gain":3200,"url":"https://www.14ers.com/route.php?route=prin1","ascents":[{"date":"2019-09-17","partners":"Vonda Downs, Caleb Downs, Shelby Downs, Marin, and LinZhi Downs","solo":false,"note":"Whole-family climb; summit announcement welcomed Baby Downs in April 2020."}]},{"name":"Mount Yale","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14200,"route":"Southwest Slopes","difficulty":"Class 2","miles":9.5,"gain":4300,"url":"https://www.14ers.com/route.php?route=yale1","ascents":[{"date":"2020-07-06","partners":"Not recorded","solo":false}]},{"name":"Mount Oxford","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14158,"route":"Via Mount Belford","difficulty":"Class 2","miles":11,"gain":5900,"url":"https://www.14ers.com/route.php?route=oxfo2","ascents":[{"date":"2019-09-14","partners":"Not recorded","solo":false}]},{"name":"Tabeguache Peak","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14158,"route":"Via Mount Shavano","difficulty":"Class 2","miles":12,"gain":5600,"url":"https://www.14ers.com/route.php?route=tabe2","ascents":[{"date":"2016-08-27","partners":"David Harbin","solo":false,"note":"Climbed with Mount Shavano."}]},{"name":"Mount Columbia","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14075,"route":"West Slopes","difficulty":"Class 2","miles":12,"gain":4250,"url":"https://www.14ers.com/route.php?route=colu2","ascents":[{"date":"2022-08-26","partners":"David Schulteis and Logan Jones","solo":false}]},{"name":"Missouri Mountain","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14071,"route":"Northwest Ridge","difficulty":"Class 2","miles":10.5,"gain":4500,"url":"https://www.14ers.com/route.php?route=miss1","ascents":[{"date":"2019-09-24","partners":"Solo","solo":true}]},{"name":"Mount of the Holy Cross","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14007,"route":"North Ridge","difficulty":"Class 2","miles":11.25,"gain":5600,"url":"https://www.14ers.com/route.php?route=holy1","ascents":[{"date":"2015-07-13","partners":"Solo","solo":true}]},{"name":"Huron Peak","range":"Sawatch Range","status":"completed","ranked":true,"elevation":14006,"route":"Northwest Slopes","difficulty":"Class 2","miles":7,"gain":3500,"url":"https://www.14ers.com/route.php?route=huro1","ascents":[{"date":"2017-07-08","partners":"Solo","solo":true}]},{"name":"Castle Peak","range":"Elk Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Conundrum Peak","range":"Elk Mountains","status":"remaining","ranked":false,"ascents":[]},{"name":"Maroon Peak","range":"Elk Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Capitol Peak","range":"Elk Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Snowmass Mountain","range":"Elk Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Pyramid Peak","range":"Elk Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"North Maroon Peak","range":"Elk Mountains","status":"remaining","ranked":false,"ascents":[]},{"name":"Uncompahgre Peak","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Mount Wilson","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"El Diente Peak","range":"San Juan Mountains","status":"completed","ranked":false,"elevation":14175,"route":"South Slopes","difficulty":"Class 3","miles":12,"gain":4400,"url":"https://www.14ers.com/route.php?route=eldi4","ascents":[{"date":"2019-08-10","partners":"Mike Brown and David Harbin","solo":false}]},{"name":"Mount Sneffels","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Windom Peak","range":"San Juan Mountains","status":"completed","ranked":true,"elevation":14089,"route":"West Ridge","difficulty":"Difficult Class 2","miles":6,"gain":3000,"url":"https://www.14ers.com/route.php?route=wind1","note":"Route statistics begin in Chicago Basin. The separate Needleton–Chicago Basin approach is listed by 14ers.com as 12 miles round trip with 2,800 feet of gain.","ascents":[{"date":"2019-08-06","partners":"Mike Brown and David Harbin","solo":false}]},{"name":"Mount Eolus","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Sunlight Peak","range":"San Juan Mountains","status":"completed","ranked":true,"elevation":14061,"route":"South Face","difficulty":"Class 4","miles":6,"gain":3000,"url":"https://www.14ers.com/route.php?route=sunl2","note":"Route statistics begin in Chicago Basin. The separate Needleton–Chicago Basin approach is listed by 14ers.com as 12 miles round trip with 2,800 feet of gain.","ascents":[{"date":"2019-08-06","partners":"Mike Brown and David Harbin","solo":false}]},{"name":"Handies Peak","range":"San Juan Mountains","status":"completed","ranked":true,"elevation":14058,"route":"Southwest Slopes","difficulty":"Class 1","miles":5.75,"gain":2500,"url":"https://www.14ers.com/route.php?route=hand1","ascents":[{"date":"2021-09-25","partners":"Vonda Downs, LinZhi Downs, and Marin Leong","solo":false}]},{"name":"North Eolus","range":"San Juan Mountains","status":"completed","ranked":false,"elevation":14042,"route":"South Ridge","difficulty":"Class 3","miles":0.2,"gain":250,"url":"https://www.14ers.com/route.php?route=neol4","note":"The 0.2-mile/250-foot listing is only the standard summit spur from the Eolus saddle, not the full trip from Needleton or Chicago Basin.","ascents":[{"date":"2019-08-07","partners":"Mike Brown and David Harbin","solo":false,"note":"Summited North Eolus in Chicago Basin. Don and David Harbin continued across the catwalk toward Mount Eolus but did not summit Mount Eolus."}]},{"name":"Redcloud Peak","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"San Luis Peak","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Wetterhorn Peak","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Wilson Peak","range":"San Juan Mountains","status":"completed","ranked":true,"elevation":14021,"route":"Southwest Ridge","difficulty":"Class 3","miles":10,"gain":3900,"url":"https://www.14ers.com/route.php?route=wils1","ascents":[{"date":"2019-08-07","partners":"Mike Brown and David Harbin","solo":false}]},{"name":"Sunshine Peak","range":"San Juan Mountains","status":"remaining","ranked":true,"ascents":[]},{"name":"Blanca Peak","range":"Sangre de Cristo Range","status":"planned","ranked":true,"ascents":[]},{"name":"Crestone Peak","range":"Sangre de Cristo Range","status":"remaining","ranked":true,"ascents":[]},{"name":"Crestone Needle","range":"Sangre de Cristo Range","status":"remaining","ranked":true,"ascents":[]},{"name":"Kit Carson Peak","range":"Sangre de Cristo Range","status":"completed","ranked":true,"elevation":14167,"route":"Via Challenger Point","difficulty":"Easy Class 3","miles":15,"gain":6250,"url":"https://www.14ers.com/route.php?route=kitc2","ascents":[{"date":"2017-08-26","partners":"Not recorded","solo":false}]},{"name":"Challenger Point","range":"Sangre de Cristo Range","status":"completed","ranked":false,"elevation":14086,"route":"North Slope","difficulty":"Difficult Class 2","miles":13.5,"gain":5400,"url":"https://www.14ers.com/route.php?route=chal1","note":"Don records Challenger Point and Kit Carson Peak on the same date. Kit Carson's standard route continues beyond Challenger Point.","ascents":[{"date":"2017-08-26","partners":"Not recorded","solo":false,"note":"Climbed the same day as Kit Carson Peak."}]},{"name":"Humboldt Peak","range":"Sangre de Cristo Range","status":"remaining","ranked":true,"ascents":[]},{"name":"Ellingwood Point","range":"Sangre de Cristo Range","status":"planned","ranked":true,"ascents":[]},{"name":"Mount Lindsey","range":"Sangre de Cristo Range","status":"planned","ranked":true,"ascents":[]},{"name":"Culebra Peak","range":"Sangre de Cristo Range","status":"remaining","ranked":true,"ascents":[]},{"name":"Little Bear Peak","range":"Sangre de Cristo Range","status":"remaining","ranked":true,"ascents":[]}];
 const PEAKS=[{"name": "Grays Peak", "range": "Front", "status": "Completed"}, {"name": "Torreys Peak", "range": "Front", "status": "Completed"}, {"name": "Mount Blue Sky", "range": "Front", "status": "Completed"}, {"name": "Longs Peak", "range": "Front", "status": "Completed"}, {"name": "Pikes Peak", "range": "Front", "status": "Completed"}, {"name": "Mount Bierstadt", "range": "Front", "status": "Completed"}, {"name": "Quandary Peak", "range": "Tenmile", "status": "Completed"}, {"name": "Mount Lincoln", "range": "Mosquito", "status": "Completed"}, {"name": "Mount Cameron", "range": "Mosquito", "status": "Completed"}, {"name": "Mount Bross", "range": "Mosquito", "status": "Completed"}, {"name": "Mount Democrat", "range": "Mosquito", "status": "Completed"}, {"name": "Mount Sherman", "range": "Mosquito", "status": "Completed"}, {"name": "Mount Elbert", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Massive", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Harvard", "range": "Sawatch", "status": "Completed"}, {"name": "La Plata Peak", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Antero", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Shavano", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Belford", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Princeton", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Yale", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Oxford", "range": "Sawatch", "status": "Completed"}, {"name": "Tabeguache Peak", "range": "Sawatch", "status": "Completed"}, {"name": "Mount Columbia", "range": "Sawatch", "status": "Completed"}, {"name": "Missouri Mountain", "range": "Sawatch", "status": "Completed"}, {"name": "Mount of the Holy Cross", "range": "Sawatch", "status": "Completed"}, {"name": "Huron Peak", "range": "Sawatch", "status": "Completed"}, {"name": "El Diente Peak", "range": "San Juan", "status": "Completed"}, {"name": "Windom Peak", "range": "San Juan", "status": "Completed"}, {"name": "Sunlight Peak", "range": "San Juan", "status": "Completed"}, {"name": "Handies Peak", "range": "San Juan", "status": "Completed"}, {"name": "North Eolus", "range": "San Juan", "status": "Completed"}, {"name": "Wilson Peak", "range": "San Juan", "status": "Completed"}, {"name": "Kit Carson Peak", "range": "Sangre de Cristo", "status": "Completed"}, {"name": "Challenger Point", "range": "Sangre de Cristo", "status": "Completed"}, {"name": "San Luis Peak", "range": "San Juan", "status": "Goal"}, {"name": "Uncompahgre Peak", "range": "San Juan", "status": "Goal"}, {"name": "Redcloud Peak", "range": "San Juan", "status": "Goal"}, {"name": "Sunshine Peak", "range": "San Juan", "status": "Goal"}, {"name": "Mount Sneffels", "range": "San Juan", "status": "Goal"}, {"name": "Wetterhorn Peak", "range": "San Juan", "status": "Goal"}, {"name": "Mount Wilson", "range": "San Juan", "status": "Goal"}, {"name": "Mount Eolus", "range": "San Juan", "status": "Goal"}, {"name": "Castle Peak", "range": "Elk", "status": "Goal"}, {"name": "Conundrum Peak", "range": "Elk", "status": "Goal"}, {"name": "Humboldt Peak", "range": "Sangre de Cristo", "status": "Goal"}, {"name": "Culebra Peak", "range": "Sangre de Cristo", "status": "Goal"}, {"name": "Blanca Peak", "range": "Sangre de Cristo", "status": "Goal"}, {"name": "Ellingwood Point", "range": "Sangre de Cristo", "status": "Goal"}, {"name": "Mount Lindsey", "range": "Sangre de Cristo", "status": "Goal"}];
 
 const TRIP_START = new Date('2026-08-19T12:00:00-06:00');
@@ -916,7 +917,7 @@ function aiContextText(){
  const nextText=document.getElementById('nextActionText')?.textContent?.trim()||'';
  const lines=[
   'MOUNTAIN GUIDE CONTEXT',
-  'App: Don Downs Mountain Guide, Version 6.8',
+  'App: Don Downs Mountain Guide, Version 7.1.1',
   'Trip: Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026',
   `Selected objective: ${aiSelectedObjective()}`,
   `Readiness: ${readiness()}% of saved gear and communication checks`,
@@ -1103,10 +1104,166 @@ function setupStories(){
  },{passive:true})
 }
 
+
+const SUMMIT_STATUS_LABELS={completed:'Completed',planned:'Planned',remaining:'Remaining'};
+function summitDisplayName(peak){
+ return peak.name==='Mount Blue Sky'?'Mount Blue Sky':peak.name
+}
+function formatClimbDate(value){
+ if(!value)return 'Date not yet entered';
+ const [year,month,day]=value.split('-').map(Number);
+ return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(year,month-1,day))
+}
+function firstAscentDate(peak){
+ return peak.ascents?.length?peak.ascents.map(a=>a.date).filter(Boolean).sort()[0]:null
+}
+function summitSearchText(peak){
+ const ascentText=(peak.ascents||[]).map(a=>`${a.date||''} ${a.partners||''} ${a.note||''}`).join(' ');
+ return `${peak.name} ${peak.range} ${peak.route||''} ${peak.difficulty||''} ${ascentText}`.toLowerCase()
+}
+function renderRangeSummary(){
+ const holder=document.getElementById('rangeSummary');
+ if(!holder)return;
+ const ranges=[...new Set(COLORADO_SUMMITS.map(p=>p.range))];
+ holder.innerHTML=ranges.map(range=>{
+  const all=COLORADO_SUMMITS.filter(p=>p.range===range);
+  const done=all.filter(p=>p.status==='completed').length;
+  const planned=all.filter(p=>p.status==='planned').length;
+  const pct=Math.round(done/all.length*100);
+  return `<button class="range-card" type="button" data-range-card="${range}">
+   <span>${range}</span>
+   <strong>${done}/${all.length}</strong>
+   <div class="mini-meter"><i style="width:${pct}%"></i></div>
+   <small>${planned?`${planned} planned · `:''}${all.length-done-planned} remaining</small>
+  </button>`
+ }).join('')
+}
+function currentSummitFilters(){
+ return {
+  query:(document.getElementById('summitSearch')?.value||'').trim().toLowerCase(),
+  status:document.getElementById('summitStatusFilter')?.value||'all',
+  range:document.getElementById('summitRangeFilter')?.value||'all'
+ }
+}
+function renderSummitLedger(){
+ const grid=document.getElementById('summitGrid');
+ if(!grid)return;
+ const {query,status,range}=currentSummitFilters();
+ const filtered=COLORADO_SUMMITS.filter(peak=>{
+  const text=summitSearchText(peak);
+  return (!query||text.includes(query))&&(status==='all'||peak.status===status)&&(range==='all'||peak.range===range)
+ });
+ grid.innerHTML=filtered.length?filtered.map(peak=>{
+  const first=firstAscentDate(peak),ascentCount=peak.ascents?.length||0;
+  return `<button class="summit-card status-${peak.status}" type="button" data-summit-name="${peak.name}" aria-label="Open details for ${summitDisplayName(peak)}">
+   <div class="summit-card-top">
+    <span class="summit-status">${SUMMIT_STATUS_LABELS[peak.status]}</span>
+    <span class="summit-rank">${peak.ranked?'Ranked':'Named · unranked'}</span>
+   </div>
+   <h3>${summitDisplayName(peak)}</h3>
+   <p>${peak.range}${peak.difficulty?` · ${peak.difficulty}`:''}${peak.elevation?` · ${Number(peak.elevation).toLocaleString()}'`:''}</p>
+   ${peak.status==='completed'
+     ?`<div class="summit-card-facts"><b>${first?formatClimbDate(first):'Date not yet entered'}</b><span>${ascentCount?`${ascentCount} recorded ascent${ascentCount===1?'':'s'}`:'Completion confirmed'}</span></div>`
+     :peak.status==='planned'
+       ?'<small>Lake Como objective; not counted until summited.</small>'
+       :'<small>Future Colorado objective.</small>'}
+   <span class="summit-open">View details →</span>
+  </button>`
+ }).join('')
+  :'<div class="empty-state">No summits match these filters.</div>';
+}
+
+function openSummitDetail(name){
+ const peak=COLORADO_SUMMITS.find(item=>item.name===name);if(!peak)return;
+ const overlay=document.getElementById('summitDetailOverlay');
+ document.getElementById('summitDetailTitle').textContent=summitDisplayName(peak);
+ document.getElementById('summitDetailSubtitle').textContent=`${peak.range}${peak.elevation?` · ${Number(peak.elevation).toLocaleString()} feet`:''}`;
+ const history=peak.ascents?.length
+  ?`<section class="summit-detail-section"><div class="kicker">Recorded climb history</div>
+    <div class="ascent-list">${peak.ascents.map((ascent,index)=>`
+      <article class="ascent-row">
+       <div><strong>${formatClimbDate(ascent.date)}</strong><span>${ascent.solo?'Solo':ascent.partners||'Partners not recorded'}</span></div>
+       ${ascent.outingName?`<div class="outing-badge"><b>${ascent.outingClass}</b><span>${ascent.outingName}</span></div>`:''}
+       ${ascent.note?`<p>${ascent.note}</p>`:''}
+      </article>`).join('')}</div></section>`
+  :peak.status==='completed'
+    ?'<section class="summit-detail-section"><div class="kicker">Recorded climb history</div><p>Completion is confirmed by the Aug. 1, 2026 checklist, but the date and partners have not yet been entered.</p></section>'
+    :'';
+ const route=peak.route
+  ?`<section class="summit-detail-section route-reference">
+      <div class="kicker">Current 14ers.com standard-route reference</div>
+      <div class="route-facts">
+       <span><b>${peak.route}</b>Route</span>
+       <span><b>${peak.difficulty}</b>Difficulty</span>
+       <span><b>${peak.miles} mi</b>Round trip</span>
+       <span><b>${Number(peak.gain).toLocaleString()}'</b>Elevation gain</span>
+      </div>
+      ${peak.note?`<p class="route-note">${peak.note}</p>`:''}
+      <p class="route-disclaimer">These are current standard-route reference values, not a reconstruction of Don’s historical GPS track or exact starting point.</p>
+      <a class="route-link" href="${peak.url}" target="_blank" rel="noopener">Open official 14ers.com route guide ↗</a>
+    </section>`
+  :'';
+ document.getElementById('summitDetailBody').innerHTML=history+route;
+ overlay.hidden=false;document.body.style.overflow='hidden';
+ document.getElementById('summitDetailClose').focus()
+}
+function closeSummitDetail(){
+ const overlay=document.getElementById('summitDetailOverlay');
+ const title=document.getElementById('summitDetailTitle').textContent;
+ overlay.hidden=true;document.body.style.overflow='';
+ [...document.querySelectorAll('[data-summit-name]')].find(button=>summitDisplayName({name:button.dataset.summitName})===title)?.focus()
+}
+
+function setupSummitLedger(){
+ const grid=document.getElementById('summitGrid');if(!grid)return;
+ const completed=COLORADO_SUMMITS.filter(p=>p.status==='completed').length;
+ const planned=COLORADO_SUMMITS.filter(p=>p.status==='planned').length;
+ document.getElementById('ledgerCompletedCount').textContent=completed;
+ document.getElementById('ledgerProjectedCount').textContent=completed+planned;
+ document.getElementById('ledgerMeterFill').style.width=`${completed/58*100}%`;
+
+ const rangeSelect=document.getElementById('summitRangeFilter');
+ [...new Set(COLORADO_SUMMITS.map(p=>p.range))].forEach(range=>{
+  const option=document.createElement('option');option.value=range;option.textContent=range;rangeSelect.append(option)
+ });
+ ['summitSearch','summitStatusFilter','summitRangeFilter'].forEach(id=>{
+  document.getElementById(id)?.addEventListener(id==='summitSearch'?'input':'change',renderSummitLedger)
+ });
+ document.getElementById('resetSummitFilters')?.addEventListener('click',()=>{
+  document.getElementById('summitSearch').value='';
+  document.getElementById('summitStatusFilter').value='all';
+  document.getElementById('summitRangeFilter').value='all';
+  renderSummitLedger()
+ });
+ document.getElementById('showPlannedSummits')?.addEventListener('click',()=>{
+  document.getElementById('summitStatusFilter').value='planned';
+  document.getElementById('summitRangeFilter').value='all';
+  document.getElementById('summitSearch').value='';
+  renderSummitLedger();
+  document.getElementById('summitGrid').scrollIntoView({behavior:'smooth',block:'start'})
+ });
+ document.getElementById('rangeSummary')?.addEventListener('click',event=>{
+  const button=event.target.closest('[data-range-card]');if(!button)return;
+  document.getElementById('summitRangeFilter').value=button.dataset.rangeCard;
+  document.getElementById('summitStatusFilter').value='all';
+  renderSummitLedger();
+  document.getElementById('summitGrid').scrollIntoView({behavior:'smooth',block:'start'})
+ });
+ document.getElementById('summitGrid')?.addEventListener('click',event=>{
+  const card=event.target.closest('[data-summit-name]');if(card)openSummitDetail(card.dataset.summitName)
+ });
+ document.getElementById('summitDetailClose')?.addEventListener('click',closeSummitDetail);
+ document.getElementById('summitDetailOverlay')?.addEventListener('click',event=>{if(event.target.id==='summitDetailOverlay')closeSummitDetail()});
+ document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&!document.getElementById('summitDetailOverlay')?.hidden)closeSummitDetail()
+ });
+ renderRangeSummary();renderSummitLedger()
+}
+
 document.documentElement.classList.remove('field-mode');storageRemove('ddmg-v3-field');
 document.getElementById('nextActionPrimary').addEventListener('click',runNextAction);
 document.getElementById('shareStatusBtn').addEventListener('click',shareStatus);
 document.getElementById('shareIntelBtn').addEventListener('click',shareStatus);
 const initialNav=document.querySelector('.bottom-nav a.active');if(initialNav)initialNav.setAttribute('aria-current','page');
-setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();setupStories();
+setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();setupStories();setupSummitLedger();
 renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();setupAi();

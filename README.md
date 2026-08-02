@@ -82,3 +82,30 @@ Version 6.8 moves Great Sand Dunes and Zapata Falls to Friday with Marin, LinZhi
 GitHub commit message:
 
 `Deploy Mountain Guide v6.8 Itinerary and Readiness Update`
+
+
+## Version 7.0
+
+Version 7.0 begins Phase 2 with an authoritative Colorado Fourteener Ledger based on Don’s August 1, 2026 14ers.com checklist: 35 of 58 named summits and 31 of 53 ranked peaks completed.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.0 Colorado Summit Ledger`
+
+
+## Version 7.1
+
+Version 7.1 adds Don’s completed-climb dates, partners, repeats, solo ascents, current 14ers.com standard-route references, and a detailed summit viewer.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.1 Completed Climb History`
+
+
+## Version 7.1.1
+
+Version 7.1.1 corrects the climb history to 35 unique summits and 35 ascent events, adds the Bierstadt–Sawtooth–Mount Evans Class 3 traverse, completes the North Eolus record, and displays mountain range and class on completed summit cards.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.1.1 Climb History Corrections`

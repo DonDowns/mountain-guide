@@ -54,3 +54,24 @@ VERSION 6.8 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v6.8 Itinerary and Readiness Update
+
+
+VERSION 7.0 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.0 Colorado Summit Ledger
+
+
+VERSION 7.1 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.1 Completed Climb History
+
+
+VERSION 7.1.1 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.1.1 Climb History Corrections
