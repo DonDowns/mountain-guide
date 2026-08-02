@@ -965,3 +965,37 @@ body{background-image:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--i
 @media print{
   .story-overlay{display:none!important}
 }
+
+
+/* Version 6.8 — itinerary intent and private waiver confirmation */
+.day-intent{
+  margin-bottom:12px;
+  padding:13px 14px;
+  border-left:5px solid var(--blue);
+  border-radius:14px;
+  background:var(--ice);
+  color:var(--muted);
+}
+.day-intent b{color:var(--ink)}
+.waiver-status{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  margin-bottom:12px;
+  padding:13px 14px;
+  border:1px solid var(--line);
+  border-left:5px solid var(--gold);
+  border-radius:15px;
+  background:color-mix(in srgb,var(--cream) 68%,var(--paper));
+}
+.waiver-status>span{
+  width:29px;height:29px;flex:none;display:grid;place-items:center;
+  border-radius:50%;background:var(--gold);color:#17242b;font-weight:950;
+}
+.waiver-status p{margin:3px 0 0;color:var(--muted)}
+.campfire-mode .day-intent,
+.campfire-mode .waiver-status{
+  color:#ffd9cb;
+  background:#2b0b07;
+  border-color:rgba(255,106,60,.28);
+}

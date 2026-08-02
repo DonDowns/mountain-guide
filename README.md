@@ -73,3 +73,12 @@ Version 6.7 adds chronological personal Mountain Stories for Mount Massive, Moun
 GitHub commit message:
 
 `Deploy Mountain Guide v6.7 Mountain Stories`
+
+
+## Version 6.8
+
+Version 6.8 moves Great Sand Dunes and Zapata Falls to Friday with Marin, LinZhi, and Sam; creates an unhurried Thursday for Don and Vonda; records the executed Mount Lindsey waiver privately; and adds device charging/setup checks.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v6.8 Itinerary and Readiness Update`

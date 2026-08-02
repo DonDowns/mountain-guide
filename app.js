@@ -118,11 +118,15 @@ const BASE_GEAR=[
  {id:'phoneOffline',name:'Phone with offline maps and route pages',category:'navigation',status:'owned',location:'worn',weightOz:null,note:'Download before leaving service.'},
  {id:'routeScreens',name:'Route screenshots, GPX, and key route photographs',category:'navigation',status:'owned',location:'summit',weightOz:0,note:'Stored offline on the phone; print critical pages when useful.'},
  {id:'garmin965',name:'Garmin Forerunner 965',category:'navigation',status:'owned',location:'worn',weightOz:null,note:'Course loaded; Hiking activity for standard Class 1–3 routes.'},
- {id:'inreach',name:'Garmin inReach',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Charged, active plan confirmed, attached high on a shoulder strap.'},
+ {id:'garmin965Charge',name:'Charge Garmin Forerunner 965',category:'navigation',status:'verify',location:'vehicle',weightOz:0,note:'Charge fully before departure and verify the route/course and activity settings.'},
+ {id:'inreach',name:'Garmin inReach',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Attach high on a shoulder strap for the climbing portion.'},
+ {id:'inreachSetup',name:'Set up, sync, and test Garmin inReach',category:'navigation',status:'verify',location:'vehicle',weightOz:0,note:'Charge fully; confirm active plan, contacts, tracking settings, presets/check-ins, pairing, and a successful test message before leaving service.'},
  {id:'headlamp',name:'Primary headlamp',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Required for alpine starts.'},
+ {id:'headlampCharge',name:'Charge and test primary headlamp',category:'navigation',status:'verify',location:'vehicle',weightOz:0,note:'Fully charge it, test all modes, and confirm the backup light or battery is independent.'},
  {id:'headlampBackup',name:'Backup headlamp or tested spare battery',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Independent backup for pre-dawn travel.'},
  {id:'powerBank',name:'Power bank',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Charged before departure.'},
- {id:'chargingCables',name:'Phone, Garmin, and inReach charging cables',category:'navigation',status:'owned',location:'vehicle',weightOz:null,note:'Keep travel and camp charging needs distinct.'},
+ {id:'chargingCables',name:'Phone, Garmin, inReach, and headlamp charging cables',category:'navigation',status:'owned',location:'vehicle',weightOz:null,note:'Match each cable to the actual device before packing.'},
+ {id:'chargingBlock',name:'USB wall charging block',category:'navigation',status:'owned',location:'vehicle',weightOz:null,note:'Bring a wall adapter with enough ports or capacity for the phone, Garmin, inReach, and headlamp charging plan.'},
  {id:'paperEmergency',name:'Printed emergency and communication card',category:'navigation',status:'owned',location:'main',weightOz:null,note:'Offline redundancy.'},
 
  {id:'hydrationReservoir',name:'Hydration reservoir and bottles',category:'water',status:'owned',location:'main',weightOz:null,note:'Total capacity 2–3 L for summit use.'},
@@ -154,7 +158,7 @@ const BASE_GEAR=[
  {id:'cleanClothes',name:'Clean return clothes',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:''},
  {id:'toiletriesMeds',name:'Toiletries and personal medications',category:'personal',status:'owned',location:'vehicle',weightOz:null,note:'Keep essential medication accessible and protected.'},
  {id:'walletId',name:'Wallet, identification, and permits or waiver copy',category:'personal',status:'owned',location:'worn',weightOz:null,note:'Keep sensitive confirmation details outside the public app.'},
- {id:'lindseyWaiver',name:'Mount Lindsey waiver confirmation saved offline',category:'personal',status:'verify',location:'vehicle',weightOz:0,note:'Reconfirm current access requirements before departure.'},
+ {id:'lindseyWaiver',name:'Executed Mount Lindsey adult waiver saved privately offline',category:'personal',status:'verify',location:'vehicle',weightOz:0,note:'Executed copy located in the July 24, 2026 SpotDraft email. Save the PDF in iPhone Files; do not publish the signed agreement on the public website.'},
  {id:'groupShelterPlan',name:'Group shelter and critical-gear assignment confirmed',category:'safety',status:'shared',location:'shared',weightOz:0,note:'Do not split critical shelter, water treatment, or emergency capability without an explicit plan.'}
 ];
 
@@ -177,7 +181,7 @@ const PACK_PRESETS={
     'phoneOffline','garmin965','firstAid','emergencyBivy','routeScreens','helmet','sunscreenLip','sunglasses'
    ]},
    {id:'vehicle',title:'Audi Q5, lodging & return',subtitle:'Travel and recovery gear that does not belong in the backpacking load.',items:[
-    'audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','lodgingBag','cleanClothes','campShoes',
+    'audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','lodgingBag','cleanClothes','campShoes',
     'toiletriesMeds','cooler','lindseyWaiver'
    ]},
    {id:'shared',title:'Shared / assigned — confirm the carrier',subtitle:'An assignment is not complete until the person and item are explicit.',items:[
@@ -232,7 +236,7 @@ const PACK_PRESETS={
   description:'Simple road-trip and lodging template when no overnight backpack is required.',
   note:'<b>Travel template:</b> preserves the Audi Q5, navigation, hydration, clean return gear, and personal essentials without loading backpacking equipment.',
   sections:[
-   {id:'vehicle',title:'Audi Q5',subtitle:'Vehicle readiness and travel support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','cooler']},
+   {id:'vehicle',title:'Audi Q5',subtitle:'Vehicle readiness and travel support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','cooler']},
    {id:'personal',title:'Lodging & personal',subtitle:'Separate from hiking equipment.',items:['lodgingBag','cleanClothes','campShoes','toiletriesMeds','walletId']},
    {id:'day',title:'Optional day-hike kit',subtitle:'Use when the itinerary includes a hike.',items:[{id:'ospreyManta',required:false},{id:'hydrationReservoir',required:false},{id:'rainShell',required:false},{id:'puffy',required:false},{id:'headlamp',required:false},{id:'phoneOffline',required:false},{id:'garmin965',required:false},{id:'firstAid',required:false}]}
   ]
@@ -912,7 +916,7 @@ function aiContextText(){
  const nextText=document.getElementById('nextActionText')?.textContent?.trim()||'';
  const lines=[
   'MOUNTAIN GUIDE CONTEXT',
-  'App: Don Downs Mountain Guide, Version 6.7',
+  'App: Don Downs Mountain Guide, Version 6.8',
   'Trip: Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026',
   `Selected objective: ${aiSelectedObjective()}`,
   `Readiness: ${readiness()}% of saved gear and communication checks`,
