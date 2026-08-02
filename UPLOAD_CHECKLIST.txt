@@ -110,3 +110,9 @@ VERSION 7.3 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v7.3 Transcript Climb History
+
+VERSION 7.3.2 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.3.2 Mount Columbia partner correction

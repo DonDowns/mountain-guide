@@ -157,3 +157,11 @@ Version 7.3 incorporates Don’s transcript from his 14ers.com climb review, cor
 GitHub commit message:
 
 `Deploy Mountain Guide v7.3 Transcript Climb History`
+
+## Version 7.3.2
+
+Version 7.3.2 corrects Mount Columbia partners to Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.3.2 Mount Columbia partner correction`

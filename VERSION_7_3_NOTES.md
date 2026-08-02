@@ -32,7 +32,7 @@ Applied the transcript as the governing record for completed summits, including:
 - Shavano/Tabeguache combo: David Harbin.
 - Yale: David Schulteis.
 - Oxford: Logan Jones, David Schulteis, and Amy.
-- Columbia: Mike Brown, David Harbin, and Dr. Charles Janssen.
+- Columbia: Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen.
 - Huron: Caleb, Shelby, and Nathan.
 - El Diente: David Harbin, Mike Brown, and Stephen McKinney.
 - Windom/Sunlight: Mike Brown.
@@ -59,3 +59,8 @@ Transcript-derived gear notes were added to summit detail records where Don prov
 ## Service worker
 
 `ddmg-v7-3-2026-08-02-1`
+
+
+## Version 7.3.2 correction
+
+Mount Columbia partners corrected to Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen. It was not climbed with David Schulteis or Logan Jones.
