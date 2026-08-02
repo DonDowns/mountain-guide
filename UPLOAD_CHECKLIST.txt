@@ -12,3 +12,10 @@ DON DOWNS MOUNTAIN GUIDE — VERSION 6.1 UPLOAD
 10. Verify Summit Focus, Night Vision, live weather, and Airplane Mode relaunch.
 
 The obsolete capital-I Index.html is not included, but an upload cannot delete an already-existing repository file.
+
+
+VERSION 6.2 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v6.2 Daily Formation Edition

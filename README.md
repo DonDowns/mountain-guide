@@ -1,4 +1,4 @@
-# Don Downs Mountain Guide — Version 6.1 Refined Alpine Edition
+# Don Downs Mountain Guide — Version 6.2 Daily Formation Edition
 
 Version 6.1 keeps the audited Version 5.1 reliability baseline and adds a focused premium experience rather than feature clutter.
 
@@ -28,3 +28,12 @@ Version 6.1 keeps the audited Version 5.1 reliability baseline and adds a focuse
 
 ## Privacy
 The public version excludes exact addresses, reservation numbers, private phone numbers, and other sensitive details.
+
+
+## Version 6.2
+
+Version 6.2 adds matched morning and evening Scripture/reflection cards to every itinerary day and corrects the projected 38-of-50 progress bar to 76%.
+
+Commit message:
+
+`Deploy Mountain Guide v6.2 Daily Formation Edition`
