@@ -74,7 +74,7 @@ boxes.forEach((b,i)=>{const k=b.dataset.save||i;b.checked=!!saved[k];b.addEventL
 function readiness(){
  const pct=boxes.length?Math.round(boxes.filter(b=>b.checked).length/boxes.length*100):0;
  document.getElementById('readyPct').textContent=pct+'%';document.getElementById('readyBar').style.width=pct+'%';
- return pct
+ if(document.getElementById('pulseReady'))document.getElementById('pulseReady').textContent=pct+'%';return pct
 }
 readiness();
 function resetChecks(){if(confirm('Clear all saved packing and communication checkmarks?')){boxes.forEach(b=>b.checked=false);storageRemove(CHECK_KEY);readiness();renderNextAction()}}
@@ -162,7 +162,7 @@ async function refreshLocation(id,{force=false,quiet=false}={}){
  const refreshBtn=document.getElementById('heroWeatherRefresh');if(id===selectedWeatherId)refreshBtn?.classList.add('loading');
  try{
   const result=await fetchWeatherPoint(spec);weatherStore[id]=result;storageSet(WEATHER_KEY,JSON.stringify(weatherStore));
-  renderHeroWeather();if(TRIP_WEATHER_IDS.includes(id))renderWeatherCard(spec);renderWeatherFreshness();updateIntelOverall();return result
+  renderHeroWeather();if(TRIP_WEATHER_IDS.includes(id))renderWeatherCard(spec);renderWeatherFreshness();updateIntelOverall();if(document.getElementById('focusOverlay'))renderFocus();if(document.getElementById('pulseWeather'))updatePulse();return result
  }catch(e){
   weatherStore[id]={...(stored||{}),lastError:String(e),failedAt:new Date().toISOString()};storageSet(WEATHER_KEY,JSON.stringify(weatherStore));
   renderHeroWeather();if(!quiet)toast('Forecast refresh failed; saved data retained');throw e
@@ -352,9 +352,42 @@ if('serviceWorker'in navigator){
 }
 function applyUpdate(){if(newWorker){window.__updateApplied=true;newWorker.postMessage({type:'SKIP_WAITING'})}}
 
+
+
+// Version 6: sunlight intelligence, Summit Focus and night-vision display
+const CAMPFIRE_KEY='ddmg-v6-campfire',FOCUS_OBJECTIVE_KEY='ddmg-v6-focus-objective';
+const FOCUS_OBJECTIVES={
+ blanca:{id:'blanca',label:'Blanca + Ellingwood',date:'2026-08-23',weatherId:'blanca',start:'4:15 AM',turn:'11:30 AM',intent:'Below exposed high terrain by late morning.',route:'The traverse is optional. Weather, rock, time and every climber’s comfort decide the sequence.',dayId:'sun',links:[['Combination route','https://www.14ers.com/route.php?route=elli3'],['Peak conditions','https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004']]},
+ lake:{id:'lake',label:'Lake Como approach',date:'2026-08-22',weatherId:'lake',start:'10:00 AM',turn:'3:30 PM',intent:'Reach camp with enough margin to recover, filter water and prepare.',route:'Road clearance determines the starting point. Do not force the vehicle higher than conditions support.',dayId:'sat',links:[['Trailhead status','https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01'],['NWS point forecast','https://forecast.weather.gov/MapClick.php?lat=37.56960&lon=-105.51406']]},
+ lindsey:{id:'lindsey',label:'Mount Lindsey',date:'2026-08-24',weatherId:'lindsey',start:'5:15 AM',turn:'12:00 PM',intent:'Summit early and return to the trailhead by early afternoon.',route:'Confirm access and waiver before departure. Route conditions and group judgment govern the climb.',dayId:'mon',links:[['Standard route','https://www.14ers.com/route.php?route=lind1'],['Required waiver','https://www.mountlindseywaiver.com/']]}
+};
+let focusObjectiveId=storageGet(FOCUS_OBJECTIVE_KEY)||'blanca';
+
+const RAD=Math.PI/180,DAY_MS=86400000,J1970=2440588,J2000=2451545;
+function toJulian(date){return date.valueOf()/DAY_MS-.5+J1970}function fromJulian(j){return new Date((j+.5-J1970)*DAY_MS)}function toDays(date){return toJulian(date)-J2000}
+function solarMeanAnomaly(d){return RAD*(357.5291+.98560028*d)}
+function eclipticLongitude(M){const C=RAD*(1.9148*Math.sin(M)+.02*Math.sin(2*M)+.0003*Math.sin(3*M)),P=RAD*102.9372;return M+C+P+Math.PI}
+function declination(L){return Math.asin(Math.sin(L)*Math.sin(RAD*23.4397))}
+function julianCycle(d,lw){return Math.round(d-.0009-lw/(2*Math.PI))}function approxTransit(Ht,lw,n){return .0009+(Ht+lw)/(2*Math.PI)+n}
+function solarTransitJ(ds,M,L){return J2000+ds+.0053*Math.sin(M)-.0069*Math.sin(2*L)}
+function hourAngle(h,phi,dec){return Math.acos((Math.sin(h)-Math.sin(phi)*Math.sin(dec))/(Math.cos(phi)*Math.cos(dec)))}
+function getSetJ(h,lw,phi,dec,n,M,L){const w=hourAngle(h,phi,dec),a=approxTransit(w,lw,n);return solarTransitJ(a,M,L)}
+function sunTimes(dateStr,lat,lon){const date=new Date(dateStr+'T12:00:00Z'),lw=RAD*-lon,phi=RAD*lat,d=toDays(date),n=julianCycle(d,lw),ds=approxTransit(0,lw,n),M=solarMeanAnomaly(ds),L=eclipticLongitude(M),dec=declination(L),Jnoon=solarTransitJ(ds,M,L);function pair(angle){const Jset=getSetJ(angle*RAD,lw,phi,dec,n,M,L),Jrise=Jnoon-(Jset-Jnoon);return [fromJulian(Jrise),fromJulian(Jset)]}const dawn=pair(-6),sun=pair(-.833);return {dawn:dawn[0],sunrise:sun[0],sunset:sun[1]}}
+function mtTime(date){return new Intl.DateTimeFormat('en-US',{timeZone:'America/Denver',hour:'numeric',minute:'2-digit'}).format(date)}
+function focusSpec(id=focusObjectiveId){return FOCUS_OBJECTIVES[id]||FOCUS_OBJECTIVES.blanca}
+function lightData(id=focusObjectiveId){const obj=focusSpec(id),loc=locationById(obj.weatherId),t=sunTimes(obj.date,loc.lat,loc.lon);return {...t,obj,loc}}
+function renderLightBoard(id=focusObjectiveId){const x=lightData(id);document.getElementById('lightObjective').value=id;document.getElementById('lightBoardTitle').textContent=`${x.obj.label} · ${new Intl.DateTimeFormat('en-US',{weekday:'long',timeZone:'America/Denver'}).format(new Date(x.obj.date+'T12:00:00-06:00'))}`;document.getElementById('lightDawn').textContent=mtTime(x.dawn);document.getElementById('lightSunrise').textContent=mtTime(x.sunrise);document.getElementById('lightSunset').textContent=mtTime(x.sunset);document.getElementById('lightContext').textContent=`${x.loc.name} · ${x.loc.elevationFt.toLocaleString()} ft · Mountain Time. First light is civil dawn, not full daylight.`;if(id==='blanca'){document.getElementById('sunMetric').textContent=mtTime(x.dawn);document.getElementById('sunMetricNote').textContent='Civil dawn · Lake Como · Aug 23'}}
+function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
+function openFocus(id){if(id&&FOCUS_OBJECTIVES[id])focusObjectiveId=id;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderFocus();const overlay=document.getElementById('focusOverlay');overlay.hidden=false;document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('focusObjective').focus(),0)}
+function closeFocus(){document.getElementById('focusOverlay').hidden=true;document.body.style.overflow=''}
+function toggleCampfire(){document.documentElement.classList.toggle('campfire-mode');const on=document.documentElement.classList.contains('campfire-mode');storageSet(CAMPFIRE_KEY,on?'1':'0');document.getElementById('pulseNightText').textContent=on?'Return to color':'Night vision';document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'});toast(on?'Night-vision display enabled':'Standard display restored')}
+function updatePulse(){document.getElementById('pulseReady').textContent=readiness()+'%';const loaded=weatherStore[selectedWeatherId];document.getElementById('pulseWeather').textContent=loaded?.fetchedAt?(ageHours(loaded.fetchedAt)<=2?'Current':`${Math.round(ageHours(loaded.fetchedAt))}h old`):'Not loaded';const today=denverParts(new Date().toISOString()).date,map={'2026-08-19':'Travel','2026-08-20':'Dunes','2026-08-21':'Prepare','2026-08-22':'Approach','2026-08-23':'Blanca','2026-08-24':'Lindsey','2026-08-25':'Contingency'};document.getElementById('pulseTodayText').textContent=map[today]||'Preparation'}
+function setupV6(){if(storageGet(CAMPFIRE_KEY)==='1')document.documentElement.classList.add('campfire-mode');toggleCampfireStateText();renderLightBoard();renderFocus();updatePulse();document.getElementById('lightObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});document.getElementById('focusObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});['openFocusHero','openFocusSection','pulseFocus','focusFab'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openFocus()));document.getElementById('closeFocus').addEventListener('click',closeFocus);document.getElementById('focusOverlay').addEventListener('click',e=>{if(e.target.id==='focusOverlay')closeFocus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('focusOverlay').hidden)closeFocus()});['campfireHero','toggleCampfireSection','focusCampfire','pulseNight'].forEach(id=>document.getElementById(id)?.addEventListener('click',toggleCampfire));document.getElementById('pulseToday').addEventListener('click',openToday);document.getElementById('focusToday').addEventListener('click',()=>{closeFocus();document.getElementById(focusSpec().dayId)?.scrollIntoView({behavior:'smooth',block:'start'})});document.getElementById('focusRefresh').addEventListener('click',async()=>{const id=focusSpec().weatherId;if(!navigator.onLine){toast('Offline — showing saved forecast');return}try{await refreshLocation(id,{force:true});renderFocus();updatePulse();toast('Focus forecast refreshed')}catch{}});const revealObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.08}):null;document.querySelectorAll('main>section').forEach((s,i)=>{if(i>0){s.classList.add('reveal');if(revealObserver)revealObserver.observe(s);else s.classList.add('visible')}})}
+function toggleCampfireStateText(){const on=document.documentElement.classList.contains('campfire-mode');document.getElementById('pulseNightText').textContent=on?'Return to color':'Night vision';document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'})}
+
 document.getElementById('nextActionPrimary').addEventListener('click',runNextAction);
 document.getElementById('shareStatusBtn').addEventListener('click',shareStatus);
 document.getElementById('shareIntelBtn').addEventListener('click',shareStatus);
 const initialNav=document.querySelector('.bottom-nav a.active');if(initialNav)initialNav.setAttribute('aria-current','page');
 setupWeatherWidget();setupInstallNudge();setupBottomNav();
-renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();
+renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();

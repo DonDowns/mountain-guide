@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b2b3d"><meta name="description" content="Don Downs Mountain Guide: live summit forecasts, trip intelligence, checklists, 14er tracking and offline field access."><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b2b3d"><meta name="description" content="Don Downs Mountain Guide: an elegant offline Colorado expedition companion with live summit forecasts, sunlight intelligence, trip focus, checklists and a personal 14er record."><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Mountain Guide">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="stylesheet" href="styles.css">
 <title>Don Downs Mountain Guide</title>
 </head>
 <body>
-<header class="hero" id="home"><img src="hero-sangres.svg" alt="Original alpine illustration of the Sangre de Cristo Range at sunrise">
+<header class="hero hero-v6" id="home"><img src="hero-v6.svg" alt="Original alpine illustration of the Sangre de Cristo Range at sunrise">
 <div class="hero-inner">
  <div class="hero-copy">
-  <div class="eyebrow">Colorado Expedition Companion</div><h1>Don Downs Mountain Guide</h1>
-  <p>Lake Como, Blanca, Ellingwood and Mount Lindsey — field-ready logistics, live summit forecasts, gear, formation, a personal summit record and an offline iPhone experience.</p>
-  <div class="actions"><a class="btn primary" href="#expedition">Open expedition</a><a class="btn ghost" href="#intelligence">Trip intelligence</a><button class="btn ghost" onclick="toggleField()">Field mode</button><button class="btn ghost" onclick="window.print()">Print</button></div>
+  <div class="hero-brand"><span class="brand-mark" aria-hidden="true">▲</span><div class="eyebrow">Colorado Expedition Companion</div></div><h1>Don Downs<br><span>Mountain Guide</span></h1>
+  <p>A personal alpine command center for Lake Como, Blanca, Ellingwood and Mount Lindsey — live summit forecasts, first-light intelligence, field focus, formation and a growing record of fifty-plus summits.</p>
+  <div class="actions"><button class="btn primary" id="openFocusHero" type="button"><span aria-hidden="true">⌁</span> Summit Focus</button><a class="btn ghost" href="#intelligence">Trip intelligence</a><button class="btn ghost" onclick="toggleField()">Field mode</button><button class="btn ghost" id="campfireHero" type="button">Night vision</button></div>
+  <div class="hero-meta"><span><b>35</b> completed</span><span><b>3</b> planned</span><span><b>50+</b> long horizon</span></div>
  </div>
  <aside class="summit-weather" id="summitWeather" aria-label="Selectable summit weather forecast">
   <div class="summit-weather-head">
@@ -43,6 +44,13 @@
   </div>
  </aside>
 </div></header>
+<div class="expedition-pulse" aria-label="Expedition quick status">
+ <button type="button" id="pulseToday"><span class="pulse-icon">◷</span><span><small>Today</small><b id="pulseTodayText">Preparation</b></span></button>
+ <button type="button" id="pulseFocus"><span class="pulse-icon">⌁</span><span><small>Focus</small><b>Summit dashboard</b></span></button>
+ <a href="#gear"><span class="pulse-icon">✓</span><span><small>Readiness</small><b id="pulseReady">0%</b></span></a>
+ <a href="#intelligence"><span class="pulse-icon">☁</span><span><small>Intelligence</small><b id="pulseWeather">Not loaded</b></span></a>
+ <button type="button" id="pulseNight"><span class="pulse-icon">◐</span><span><small>Display</small><b id="pulseNightText">Night vision</b></span></button>
+</div>
 
 <nav class="nav"><div class="navin"><a href="#home">Home</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
 <div class="install-nudge" id="installNudge" hidden>
@@ -53,10 +61,11 @@
 <main>
 <section>
 <div class="section-head"><div><div class="kicker">Dashboard</div><h2>Lake Como 2026</h2></div><p>August 19–24, with August 25 reserved for weather or recovery.</p></div>
-<div class="grid g3">
+<div class="grid g4 dashboard-grid">
 <div class="card metric"><div><div class="kicker">Departure</div><strong class="countdown" id="countdown">Calculating…</strong><small>until the expedition begins</small></div><div class="status"><span class="dot"></span><span id="net">Checking connection</span></div></div>
 <div class="card metric"><div><div class="kicker">Summit goal</div><strong>35 → 38</strong><small>named summits after the planned trip</small></div><div class="progress"><span style="width:76%"></span></div></div>
 <div class="card metric"><div><div class="kicker">Readiness</div><strong id="readyPct">0%</strong><small>of saved gear and communication checks</small></div><div class="progress"><span id="readyBar" style="width:0%"></span></div></div>
+<div class="card metric sun-metric"><div><div class="kicker">Sunday first light</div><strong id="sunMetric">Calculating…</strong><small id="sunMetricNote">Lake Como · Aug 23</small></div><div class="sun-arc" aria-hidden="true"><span></span></div></div>
 </div>
 <div class="next-action" id="nextAction">
  <div class="next-action-icon" aria-hidden="true">↗</div>
@@ -66,6 +75,25 @@
 <div class="callout"><b>Privacy:</b> this public app omits exact home and lodging addresses, confirmation numbers, private telephone numbers and other sensitive details. Those remain in the offline documents.</div>
 </section>
 
+
+
+<section id="focus" class="focus-intro">
+<div class="section-head"><div><div class="kicker">One-screen field clarity</div><h2>Summit Focus</h2></div><p>Reduce the app to the few facts that matter before moving: light, weather, start, turnaround, route and communication.</p></div>
+<div class="focus-showcase">
+ <div class="focus-showcase-copy">
+  <span class="focus-orbit" aria-hidden="true"></span>
+  <div class="kicker">Designed for 3:30 AM</div><h3>Everything critical. Nothing noisy.</h3>
+  <p>Choose the Lake Como approach, Blanca–Ellingwood or Mount Lindsey. The field sheet combines the saved forecast, first light, key timeline and authoritative route links.</p>
+  <div class="focus-actions"><button class="intel-primary" id="openFocusSection" type="button">Open Summit Focus</button><button id="toggleCampfireSection" type="button">Use night-vision display</button></div>
+ </div>
+ <div class="light-board" aria-label="Sunlight times for the selected objective">
+  <div class="light-board-head"><div><div class="kicker">Sun & light</div><h3 id="lightBoardTitle">Blanca · Sunday</h3></div><select id="lightObjective" aria-label="Select objective for sunlight times"><option value="blanca">Blanca–Ellingwood</option><option value="lake">Lake Como approach</option><option value="lindsey">Mount Lindsey</option></select></div>
+  <div class="light-track" aria-hidden="true"><span class="light-dawn"></span><span class="light-sun"></span><i></i></div>
+  <div class="light-times"><div><small>Civil dawn</small><b id="lightDawn">—</b></div><div><small>Sunrise</small><b id="lightSunrise">—</b></div><div><small>Sunset</small><b id="lightSunset">—</b></div></div>
+  <p id="lightContext">Calculating Mountain Time for the objective location.</p>
+ </div>
+</div>
+</section>
 
 <section id="intelligence">
 <div class="section-head"><div><div class="kicker">Night-before and morning-of</div><h2>Trip Intelligence</h2></div><p>Live NOAA weather updates automatically. Current 14ers.com condition and trailhead pages open from the exact authoritative links, then you record when each was reviewed.</p></div>
@@ -127,11 +155,11 @@
 </section>
 
 <section class="photo-strip">
-<div class="section-head"><div><div class="kicker">Personal story slots</div><h2>Mountains that already matter</h2></div><p>These original scenic placeholders are ready to be replaced later by your Holy Cross summit portrait, Massive sunrise with Caleb and Princeton family celebration.</p></div>
+<div class="section-head"><div><div class="kicker">Personal story slots</div><h2>Mountains that already matter</h2></div><p>The visual system is already shaped around three personal stories. Your photographs can replace these original illustrations later without changing the design.</p></div>
 <div class="grid g3">
-<div class="card photo-card"><img src="holy-cross.svg" alt=""><div class="caption"><h3>Mount of the Holy Cross</h3><p>Future home of your summit portrait.</p></div></div>
-<div class="card photo-card"><img src="sunrise.svg" alt=""><div class="caption"><h3>Mount Massive Sunrise</h3><p>Your only sunrise summit with Caleb.</p></div></div>
-<div class="card photo-card"><img src="princeton.svg" alt=""><div class="caption"><h3>Mount Princeton</h3><p>The family celebration announcing Finn.</p></div></div>
+<div class="card photo-card"><img src="holy-cross-v6.svg" alt=""><div class="caption"><h3>Mount of the Holy Cross</h3><p>Summit portrait · strength received with gratitude.</p></div></div>
+<div class="card photo-card"><img src="massive-sunrise-v6.svg" alt=""><div class="caption"><h3>Mount Massive Sunrise</h3><p>Your only sunrise summit with Caleb · first-light memory.</p></div></div>
+<div class="card photo-card"><img src="princeton-v6.svg" alt=""><div class="caption"><h3>Mount Princeton</h3><p>The family celebration where Caleb and Shelby announced Finn.</p></div></div>
 </div>
 </section>
 
@@ -201,15 +229,22 @@
 </section>
 
 <section id="routes"><div class="section-head"><div><div class="kicker">Terrain and judgment</div><h2>Route center</h2></div><p>Planning summaries do not replace downloaded 14ers.com route text, photographs, GPX files and current condition reports.</p></div>
-<div class="grid g3">
+
+<div class="route-profiles" aria-label="Schematic route elevation profiles">
+ <article class="route-profile"><div class="route-profile-head"><div><span>01</span><h3>Lake Como approach</h3></div><small>Planning profile · not GPS</small></div><svg viewBox="0 0 520 150" role="img" aria-label="Schematic climb from parking to Lake Como"><defs><linearGradient id="rp1" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#6c8f82"/><stop offset="1" stop-color="#e8a64e"/></linearGradient></defs><path class="profile-fill" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22 V142 H10Z"/><path class="profile-line" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22"/><circle cx="10" cy="132" r="5"/><circle cx="510" cy="22" r="5"/><text x="10" y="148">8.0–8.8k parking</text><text x="390" y="17">11,750 ft camp</text></svg><p>Let road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.</p></article>
+ <article class="route-profile featured"><div class="route-profile-head"><div><span>02</span><h3>Blanca + Ellingwood</h3></div><small>Schematic traverse</small></div><svg viewBox="0 0 520 150" role="img" aria-label="Schematic profile from Lake Como to Blanca and Ellingwood"><path class="profile-fill" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130 V142 H10Z"/><path class="profile-line" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130"/><circle cx="10" cy="130" r="5"/><circle cx="305" cy="18" r="5"/><circle cx="405" cy="36" r="5"/><text x="10" y="148">Lake Como</text><text x="260" y="13">Blanca 14,350</text><text x="370" y="31">Ellingwood 14,057</text></svg><p>The traverse remains optional. Weather, rock, time and every climber’s comfort decide the sequence.</p></article>
+ <article class="route-profile"><div class="route-profile-head"><div><span>03</span><h3>Mount Lindsey</h3></div><small>Schematic out-and-back</small></div><svg viewBox="0 0 520 150" role="img" aria-label="Schematic Mount Lindsey climb and return"><path class="profile-fill" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132 V142 H10Z"/><path class="profile-line" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132"/><circle cx="10" cy="132" r="5"/><circle cx="365" cy="18" r="5"/><circle cx="510" cy="132" r="5"/><text x="10" y="148">Trailhead</text><text x="325" y="13">14,055 ft</text><text x="455" y="148">Return</text></svg><p>Access and the signed ranch waiver are part of the route, not administrative afterthoughts.</p></article>
+</div>
+
+<div class="grid g3 route-summary-grid">
 <div class="card soft"><h3>Lake Como approach</h3><p>Operate from an 8,000–8,800 ft parking assumption. Do not force a loaded Forester higher.</p></div>
 <div class="card soft"><h3>Blanca + Ellingwood</h3><p>About 7 miles and roughly 3,000 ft from camp. Traverse only if weather, rock and every climber support it.</p></div>
 <div class="card soft"><h3>Mount Lindsey</h3><p>About 8.25 miles and 3,500 ft. Reconfirm current access, waiver and private-property rules.</p></div>
 </div>
 <div class="links" style="margin-top:14px">
-<a class="link" href="https://www.14ers.com/route.php?route=elli3">Blanca/Ellingwood combination<small>14ers.com route photographs and GPX</small></a>
-<a class="link" href="https://www.14ers.com/route.php?route=blan1">Blanca standard route<small>Alternative and descent context</small></a>
-<a class="link" href="https://www.14ers.com/route.php?route=elli2">Ellingwood standard route<small>Alternative and descent context</small></a>
+<a class="link" href="https://www.14ers.com/route.php?route=elli3" target="_blank" rel="noopener">Blanca/Ellingwood combination<small>14ers.com route photographs and GPX</small></a>
+<a class="link" href="https://www.14ers.com/route.php?route=blan1" target="_blank" rel="noopener">Blanca standard route<small>Alternative and descent context</small></a>
+<a class="link" href="https://www.14ers.com/route.php?route=elli2" target="_blank" rel="noopener">Ellingwood standard route<small>Alternative and descent context</small></a>
 <a class="link" href="https://www.14ers.com/route.php?route=lind1" target="_blank" rel="noopener">Mount Lindsey standard route<small>Current route details and waiver requirement</small></a>
 <a class="link" href="https://www.mountlindseywaiver.com/" target="_blank" rel="noopener">Required Mount Lindsey waiver<small>Complete before the hike and save confirmation</small></a>
 <a class="link" href="https://www.14ers.org/peaks/sangre-de-cristo-range/mount-lindsey/" target="_blank" rel="noopener">Mount Lindsey stewardship<small>Colorado Fourteeners Initiative</small></a>
@@ -254,10 +289,10 @@
 <div class="card"><div class="kicker">Operational target</div><h3>Below exposure by late morning</h3><p>Cloud growth, thunder, wind and team condition outrank the summit schedule.</p></div>
 </div>
 <div class="links" style="margin-top:14px">
-<a class="link" href="https://www.weather.gov/">National Weather Service<small>Point forecast and hourly detail</small></a>
-<a class="link" href="https://opensnow.com/news/post/colorado-14er-weather-forecasts">OpenSnow 14er forecasts<small>Summit-oriented planning</small></a>
-<a class="link" href="https://www.windy.com/">Windy<small>Wind and model comparison</small></a>
-<a class="link" href="https://support.garmin.com/en-US/?faq=6yhhs5lLq01fp1S5460Pf9">inReach weather<small>Satellite weather request instructions</small></a>
+<a class="link" href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service<small>Point forecast and hourly detail</small></a>
+<a class="link" href="https://opensnow.com/news/post/colorado-14er-weather-forecasts" target="_blank" rel="noopener">OpenSnow 14er forecasts<small>Summit-oriented planning</small></a>
+<a class="link" href="https://www.windy.com/" target="_blank" rel="noopener">Windy<small>Wind and model comparison</small></a>
+<a class="link" href="https://support.garmin.com/en-US/?faq=6yhhs5lLq01fp1S5460Pf9" target="_blank" rel="noopener">inReach weather<small>Satellite weather request instructions</small></a>
 </div></section>
 
 <section id="progress"><div class="section-head"><div><div class="kicker">Long horizon</div><h2>Colorado 14er record</h2></div><p>Search the combined list of 35 completed named summits and 15 selected objectives.</p></div>
@@ -289,13 +324,31 @@
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
 
-<div class="footer">Don Downs Mountain Guide · Version 5.1 Audited<br><span class="status"><span class="dot"></span><span id="net2">Private data omitted from public deployment</span></span></div>
+<div class="footer">Don Downs Mountain Guide · Version 6 · Alpine Edition<br><span class="status"><span class="dot"></span><span id="net2">Private data omitted from public deployment</span></span></div>
 </main>
 
+
+<div class="focus-overlay" id="focusOverlay" hidden>
+ <section class="focus-sheet" role="dialog" aria-modal="true" aria-labelledby="focusTitle">
+  <div class="focus-sheet-top"><div><div class="kicker">Field sheet</div><h2 id="focusTitle">Summit Focus</h2></div><div class="focus-sheet-controls"><button id="focusCampfire" type="button">Night vision</button><button class="close-focus" id="closeFocus" type="button" aria-label="Close Summit Focus">×</button></div></div>
+  <label class="focus-select-label" for="focusObjective">Objective</label>
+  <select id="focusObjective" class="focus-select"><option value="blanca">Blanca + Ellingwood · Sunday</option><option value="lake">Lake Como approach · Saturday</option><option value="lindsey">Mount Lindsey · Monday</option></select>
+  <div class="focus-critical">
+   <div><small>Start</small><b id="focusStart">4:15 AM</b></div><div><small>Light</small><b id="focusLight">—</b></div><div><small>Turn / exit</small><b id="focusTurn">11:30 AM</b></div>
+  </div>
+  <div class="focus-weather-card" id="focusWeather" aria-live="polite"><span class="weather-pulse"></span><div><b>Loading saved forecast…</b><small>Refresh when online.</small></div></div>
+  <div class="focus-route"><div class="kicker">Field intent</div><h3 id="focusIntent">Below exposed terrain by late morning.</h3><p id="focusRouteText">The traverse is optional; group comfort and conditions decide the sequence.</p></div>
+  <div class="focus-links" id="focusLinks"></div>
+  <div class="focus-rule"><span aria-hidden="true">!</span><p><b>Weather is evidence, not permission.</b> Compare the forecast with the sky, wind, terrain and condition of the group.</p></div>
+  <div class="focus-bottom"><button class="intel-primary" id="focusRefresh" type="button">Refresh selected weather</button><button id="focusToday" type="button">Open full day</button></div>
+ </section>
+</div>
+
+<div class="focus-fab-wrap"><button class="focus-fab" id="focusFab" type="button" aria-label="Open Summit Focus"><span>⌁</span><small>Focus</small></button></div>
 <div class="float"><button onclick="openToday()">Today</button><button onclick="toggleField()">Field mode</button></div>
 <nav class="bottom-nav" aria-label="Primary app navigation">
  <a href="#home" data-nav="home" class="active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3z"/></svg><span>Home</span></a>
- <a href="#expedition" data-nav="expedition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 20 6-11 3 5 3-7 6 13H3Z"/></svg><span>Today</span></a>
+ <a href="#expedition" data-nav="expedition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 20 6-11 3 5 3-7 6 13H3Z"/></svg><span>Plan</span></a>
  <a href="#intelligence" data-nav="intelligence"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.2 8.7 4.7 4.7 0 0 0 7 18Z"/></svg><span>Weather</span></a>
  <a href="#gear" data-nav="gear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8l2 4v12H6V8l2-4Zm0 6h8M10 4v3h4V4"/></svg><span>Gear</span></a>
  <a href="#emergency" data-nav="emergency"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 20h18L12 3Zm0 6v5m0 3v1"/></svg><span>Emergency</span></a>

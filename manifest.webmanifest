@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Don Downs Mountain Guide",
+  "name": "Don Downs Mountain Guide \u2014 Alpine Edition",
   "short_name": "Mountain Guide",
-  "description": "A field-ready Colorado mountain guide with live summit forecasts, trip intelligence, checklists, 14er tracking and offline access.",
+  "description": "An elegant offline Colorado expedition companion with live summit forecasts, sunlight intelligence, Summit Focus, checklists and a personal 14er record.",
   "start_url": "./?source=homescreen",
   "scope": "./",
   "display": "standalone",
@@ -34,6 +34,18 @@
   ],
   "shortcuts": [
     {
+      "name": "Summit Focus",
+      "short_name": "Focus",
+      "description": "Open the field-focused summit dashboard.",
+      "url": "./#focus",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
       "name": "Trip Intelligence",
       "short_name": "Weather",
       "description": "Open live forecasts and current-condition review tools.",
@@ -46,19 +58,7 @@
       ]
     },
     {
-      "name": "Expedition Today",
-      "short_name": "Today",
-      "description": "Open the current expedition day.",
-      "url": "./#expedition",
-      "icons": [
-        {
-          "src": "icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Gear Checklist",
+      "name": "Gear Readiness",
       "short_name": "Gear",
       "description": "Open persistent approach and summit checklists.",
       "url": "./#gear",

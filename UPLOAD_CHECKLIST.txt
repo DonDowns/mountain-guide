@@ -1,25 +1,15 @@
-DON DOWNS MOUNTAIN GUIDE — VERSION 5.1 AUDITED UPLOAD CHECKLIST
+DON DOWNS MOUNTAIN GUIDE — VERSION 6 ALPINE EDITION
 
-1. Download Don_Downs_Mountain_Guide_V5_1_Audited.zip.
-2. Double-click the ZIP to extract it.
-3. In GitHub, open DonDowns / mountain-guide.
-4. Click Add file.
-5. Click Upload files.
-6. Drag ALL extracted Version 5 files onto the GitHub upload page.
-7. Do not delete CNAME.
-8. Commit message: Deploy audited Mountain Guide v5.1
-9. Click Commit changes.
-10. Wait 1–3 minutes.
-11. Open https://mountainguide.vondadowns.com
-12. Mac hard refresh if needed: Command + Shift + R.
+1. Download and unzip Don_Downs_Mountain_Guide_V6.zip.
+2. Open GitHub: DonDowns / mountain-guide.
+3. Click Add file → Upload files.
+4. Drag every extracted Version 6 file into GitHub.
+5. Do not delete CNAME.
+6. Commit message: Deploy Mountain Guide v6 Alpine Edition
+7. Commit directly to main.
+8. Wait 1–3 minutes.
+9. Open https://mountainguide.vondadowns.com and use Command + Shift + R on Mac.
+10. On iPhone, close and reopen the installed app; accept Update now if shown.
+11. Open Summit Focus, test Night Vision, refresh weather, and retest Airplane Mode.
 
-IPHONE INSTALLATION
-
-1. Open https://mountainguide.vondadowns.com in Safari.
-2. Tap the Share icon.
-3. Scroll and tap Add to Home Screen.
-4. Keep the name Mountain Guide.
-5. Tap Add.
-6. Open the new Mountain Guide icon once while online.
-7. Tap the weather refresh button and Refresh Trip Intelligence.
-8. Close the app, turn on Airplane Mode, and reopen it to verify offline access.
+The obsolete capital-I Index.html is not in this package. Uploading Version 6 will not delete it from GitHub; remove it separately when convenient.

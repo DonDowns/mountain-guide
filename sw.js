@@ -1,5 +1,5 @@
-const CACHE='ddmg-v5-1-audited-2026-08-02-1';
-const CORE=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./hero-sangres.svg','./sunrise.svg','./holy-cross.svg','./princeton.svg'];
+const CACHE='ddmg-v6-2026-08-02-1';
+const CORE=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./hero-v6.svg','./holy-cross-v6.svg','./massive-sunrise-v6.svg','./princeton-v6.svg','./apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting()});
