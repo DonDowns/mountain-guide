@@ -109,3 +109,33 @@ Version 7.1.1 corrects the climb history to 35 unique summits and 35 ascent even
 GitHub commit message:
 
 `Deploy Mountain Guide v7.1.1 Climb History Corrections`
+
+
+## Version 7.1.2
+
+Version 7.1.2 corrects the blank summit ledger on iPhone, rebuilds the six-item
+bottom navigation, aligns the Summits icon and label, and moves Ask clear of Gear.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.1.2 Mobile Navigation Fix`
+
+
+## Version 7.1.3
+
+Version 7.1.3 adds Don and David Harbin’s confirmed Fort Garland lodging to the Sunday/Monday itinerary and readiness checklist while keeping booking credentials out of the public app.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.1.3 Fort Garland Lodging`
+
+
+## Version 7.1.4
+
+Version 7.1.4 adds the exact Fort Garland motel address, tappable directions,
+a call button, and the 10:00 AM checkout while keeping the Expedia confirmation
+number and booking credentials private.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.1.4 Lodging Contact and Directions`

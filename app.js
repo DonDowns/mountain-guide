@@ -136,11 +136,13 @@ const BASE_GEAR=[
  {id:'electrolytes',name:'Electrolyte mix',category:'water',status:'owned',location:'main',weightOz:null,note:'Use in one bottle or reservoir according to the trip plan.'},
 
  {id:'trailFuel',name:'Trail food: granola bars and trail mix',category:'food',status:'owned',location:'main',weightOz:null,note:'Trail mix preference: nuts, M&Ms, and raisins. Target 150–250 kcal per hour on summit days.'},
+ {id:'instantCoffee',name:'Instant coffee',category:'food',status:'owned',location:'main',weightOz:null,note:'For the Sunday 3:30 AM camp breakfast before the Blanca/Ellingwood start. Packets are lighter than a jar; pack with Saturday\'s dinner in the Paragon 60.'},
+ {id:'rteMeals',name:'Ready-to-eat (RTE) meals',category:'food',status:'owned',location:'main',weightOz:null,note:'No-stove meals. Count out per meal before packing: Saturday trail lunch on the approach, Sunday break-camp meal before the descent, and Monday\'s pre-dawn Lindsey breakfast plus trailhead food. The motel covers Sunday dinner.'},
  {id:'dehydratedMeals',name:'Dehydrated camp dinners',category:'food',status:'owned',location:'main',weightOz:null,note:'One per planned camp dinner plus only the margin the itinerary warrants.'},
  {id:'breakfastFood',name:'Backpacking breakfast',category:'food',status:'owned',location:'main',weightOz:null,note:'Target approximately 300–500 kcal before moving.'},
  {id:'spoonMug',name:'Long spoon and insulated mug',category:'food',status:'owned',location:'main',weightOz:null,note:''},
- {id:'sharedStove',name:"Friend's stove",category:'food',status:'shared',location:'shared',weightOz:null,note:'Confirm the assigned carrier and fuel compatibility.'},
- {id:'sharedFuel',name:'Stove fuel',category:'food',status:'shared',location:'shared',weightOz:null,note:'Confirm quantity and carrier with the stove owner.'},
+ {id:'sharedStove',name:"Mike Brown's stove",category:'food',status:'shared',location:'shared',weightOz:null,note:'Mike Brown is bringing the stove. Used exactly twice: Saturday camp dinner and the Sunday 3:30 AM breakfast — Sunday night is the motel. Confirm the handoff and that the fuel Don carries matches this stove.'},
+ {id:'sharedFuel',name:'Stove fuel (Don carries)',category:'food',status:'verify',location:'main',weightOz:null,note:'Confirm Mike Brown\'s stove type FIRST — the fuel must match the stove. If it is a canister stove (most common): one 230 g isobutane canister covers the two camp uses (Saturday dinner + Sunday pre-dawn) for four people with margin; cold weakens canister pressure, so keep it in the tent overnight and warm it inside a jacket before the 3:30 AM boil. If it is a liquid-fuel stove: bring the bottle and amount Mike specifies. Test-fit fuel to stove at the Friday evening readiness check.'},
  {id:'cooler',name:'Vehicle cooler and post-hike food',category:'food',status:'conditional',location:'vehicle',weightOz:null,note:'Vehicle and lodging support, not carried to camp.'},
 
  {id:'firstAid',name:'Compact first-aid and blister kit',category:'safety',status:'owned',location:'main',weightOz:null,note:'Personal kit; group plan should not depend on one inaccessible kit.'},
@@ -156,6 +158,7 @@ const BASE_GEAR=[
  {id:'vehicleKeys',name:'Audi keys and deliberate spare-key plan',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:'Keep the spare with a different responsible adult when practical.'},
  {id:'fuelTopOff',name:'Fuel topped off before remote travel',category:'vehicle',status:'verify',location:'vehicle',weightOz:0,note:''},
  {id:'lodgingBag',name:'Separate lodging and travel bag',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:'Keep it separate from the intact backpacking system.'},
+ {id:'fortGarlandLodging',name:'Fort Garland motel registration and access saved offline',category:'vehicle',status:'verify',location:'vehicle',weightOz:0,note:'The Lodge Motel, Aug 23–24, Don + David. Complete secure online registration, save the access code, confirm directions to 825 U.S. 160, save 719-379-2880, protect the 9:00 PM check-in cutoff, and note checkout is before 10:00 AM.'},
  {id:'cleanClothes',name:'Clean return clothes',category:'vehicle',status:'owned',location:'vehicle',weightOz:null,note:''},
  {id:'toiletriesMeds',name:'Toiletries and personal medications',category:'personal',status:'owned',location:'vehicle',weightOz:null,note:'Keep essential medication accessible and protected.'},
  {id:'walletId',name:'Wallet, identification, and permits or waiver copy',category:'personal',status:'owned',location:'worn',weightOz:null,note:'Keep sensitive confirmation details outside the public app.'},
@@ -175,14 +178,13 @@ const PACK_PRESETS={
    {id:'main',title:'Gregory Paragon 60 — approach to camp',subtitle:'Backpacking shelter, sleep system, layers, water, food, and emergency redundancy.',items:[
     'paragon60','sweetSuite2','sleepingBag20','insulatedPad','flash18','rainShell','puffy','fleece','beanie','gloves','drySocks',
     'headlamp','headlampBackup','inreach','powerBank','waterFilter','hydrationReservoir','electrolytes','poles','firstAid',
-    'emergencyBivy','helmet','routeScreens','paperEmergency','repairKit','dehydratedMeals','breakfastFood','trailFuel','spoonMug'
-   ]},
+    'emergencyBivy','helmet','routeScreens','paperEmergency','repairKit','dehydratedMeals','breakfastFood','trailFuel','spoonMug','instantCoffee','rteMeals']},
    {id:'summit',title:'REI Flash 18 — summit repack',subtitle:'Confirm again after camp is established; these checks represent the actual summit loadout.',items:[
     'flash18','hydrationReservoir','trailFuel','electrolytes','rainShell','puffy','beanie','gloves','headlamp','inreach',
     'phoneOffline','garmin965','firstAid','emergencyBivy','routeScreens','helmet','sunscreenLip','sunglasses'
    ]},
    {id:'vehicle',title:'Audi Q5, lodging & return',subtitle:'Travel and recovery gear that does not belong in the backpacking load.',items:[
-    'audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','lodgingBag','cleanClothes','campShoes',
+    'audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','fortGarlandLodging','lodgingBag','cleanClothes','campShoes',
     'toiletriesMeds','cooler','lindseyWaiver'
    ]},
    {id:'shared',title:'Shared / assigned — confirm the carrier',subtitle:'An assignment is not complete until the person and item are explicit.',items:[
@@ -237,7 +239,7 @@ const PACK_PRESETS={
   description:'Simple road-trip and lodging template when no overnight backpack is required.',
   note:'<b>Travel template:</b> preserves the Audi Q5, navigation, hydration, clean return gear, and personal essentials without loading backpacking equipment.',
   sections:[
-   {id:'vehicle',title:'Audi Q5',subtitle:'Vehicle readiness and travel support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','cooler']},
+   {id:'vehicle',title:'Audi Q5',subtitle:'Vehicle readiness and travel support.',items:['audiQ5','vehicleKeys','fuelTopOff','vehicleWater','chargingCables','chargingBlock','garmin965Charge','inreachSetup','headlampCharge','fortGarlandLodging','cooler']},
    {id:'personal',title:'Lodging & personal',subtitle:'Separate from hiking equipment.',items:['lodgingBag','cleanClothes','campShoes','toiletriesMeds','walletId']},
    {id:'day',title:'Optional day-hike kit',subtitle:'Use when the itinerary includes a hike.',items:[{id:'ospreyManta',required:false},{id:'hydrationReservoir',required:false},{id:'rainShell',required:false},{id:'puffy',required:false},{id:'headlamp',required:false},{id:'phoneOffline',required:false},{id:'garmin965',required:false},{id:'firstAid',required:false}]}
   ]
@@ -255,6 +257,14 @@ function buildGearLocker(){
  return locker
 }
 let gearLocker=buildGearLocker();
+(function refreshFuelNotes(){
+ if(storageGet('ddmg-v7-1-5-fuelnotes')==='1')return;
+ const seed={};BASE_GEAR.forEach(i=>seed[i.id]=i);
+ ['sharedStove','sharedFuel'].forEach(id=>{
+  if(gearLocker[id]&&seed[id]){gearLocker[id].name=seed[id].name;gearLocker[id].note=seed[id].note;gearLocker[id].status=seed[id].status;gearLocker[id].location=seed[id].location}
+ });
+ saveGearLocker();storageSet('ddmg-v7-1-5-fuelnotes','1')
+})();
 let packState=safeParse(storageGet(PACK_STATE_KEY),{});
 let packProfileId=PACK_PRESETS[storageGet(PACK_PROFILE_KEY)]?storageGet(PACK_PROFILE_KEY):'lake-como-2026';
 let customPack=safeParse(storageGet(CUSTOM_PACK_KEY),{});
@@ -793,10 +803,32 @@ function setupInstallNudge(){
  })
 }
 function setupBottomNav(){
- const links=[...document.querySelectorAll('.bottom-nav a')],targets=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+ const links=[...document.querySelectorAll('.bottom-nav a')];
+ const targets=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+ const setActive=id=>links.forEach(a=>{
+  const on=a.getAttribute('href')==='#'+id;
+  a.classList.toggle('active',on);
+  if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')
+ });
+ links.forEach(link=>link.addEventListener('click',()=>{
+  const id=link.getAttribute('href').slice(1);setActive(id)
+ }));
  if(!('IntersectionObserver'in window))return;
- const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!visible)return;links.forEach(a=>{const on=a.getAttribute('href')==='#'+visible.target.id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})},{rootMargin:'-25% 0px -60% 0px',threshold:[0,.15,.4]});
- targets.forEach(t=>observer.observe(t))
+ const visibleTargets=new Map();
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting)visibleTargets.set(entry.target,entry.boundingClientRect.top);
+   else visibleTargets.delete(entry.target)
+  });
+  if(!visibleTargets.size)return;
+  const selected=[...visibleTargets.entries()].sort((a,b)=>{
+   const aPast=a[1]<=window.innerHeight*.36,bPast=b[1]<=window.innerHeight*.36;
+   if(aPast!==bPast)return aPast?-1:1;
+   return aPast?b[1]-a[1]:a[1]-b[1]
+  })[0][0];
+  setActive(selected.id)
+ },{rootMargin:'-35% 0px -55% 0px',threshold:0});
+ targets.forEach(target=>observer.observe(target))
 }
 
 if('serviceWorker'in navigator){
@@ -882,7 +914,7 @@ function renderCountdown(){
 function startFocusCountdown(){stopFocusCountdown();renderCountdown();focusCountdownTimer=setInterval(renderCountdown,30000)}
 function stopFocusCountdown(){if(focusCountdownTimer){clearInterval(focusCountdownTimer);focusCountdownTimer=null}}
 function toggleCampfire(){document.documentElement.classList.toggle('campfire-mode');const on=document.documentElement.classList.contains('campfire-mode');storageSet(CAMPFIRE_KEY,on?'1':'0');document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'});toast(on?'Night-vision display enabled':'Standard display restored')}
-function setupV6(){if(storageGet(CAMPFIRE_KEY)==='1')document.documentElement.classList.add('campfire-mode');toggleCampfireStateText();renderLightBoard();renderFocus();document.getElementById('lightObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});document.getElementById('focusObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus();renderCountdown()});['openFocusHero','openFocusSection','focusFab'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openFocus()));document.getElementById('closeFocus').addEventListener('click',closeFocus);document.getElementById('focusOverlay').addEventListener('click',e=>{if(e.target.id==='focusOverlay')closeFocus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('focusOverlay').hidden)closeFocus()});['campfireHero','toggleCampfireSection','focusCampfire'].forEach(id=>document.getElementById(id)?.addEventListener('click',toggleCampfire));document.getElementById('focusToday').addEventListener('click',()=>{closeFocus();document.getElementById(focusSpec().dayId)?.scrollIntoView({behavior:'smooth',block:'start'})});document.getElementById('focusRefresh').addEventListener('click',async()=>{const id=focusSpec().weatherId;if(!navigator.onLine){toast('Offline — showing saved forecast');return}try{await refreshLocation(id,{force:true});renderFocus();toast('Focus forecast refreshed')}catch{}});const revealObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.08}):null;document.querySelectorAll('main>section').forEach((s,i)=>{if(i>0){s.classList.add('reveal');if(revealObserver)revealObserver.observe(s);else s.classList.add('visible')}})}
+function setupV6(){if(storageGet(CAMPFIRE_KEY)==='1')document.documentElement.classList.add('campfire-mode');toggleCampfireStateText();renderLightBoard();renderFocus();document.getElementById('lightObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus()});document.getElementById('focusObjective').addEventListener('change',e=>{focusObjectiveId=e.target.value;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderLightBoard();renderFocus();renderCountdown()});['openFocusHero','openFocusSection','focusFab'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openFocus()));document.getElementById('closeFocus').addEventListener('click',closeFocus);document.getElementById('focusOverlay').addEventListener('click',e=>{if(e.target.id==='focusOverlay')closeFocus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('focusOverlay').hidden)closeFocus()});['campfireHero','toggleCampfireSection','focusCampfire'].forEach(id=>document.getElementById(id)?.addEventListener('click',toggleCampfire));document.getElementById('focusToday').addEventListener('click',()=>{closeFocus();document.getElementById(focusSpec().dayId)?.scrollIntoView({behavior:'smooth',block:'start'})});document.getElementById('focusRefresh').addEventListener('click',async()=>{const id=focusSpec().weatherId;if(!navigator.onLine){toast('Offline — showing saved forecast');return}try{await refreshLocation(id,{force:true});renderFocus();toast('Focus forecast refreshed')}catch{}});const revealObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:0,rootMargin:'0px 0px -4% 0px'}):null;document.querySelectorAll('main>section').forEach((s,i)=>{if(i>0){s.classList.add('reveal');if(s.id==='summits')s.classList.add('visible');else if(revealObserver)revealObserver.observe(s);else s.classList.add('visible')}})}
 function toggleCampfireStateText(){const on=document.documentElement.classList.contains('campfire-mode');document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{if(b)b.textContent=on?'Return to color':'Night vision'})}
 
 
@@ -917,7 +949,7 @@ function aiContextText(){
  const nextText=document.getElementById('nextActionText')?.textContent?.trim()||'';
  const lines=[
   'MOUNTAIN GUIDE CONTEXT',
-  'App: Don Downs Mountain Guide, Version 7.1.1',
+  'App: Don Downs Mountain Guide, Version 7.1.4',
   'Trip: Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026',
   `Selected objective: ${aiSelectedObjective()}`,
   `Readiness: ${readiness()}% of saved gear and communication checks`,

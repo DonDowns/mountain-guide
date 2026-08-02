@@ -1352,3 +1352,190 @@ body{background-image:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--i
 }
 .outing-badge b{flex:none;color:var(--ink);font-size:12px}
 .campfire-mode .outing-badge{background:#2b0b07;color:#ffd9cb}
+
+
+/* Version 7.1.2 — mobile navigation and tall-section visibility fix */
+.summit-ledger.reveal{
+  opacity:1;
+  transform:none;
+}
+.summit-loading{
+  grid-column:1/-1;
+  padding:26px;
+  border:1px dashed var(--line);
+  border-radius:16px;
+  color:var(--muted);
+  text-align:center;
+  background:var(--paper);
+}
+@media(max-width:780px){
+  .bottom-nav{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    padding-left:3px;
+    padding-right:3px;
+  }
+  .bottom-nav a,
+  .bottom-nav a:nth-child(2),
+  .bottom-nav a:nth-child(3){
+    min-width:0;
+    padding:4px 0;
+    gap:2px;
+    font-size:8.5px;
+    font-weight:750;
+    line-height:1.05;
+  }
+  .bottom-nav a.active{
+    color:var(--blue);
+    font-weight:950;
+  }
+  .bottom-nav svg{
+    width:21px;
+    height:21px;
+    flex:none;
+  }
+  .bottom-nav a span{
+    display:block;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .ai-fab-wrap{
+    right:10px;
+    bottom:calc(100px + env(safe-area-inset-bottom));
+  }
+  .focus-fab-wrap{
+    right:10px;
+    bottom:calc(164px + env(safe-area-inset-bottom));
+  }
+}
+@media(max-width:360px){
+  .bottom-nav a,
+  .bottom-nav a:nth-child(2),
+  .bottom-nav a:nth-child(3){
+    font-size:8px;
+  }
+  .bottom-nav svg{
+    width:20px;
+    height:20px;
+  }
+}
+
+
+/* Version 7.1.3 — confirmed Fort Garland lodging */
+.lodging-confirmation{
+  margin:8px 0 14px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-left:5px solid var(--gold);
+  border-radius:17px;
+  background:color-mix(in srgb,var(--cream) 70%,var(--paper));
+}
+.lodging-confirmation-head{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+}
+.lodging-confirmation-head>span{
+  width:31px;
+  height:31px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#17242b;
+  background:var(--gold);
+  font-weight:950;
+}
+.lodging-confirmation h3{margin:3px 0 0}
+.lodging-facts{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:14px 0 10px;
+}
+.lodging-facts span{
+  min-height:64px;
+  padding:10px;
+  border-radius:12px;
+  color:var(--muted);
+  background:var(--paper);
+  font-size:11px;
+}
+.lodging-facts b{
+  display:block;
+  margin-bottom:4px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.lodging-confirmation p{margin:0;color:var(--muted)}
+@media(max-width:720px){
+  .lodging-facts{grid-template-columns:1fr 1fr}
+}
+.campfire-mode .lodging-confirmation{
+  color:#fff2ec;
+  background:#2b0b07;
+  border-color:rgba(255,106,60,.28);
+}
+.campfire-mode .lodging-facts span{
+  color:#ffd9cb;
+  background:#200806;
+}
+
+
+/* Version 7.1.4 — motel address, directions, and contact actions */
+.lodging-contact{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) minmax(180px,.6fr);
+  gap:10px;
+  margin:10px 0;
+}
+.lodging-contact>div{
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--paper);
+}
+.lodging-contact b{
+  display:block;
+  margin-bottom:4px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.lodging-contact span,
+.lodging-contact a{
+  color:var(--muted);
+  font-weight:750;
+}
+.lodging-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin:11px 0 12px;
+}
+.lodging-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:10px 15px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:900;
+}
+@media(max-width:620px){
+  .lodging-contact{grid-template-columns:1fr}
+  .lodging-actions{display:grid;grid-template-columns:1fr 1fr}
+}
+.campfire-mode .lodging-contact>div{
+  background:#200806;
+  border-color:rgba(255,106,60,.24);
+}
+.campfire-mode .lodging-contact span,
+.campfire-mode .lodging-contact a{
+  color:#ffd9cb;
+}
