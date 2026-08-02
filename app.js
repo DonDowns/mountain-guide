@@ -775,9 +775,17 @@ function setupWeatherWidget(){
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')maybeAutoRefreshSelected(false)})
 }
 function setupInstallNudge(){
- const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,nudge=document.getElementById('installNudge');
- if(isIOS&&!standalone&&storageGet(INSTALL_DISMISSED_KEY)!=='1')nudge.hidden=false;
- document.getElementById('dismissInstall').addEventListener('click',()=>{nudge.hidden=true;storageSet(INSTALL_DISMISSED_KEY,'1')})
+ const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const nudge=document.getElementById('installNudge');
+ const dismiss=document.getElementById('dismissInstall');
+ if(!nudge||!dismiss)return;
+ nudge.hidden=standalone||!isIOS||storageGet(INSTALL_DISMISSED_KEY)==='1';
+ dismiss.addEventListener('click',event=>{
+  event.preventDefault();event.stopPropagation();
+  storageSet(INSTALL_DISMISSED_KEY,'1');
+  nudge.hidden=true
+ })
 }
 function setupBottomNav(){
  const links=[...document.querySelectorAll('.bottom-nav a')],targets=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
@@ -904,7 +912,7 @@ function aiContextText(){
  const nextText=document.getElementById('nextActionText')?.textContent?.trim()||'';
  const lines=[
   'MOUNTAIN GUIDE CONTEXT',
-  'App: Don Downs Mountain Guide, Version 6.6',
+  'App: Don Downs Mountain Guide, Version 6.7',
   'Trip: Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026',
   `Selected objective: ${aiSelectedObjective()}`,
   `Readiness: ${readiness()}% of saved gear and communication checks`,
@@ -992,10 +1000,109 @@ function setupAi(){
  renderAiPreview();
 }
 
+
+
+// Version 6.7 — chronological personal Mountain Stories.
+const MOUNTAIN_STORIES={
+ massive:{
+  title:'Mount Massive',
+  kicker:'A sunrise summit with Caleb',
+  photos:[
+   {src:'massive-01-trailhead.jpg',alt:'Don and Caleb together at the trailhead before beginning Mount Massive',caption:'At the trailhead—Caleb and me before the climb began.'},
+   {src:'massive-02-sunrise-silhouette.jpg',alt:'A silhouetted climber watching the sun rise above a sea of clouds on Mount Massive',caption:'First light breaking over a sea of clouds.'},
+   {src:'massive-03-caleb-camera.jpg',alt:'Caleb standing in the distance using his camera high on Mount Massive',caption:'Caleb pausing high on the route to make one of his photographs.'},
+   {src:'massive-04-outcrop.jpg',alt:'Don standing on a sunlit rocky outcropping high on Mount Massive',caption:'The mountain turning gold around the rocky outcropping.'},
+   {src:'massive-05-summit-together.jpg',alt:'Don and Caleb together in jackets near the summit of Mount Massive',caption:'Together at the summit—our first and only sunrise summit.'}
+  ]
+ },
+ 'holy-cross':{
+  title:'Mount of the Holy Cross',
+  kicker:'High above the Holy Cross basin',
+  photos:[
+   {src:'holy-cross-01-approach-landscape.jpg',alt:'A wide alpine landscape on the approach to Mount of the Holy Cross',caption:'The long approach opening toward the high country.'},
+   {src:'holy-cross-02-peak-ahead.jpg',alt:'Mount of the Holy Cross framed by evergreen trees from the trail',caption:'The mountain coming into view through the trees.'},
+   {src:'holy-cross-03-steep-basin-view.jpg',alt:'A steep rocky view down into the Holy Cross basin and lake',caption:'Looking down through the steep rock into the basin below.'},
+   {src:'holy-cross-04-summit-portrait.jpg',alt:'Don standing on Mount of the Holy Cross with the basin and lake far below',caption:'On the summit above the basin—steep, beautiful, and unforgettable.'},
+   {src:'holy-cross-05-forest-descent.jpg',alt:'A forest trail on the descent from Mount of the Holy Cross',caption:'Back into the forest on the way down.'}
+  ]
+ },
+ princeton:{
+  title:'Mount Princeton',
+  kicker:'A family summit and unforgettable news',
+  photos:[
+   {src:'princeton-01-trailhead-family.jpg',alt:'Don, Vonda, Caleb, Shelby, Marin, and LinZhi together at the Mount Princeton trailhead',caption:'All together at the trailhead before the climb.'},
+   {src:'princeton-02-don-vonda-ascent.jpg',alt:'Don and Vonda together on the ascent of Mount Princeton',caption:'Vonda and me together on the ascent.'},
+   {src:'princeton-03-caleb-shelby-trail.jpg',alt:'Caleb and Shelby together on the Mount Princeton trail',caption:'Caleb and Shelby higher on the route.'},
+   {src:'princeton-04-family-high-route.jpg',alt:'Caleb, Shelby, Marin, and LinZhi together high on Mount Princeton',caption:'The kids together high on the mountain.'},
+   {src:'princeton-05-family-summit-announcement.jpg',alt:'The family together on the summit of Mount Princeton holding a Mount Princeton sign',caption:'At the summit, we flipped the sign and read: “Welcome Baby Downs — April 2020!”'},
+   {src:'princeton-06-don-vonda-summit.jpg',alt:'Don and Vonda together on the summit of Mount Princeton',caption:'Vonda and me together at the summit.'}
+  ]
+ }
+};
+let activeStoryId=null,activeStoryIndex=0,storyTouchStartX=0;
+
+function renderStory(){
+ const story=MOUNTAIN_STORIES[activeStoryId];
+ if(!story)return;
+ const photo=story.photos[activeStoryIndex];
+ document.getElementById('storyTitle').textContent=story.title;
+ document.getElementById('storyKicker').textContent=story.kicker;
+ const image=document.getElementById('storyImage');
+ image.src=photo.src;
+ image.alt=photo.alt;
+ document.getElementById('storyCounter').textContent=`${activeStoryIndex+1} / ${story.photos.length}`;
+ document.getElementById('storyCaption').textContent=photo.caption;
+ const dots=document.getElementById('storyDots');
+ dots.innerHTML=story.photos.map((_,index)=>`<button type="button" data-story-index="${index}" class="${index===activeStoryIndex?'active':''}" aria-label="Open photograph ${index+1}" ${index===activeStoryIndex?'aria-current="true"':''}></button>`).join('');
+}
+function openStory(id){
+ if(!MOUNTAIN_STORIES[id])return;
+ activeStoryId=id;activeStoryIndex=0;
+ document.getElementById('storyOverlay').hidden=false;
+ document.body.style.overflow='hidden';
+ renderStory();
+ document.getElementById('storyClose').focus()
+}
+function closeStory(){
+ document.getElementById('storyOverlay').hidden=true;
+ document.body.style.overflow='';
+ const trigger=document.querySelector(`[data-story="${activeStoryId}"]`);
+ activeStoryId=null;
+ trigger?.focus()
+}
+function stepStory(delta){
+ const story=MOUNTAIN_STORIES[activeStoryId];if(!story)return;
+ activeStoryIndex=(activeStoryIndex+delta+story.photos.length)%story.photos.length;
+ renderStory()
+}
+function setupStories(){
+ document.querySelectorAll('[data-story]').forEach(button=>button.addEventListener('click',()=>openStory(button.dataset.story)));
+ document.getElementById('storyClose').addEventListener('click',closeStory);
+ document.getElementById('storyPrev').addEventListener('click',()=>stepStory(-1));
+ document.getElementById('storyNext').addEventListener('click',()=>stepStory(1));
+ document.getElementById('storyDots').addEventListener('click',event=>{
+  const button=event.target.closest('[data-story-index]');if(!button)return;
+  activeStoryIndex=Number(button.dataset.storyIndex);renderStory()
+ });
+ document.getElementById('storyOverlay').addEventListener('click',event=>{if(event.target.id==='storyOverlay')closeStory()});
+ document.addEventListener('keydown',event=>{
+  if(document.getElementById('storyOverlay').hidden)return;
+  if(event.key==='Escape')closeStory();
+  if(event.key==='ArrowLeft')stepStory(-1);
+  if(event.key==='ArrowRight')stepStory(1)
+ });
+ const image=document.getElementById('storyImage');
+ image.addEventListener('touchstart',event=>{storyTouchStartX=event.changedTouches[0].clientX},{passive:true});
+ image.addEventListener('touchend',event=>{
+  const delta=event.changedTouches[0].clientX-storyTouchStartX;
+  if(Math.abs(delta)>45)stepStory(delta<0?1:-1)
+ },{passive:true})
+}
+
 document.documentElement.classList.remove('field-mode');storageRemove('ddmg-v3-field');
 document.getElementById('nextActionPrimary').addEventListener('click',runNextAction);
 document.getElementById('shareStatusBtn').addEventListener('click',shareStatus);
 document.getElementById('shareIntelBtn').addEventListener('click',shareStatus);
 const initialNav=document.querySelector('.bottom-nav a.active');if(initialNav)initialNav.setAttribute('aria-current','page');
-setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();
+setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();setupStories();
 renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();setupAi();

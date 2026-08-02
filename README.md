@@ -64,3 +64,12 @@ Version 6.6 adds a reusable Personal Gear Locker, smart packing presets, custom 
 GitHub commit message:
 
 `Deploy Mountain Guide v6.6 Gear Locker and Pack Builder`
+
+
+## Version 6.7
+
+Version 6.7 adds chronological personal Mountain Stories for Mount Massive, Mount of the Holy Cross, and Mount Princeton; removes the visible privacy callout; and fixes persistent dismissal of the iPhone installation banner.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v6.7 Mountain Stories`

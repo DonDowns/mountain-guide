@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: an offline Colorado expedition companion with live summit forecasts, Summit Focus, a reusable personal Gear Locker, smart trip packing presets, formation and a personal 14er record." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: an offline Colorado expedition companion with summit weather, field tools, reusable gear presets, and personal mountain photo stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -64,7 +64,7 @@
 <div class="next-action-copy"><div class="kicker">Next best action</div><strong id="nextActionTitle">Build expedition readiness</strong><p id="nextActionText">Complete the approach and summit checklists while the trip remains outside the live forecast horizon.</p></div>
 <div class="next-action-buttons"><button class="intel-primary" id="nextActionPrimary" type="button">Open gear checklist</button><button id="shareStatusBtn" type="button">Share status</button></div>
 </div>
-<div class="callout"><b>Privacy:</b> this public app omits exact home and lodging addresses, confirmation numbers, private telephone numbers and other sensitive details. Those remain in the offline documents.</div>
+
 </section>
 <section class="focus-intro" id="focus">
 <div class="section-head"><div><div class="kicker">One-screen field clarity</div><h2>Summit Focus</h2></div><p>Reduce the app to the few facts that matter before moving: light, weather, start, turnaround, route and communication.</p></div>
@@ -137,12 +137,42 @@
 </div>
 <div class="toolbar"><button onclick="resetIntelWorkflow()">Reset intelligence workflow</button><button onclick="exportData()">Export app backup</button></div>
 </section>
-<section class="photo-strip">
-<div class="section-head"><div><div class="kicker">Personal story slots</div><h2>Mountains that already matter</h2></div><p>The visual system is already shaped around three personal stories. Your photographs can replace these original illustrations later without changing the design.</p></div>
-<div class="grid g3">
-<div class="card photo-card"><img alt="" src="holy-cross-v6.svg"/><div class="caption"><h3>Mount of the Holy Cross</h3><p>Summit portrait · strength received with gratitude.</p></div></div>
-<div class="card photo-card"><img alt="" src="massive-sunrise-v6.svg"/><div class="caption"><h3>Mount Massive Sunrise</h3><p>Your only sunrise summit with Caleb · first-light memory.</p></div></div>
-<div class="card photo-card"><img alt="" src="princeton-v6.svg"/><div class="caption"><h3>Mount Princeton</h3><p>The family celebration where Caleb and Shelby announced Finn.</p></div></div>
+<section class="photo-strip mountain-stories" id="stories">
+<div class="section-head">
+<div>
+<div class="kicker">Personal summit memories</div>
+<h2>Mountains that already matter</h2>
+</div>
+<p>Three climbs, remembered in sequence from the trailhead toward the summit. Tap a photograph to open the full story.</p>
+</div>
+<div class="grid g3 story-grid">
+<button aria-label="Open Mount Massive photo story" class="card photo-card story-card" data-story="massive" type="button">
+<img alt="Don standing on a sunlit rocky outcropping high on Mount Massive" src="massive-04-outcrop.jpg"/>
+<div class="caption">
+<span class="story-count">5 photographs</span>
+<h3>Mount Massive</h3>
+<p>A first-light summit with Caleb—our first and only sunrise summit together, with the mountain turning gold as the day began.</p>
+<span class="story-open">Open story →</span>
+</div>
+</button>
+<button aria-label="Open Mount of the Holy Cross photo story" class="card photo-card story-card story-card-portrait" data-story="holy-cross" type="button">
+<img alt="Don standing high on Mount of the Holy Cross with the basin and lake far below" src="holy-cross-04-summit-portrait.jpg"/>
+<div class="caption">
+<span class="story-count">5 photographs</span>
+<h3>Mount of the Holy Cross</h3>
+<p>A high and rugged day above the Holy Cross basin—steep, beautiful, and unforgettable.</p>
+<span class="story-open">Open story →</span>
+</div>
+</button>
+<button aria-label="Open Mount Princeton photo story" class="card photo-card story-card" data-story="princeton" type="button">
+<img alt="The Downs family together on the summit of Mount Princeton holding a Mount Princeton sign" src="princeton-05-family-summit-announcement.jpg"/>
+<div class="caption">
+<span class="story-count">6 photographs</span>
+<h3>Mount Princeton</h3>
+<p>A family summit made unforgettable when we flipped the sign and read, “Welcome Baby Downs — April 2020!”</p>
+<span class="story-open">Open story →</span>
+</div>
+</button>
 </div>
 </section>
 <section id="expedition">
@@ -349,8 +379,31 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 6.6</div>
-</main>
+<div class="footer">Don Downs Mountain Guide · Version 6.7</div>
+</main><div class="story-overlay" hidden="" id="storyOverlay">
+<section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
+<div class="story-viewer-top">
+<div>
+<div class="kicker" id="storyKicker">Mountain story</div>
+<h2 id="storyTitle">Mountain</h2>
+</div>
+<button aria-label="Close photo story" class="story-close" id="storyClose" type="button">×</button>
+</div>
+<div class="story-stage">
+<button aria-label="Previous photograph" class="story-nav story-prev" id="storyPrev" type="button">‹</button>
+<figure>
+<img alt="" id="storyImage" src=""/>
+<figcaption>
+<span id="storyCounter">1 / 1</span>
+<b id="storyCaption"></b>
+</figcaption>
+</figure>
+<button aria-label="Next photograph" class="story-nav story-next" id="storyNext" type="button">›</button>
+</div>
+<div aria-label="Select photograph" class="story-dots" id="storyDots"></div>
+<p class="story-swipe-note">Swipe the photograph or use the arrows to move chronologically through the climb.</p>
+</section>
+</div>
 <div class="focus-overlay" hidden="" id="focusOverlay">
 <section aria-labelledby="focusTitle" aria-modal="true" class="focus-sheet" role="dialog">
 <div class="focus-sheet-top"><div><div class="kicker">Field sheet</div><h2 id="focusTitle">Summit Focus</h2></div><div class="focus-sheet-controls"><button id="focusCampfire" type="button">Night vision</button><button aria-label="Close Summit Focus" class="close-focus" id="closeFocus" type="button">×</button></div></div>

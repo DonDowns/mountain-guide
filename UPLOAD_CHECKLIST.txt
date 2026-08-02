@@ -40,3 +40,10 @@ VERSION 6.6 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v6.6 Gear Locker and Pack Builder
+
+
+VERSION 6.7 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v6.7 Mountain Stories

@@ -775,3 +775,193 @@ body{background-image:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--i
   .locker-filters,.custom-gear-form,.gear-delete,.gear-toolbar{display:none!important}
   .gear-panel{break-inside:avoid}
 }
+
+.install-nudge[hidden]{display:none!important}
+
+
+/* Version 6.7 — Mountain Stories */
+.mountain-stories .section-head p{max-width:620px}
+.story-card{
+  width:100%;
+  border:0;
+  text-align:left;
+  cursor:pointer;
+  font:inherit;
+}
+.story-card:focus-visible{
+  outline:4px solid color-mix(in srgb,var(--gold) 60%,transparent);
+  outline-offset:4px;
+}
+.story-card-portrait img{object-position:center 34%}
+.story-count{
+  display:block;
+  margin-bottom:6px;
+  color:#f2d291;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.story-open{
+  display:inline-block;
+  margin-top:10px;
+  color:white;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+.story-overlay[hidden]{display:none!important}
+.story-overlay{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  overflow:auto;
+  padding:18px;
+  background:rgba(1,9,14,.88);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.story-viewer{
+  max-width:1080px;
+  min-height:calc(100vh - 36px);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  color:white;
+}
+.story-viewer-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  padding:8px 4px 13px;
+}
+.story-viewer-top h2{
+  margin:3px 0 0;
+  color:white;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(30px,5vw,52px);
+  font-weight:500;
+  letter-spacing:-.035em;
+}
+.story-viewer-top .kicker{color:#e9c77e}
+.story-close{
+  width:46px;
+  height:46px;
+  flex:none;
+  padding:0;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  color:white;
+  background:rgba(255,255,255,.08);
+  font-size:27px;
+  font-weight:900;
+}
+.story-stage{
+  flex:1;
+  display:grid;
+  grid-template-columns:54px minmax(0,1fr) 54px;
+  gap:12px;
+  align-items:center;
+}
+.story-stage figure{
+  min-width:0;
+  margin:0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:24px;
+  background:#061117;
+  box-shadow:0 32px 90px rgba(0,0,0,.45);
+}
+.story-stage img{
+  display:block;
+  width:100%;
+  height:min(68vh,760px);
+  object-fit:contain;
+  background:#02080b;
+}
+.story-stage figcaption{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:13px 16px 15px;
+}
+.story-stage figcaption span{
+  flex:none;
+  color:#e9c77e;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.story-stage figcaption b{
+  color:#e7eef1;
+  font-size:14px;
+  line-height:1.4;
+}
+.story-nav{
+  width:50px;
+  height:50px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  color:white;
+  background:rgba(255,255,255,.08);
+  font-size:34px;
+  line-height:1;
+}
+.story-dots{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:14px 0 6px;
+}
+.story-dots button{
+  width:9px;
+  height:9px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.28);
+}
+.story-dots button.active{
+  width:28px;
+  border-radius:99px;
+  background:var(--gold);
+}
+.story-swipe-note{
+  margin:2px 0 8px;
+  color:rgba(255,255,255,.62);
+  font-size:11px;
+  text-align:center;
+}
+.campfire-mode .story-card img{filter:none}
+@media(max-width:780px){
+  .story-overlay{padding:0}
+  .story-viewer{
+    min-height:100%;
+    padding:calc(12px + env(safe-area-inset-top)) 10px calc(15px + env(safe-area-inset-bottom));
+  }
+  .story-stage{
+    display:block;
+  }
+  .story-stage img{
+    height:calc(100vh - 245px);
+    min-height:330px;
+  }
+  .story-nav{
+    position:fixed;
+    z-index:2;
+    top:50%;
+    width:42px;
+    height:42px;
+    background:rgba(2,10,14,.62);
+  }
+  .story-prev{left:13px}
+  .story-next{right:13px}
+  .story-stage figcaption{display:block}
+  .story-stage figcaption span{display:block;margin-bottom:4px}
+}
+@media print{
+  .story-overlay{display:none!important}
+}
