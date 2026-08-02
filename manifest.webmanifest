@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Don Downs Mountain Guide \u2014 Alpine Edition",
   "short_name": "Mountain Guide",
-  "description": "An elegant offline Colorado expedition companion with live summit forecasts, sunlight intelligence, Summit Focus, checklists and a personal 14er record.",
+  "description": "A refined offline Colorado mountain guide with live forecasts, honest astronomical light times, Summit Focus, checklists and a personal 14er record.",
   "start_url": "./?source=homescreen",
   "scope": "./",
   "display": "standalone",

@@ -1,6 +1,6 @@
-# Don Downs Mountain Guide — Version 6 Alpine Edition
+# Don Downs Mountain Guide — Version 6.1 Refined Alpine Edition
 
-Version 6 keeps the audited Version 5.1 reliability baseline and adds a focused premium experience rather than feature clutter.
+Version 6.1 keeps the audited Version 5.1 reliability baseline and adds a focused premium experience rather than feature clutter.
 
 ## Material additions
 - Cinematic alpine visual system with original artwork
@@ -15,7 +15,7 @@ Version 6 keeps the audited Version 5.1 reliability baseline and adds a focused 
 ## Deploy
 1. Upload every file in this package to the root of `DonDowns/mountain-guide`.
 2. Keep the existing `CNAME` file.
-3. Commit directly to `main` with: `Deploy Mountain Guide v6 Alpine Edition`.
+3. Commit directly to `main` with: `Deploy Mountain Guide v6 Refined Alpine Edition`.
 4. Wait 1–3 minutes, then hard-refresh the live site.
 5. In the installed iPhone app, accept the update banner or fully close and reopen after the new service worker installs.
 
