@@ -30,8 +30,8 @@ Applied the transcript as the governing record for completed summits, including:
 - La Plata: solo.
 - Antero: David Harbin.
 - Shavano/Tabeguache combo: David Harbin.
-- Yale: David Schulteis.
-- Oxford: Logan Jones, David Schulteis, and Amy.
+- Yale: David Schultheis.
+- Belford/Oxford combo: Logan Jones, Amy, and David Schultheis.
 - Columbia: Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen.
 - Huron: Caleb, Shelby, and Nathan.
 - El Diente: David Harbin, Mike Brown, and Stephen McKinney.
@@ -63,4 +63,4 @@ Transcript-derived gear notes were added to summit detail records where Don prov
 
 ## Version 7.3.2 correction
 
-Mount Columbia partners corrected to Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen. It was not climbed with David Schulteis or Logan Jones.
+Mount Columbia partners corrected to Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen. It was not climbed with David Schultheis or Logan Jones.

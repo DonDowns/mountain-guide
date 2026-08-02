@@ -9,13 +9,13 @@ Mount Columbia is now recorded as climbed by:
 - David Harbin
 - Dr. Charles Jansen
 
-It is explicitly not recorded as climbed with David Schulteis or Logan Jones.
+It is explicitly not recorded as climbed with David Schultheis or Logan Jones.
 
 ## Scope
 
 This release updates the active summit dataset, the summit detail page data, and the current summit-review CSV.
 
-David Schulteis and Logan Jones are not globally removed from the app because they still belong to other climb records where separately recorded.
+David Schultheis and Logan Jones are not globally removed from the app because they still belong to other climb records where separately recorded.
 
 ## Preserved
 

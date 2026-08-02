@@ -32,7 +32,7 @@ Applied Don’s Aug. 2, 2026 partner corrections:
 - Mount Antero: David Harbin.
 - Mount Harvard: David Harbin.
 - La Plata Peak: Mike Brown and David Harbin.
-- Mount Columbia: Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen. It was not climbed with David Schulteis or Logan Jones.
+- Mount Columbia: Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen. It was not climbed with David Schultheis or Logan Jones.
 - North Eolus and El Diente retain Mike Brown and David Harbin because Mike was previously specifically recorded and the new note confirmed David without explicitly removing Mike.
 
 ## Preserved

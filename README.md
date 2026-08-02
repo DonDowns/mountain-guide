@@ -165,3 +165,11 @@ Version 7.3.2 corrects Mount Columbia partners to Don Downs, Mike Brown, David H
 GitHub commit message:
 
 `Deploy Mountain Guide v7.3.2 Mount Columbia partner correction`
+
+## Version 7.3.3
+
+Version 7.3.3 corrects Mount Belford and Mount Oxford as a combo climb with Logan Jones, Amy, and David Schultheis.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.3.3 Belford Oxford partner correction`
