@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: Colorado fourteener and Lake Como expedition guide with corrected Belford/Oxford partners, corrected Mount Columbia partners, transcript climb history, photo-verified gear, weather, lodging, and mountain stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: Colorado fourteener and Lake Como expedition guide with hardened local data transfer, this-device data stamp, single-source ledger facts, corrected partners, photo-verified gear, weather, lodging, and mountain stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -15,7 +15,7 @@
 <div class="hero-brand"><span aria-hidden="true" class="brand-mark">▲</span><div class="eyebrow">Colorado Expedition Companion</div></div><h1>Don Downs<br/><span>Mountain Guide</span></h1>
 <p>A personal alpine command center for Lake Como, Blanca, Ellingwood and Mount Lindsey — live summit forecasts, first-light intelligence, formation and a long-term path toward fifty-plus summits.</p>
 <div class="actions"><button class="btn primary" id="openFocusHero" type="button"><span aria-hidden="true">⌁</span> Summit Focus</button><a class="btn ghost" href="#intelligence">Trip intelligence</a><button class="btn ghost" id="campfireHero" type="button">Night vision</button></div>
-<div class="hero-meta"><span><b>35</b> completed</span><span><b>3</b> planned</span><span><b>50+</b> goal</span></div>
+<div class="hero-meta"><span><b id="heroCompleted">—</b> completed</span><span><b id="heroPlanned">—</b> planned</span><span><b id="heroGoal">—</b> goal</span></div>
 </div>
 <aside aria-label="Selectable summit weather forecast" class="summit-weather" id="summitWeather">
 <div class="summit-weather-head">
@@ -55,8 +55,8 @@
 <div class="section-head"><div><div class="kicker">Dashboard</div><h2>Lake Como 2026</h2></div><p>August 19–24, with August 25 reserved for weather or recovery.</p></div>
 <div class="grid g4 dashboard-grid">
 <div class="card metric"><div><div class="kicker">Departure</div><strong class="countdown" id="countdown">Calculating…</strong><small>until the expedition begins</small></div><div class="status"><span class="dot"></span><span id="net">Checking connection</span></div></div>
-<div class="card metric"><div><div class="kicker">Summit goal</div><strong>38 / 50</strong><small>projected after the planned trip</small></div><div class="progress"><span style="width:76%"></span></div></div>
-<div class="card metric"><div><div class="kicker">Readiness</div><strong id="readyPct">0%</strong><small>of saved gear and communication checks</small></div><div class="progress"><span id="readyBar" style="width:0%"></span></div></div>
+<div class="card metric"><div><div class="kicker">Summit goal</div><strong id="goalSummary">—</strong><small>projected after the planned trip</small></div><div class="progress"><span id="goalBar" style="width:0%"></span></div></div>
+<div class="card metric"><div><div class="kicker">Readiness · this device</div><strong id="readyPct">0%</strong><small>of saved gear and communication checks on this device only</small></div><div class="progress"><span id="readyBar" style="width:0%"></span></div><p class="device-note">Checkmarks are stored on each device separately. Your iPhone and Mac will show different percentages unless you export a backup from one and import it on the other.</p></div>
 <div class="card metric sun-metric"><div><div class="kicker">Sunday first light</div><strong id="sunMetric">Calculating…</strong><small id="sunMetricNote">Lake Como · Aug 23</small></div><div aria-hidden="true" class="sun-arc"><span></span></div></div>
 </div>
 <div class="next-action" id="nextAction">
@@ -188,12 +188,8 @@
 <div aria-label="Colorado fourteener progress" class="ledger-meter">
 <span id="ledgerMeterFill"></span>
 </div>
-<div class="ledger-stat-row"><span><b>31</b> ranked completed</span><span><b>35</b> recorded summit ascents</span><span><b>5</b> recorded solo summits</span><span><b id="ledgerProjectedCount">38</b> projected named summits after Lake Como</span><span><b>50+</b> personal goal</span></div>
-<div class="milestone-strip">
-<span><b>First climb</b>Longs Peak · Sept. 4, 2011</span>
-<span><b>First 14er with Caleb</b>Pikes Peak · Oct. 2, 2019</span>
-<span><b>First sunrise summit</b>Mount Massive with Caleb</span>
-</div></div>
+<div class="ledger-stat-row"><span><b id="statRanked">—</b> ranked completed</span><span><b id="statAscents">—</b> recorded summit ascents</span><span><b id="statSolo">—</b> recorded solo summits</span><span><b id="ledgerProjectedCount">—</b> projected named summits after Lake Como</span><span><b id="statGoal">—</b> personal goal</span></div>
+<div class="milestone-strip" id="milestoneStrip"></div></div>
 <div class="ledger-focus">
 <div class="kicker">Current expedition focus</div>
 <h3>Blanca · Ellingwood Point · Mount Lindsey</h3>
@@ -379,6 +375,29 @@
 <h2>Gear Locker &amp; Smart Pack Builder</h2>
 </div>
 <p>Your gear is stored once, then reused across trip presets. Lake Como is the first complete trip profile rather than a one-off checklist.</p>
+</div><div class="data-transfer-panel" id="data-transfer-panel">
+<div class="data-transfer-head">
+<div>
+<p class="eyebrow">Local Data</p>
+<h3>Data Transfer</h3>
+</div>
+<span class="device-pill">This device only</span>
+</div>
+<p class="data-local-note">
+    Readiness, gear status, pack checkmarks, weather snapshots, and app preferences live only in this browser/app installation. Your iPhone app and this webpage can differ unless you export from one and import into the other.
+  </p>
+<div class="data-stamp-grid">
+<span><b>This copy last changed</b><em id="localDataStamp">No local changes recorded yet</em></span>
+<span><b>Stored data profile</b><em id="localDataProfile">Local browser/app storage</em></span>
+</div>
+<div class="data-transfer-actions">
+<button class="primary" id="exportDataBtn" type="button">Export this device’s data</button>
+<label class="secondary import-label" for="importDataFile">Import backup file</label>
+<input accept="application/json,.json" hidden="" id="importDataFile" type="file"/>
+</div>
+<p class="data-transfer-warning">
+    For the Lake Como trip, use the iPhone as the field source of truth. Export/import is a manual transfer; this app has no server-side cloud sync.
+  </p>
 </div>
 <div class="gear-principle">
 <span aria-hidden="true">↻</span>
@@ -500,7 +519,7 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 7.3.3</div>
+<div class="footer">Don Downs Mountain Guide · Version 7.5.1</div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
 <div class="story-viewer-top">

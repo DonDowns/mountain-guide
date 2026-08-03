@@ -158,18 +158,26 @@ GitHub commit message:
 
 `Deploy Mountain Guide v7.3 Transcript Climb History`
 
-## Version 7.3.2
+## Version 7.4.1
 
-Version 7.3.2 corrects Mount Columbia partners to Don Downs, Mike Brown, David Harbin, and Dr. Charles Jansen.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.3.2 Mount Columbia partner correction`
-
-## Version 7.3.3
-
-Version 7.3.3 corrects Mount Belford and Mount Oxford as a combo climb with Logan Jones, Amy, and David Schultheis.
+Version 7.4.1 keeps the Version 7.4 single-source-of-truth and this-device readiness fixes, then re-applies the Mount Columbia and Belford/Oxford partner corrections.
 
 GitHub commit message:
 
-`Deploy Mountain Guide v7.3.3 Belford Oxford partner correction`
+`Deploy Mountain Guide v7.4.1 single source truth partner corrections`
+
+## Version 7.5
+
+Version 7.5 adds a visible Data Transfer panel and local data stamp. It does not attempt false cross-device sync detection. It is built from 7.4.1 and preserves all partner corrections.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.5 Data Transfer and Local Stamp`
+
+## Version 7.5.1
+
+Version 7.5.1 hardens the Data Transfer feature: confirmation before import, app-scoped ddmg-* backup keys, reload after import, and no global Storage.prototype monkey patch.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.5.1 Data Transfer hardening`

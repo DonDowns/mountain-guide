@@ -111,14 +111,20 @@ Replace “Add files via upload” with:
 
 Deploy Mountain Guide v7.3 Transcript Climb History
 
-VERSION 7.3.2 COMMIT MESSAGE
+VERSION 7.4.1 COMMIT MESSAGE
 
 Replace “Add files via upload” with:
 
-Deploy Mountain Guide v7.3.2 Mount Columbia partner correction
+Deploy Mountain Guide v7.4.1 single source truth partner corrections
 
-VERSION 7.3.3 COMMIT MESSAGE
+VERSION 7.5 COMMIT MESSAGE
 
 Replace “Add files via upload” with:
 
-Deploy Mountain Guide v7.3.3 Belford Oxford partner correction
+Deploy Mountain Guide v7.5 Data Transfer and Local Stamp
+
+VERSION 7.5.1 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.5.1 Data Transfer hardening
