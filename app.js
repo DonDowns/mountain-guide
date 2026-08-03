@@ -39,7 +39,7 @@ const LOCAL_DATA_STAMP_KEY='ddmg-local-data-last-changed';
 const LOCAL_DATA_PROFILE_KEY='ddmg-local-data-profile';
 function stampLocalDataChange(reason='local change'){
  try{
-  const payload={at:new Date().toISOString(),reason,version:'7.5.1'};
+  const payload={at:new Date().toISOString(),reason,version:'7.7'};
   localStorage.setItem(LOCAL_DATA_STAMP_KEY,JSON.stringify(payload));
   localStorage.setItem(LOCAL_DATA_PROFILE_KEY,'Local browser/app storage');
  }catch(e){}
@@ -69,7 +69,7 @@ function exportLocalData(){
   const key=localStorage.key(i);
   if(key&&key.startsWith('ddmg-'))storage[key]=localStorage.getItem(key);
  }
- const data={exportedAt:new Date().toISOString(),app:'Don Downs Mountain Guide',version:'7.5.1',scope:'ddmg-localStorage-only',storage};
+ const data={exportedAt:new Date().toISOString(),app:'Don Downs Mountain Guide',version:'7.7',scope:'ddmg-localStorage-only',storage};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob);
  const a=document.createElement('a');
@@ -385,6 +385,7 @@ const GEAR_REFRESH_V7_2={"rainShell":{"name":"Marmot PreCip rain jacket (red, M)
 let packState=safeParse(storageGet(PACK_STATE_KEY),{});
 let packProfileId=PACK_PRESETS[storageGet(PACK_PROFILE_KEY)]?storageGet(PACK_PROFILE_KEY):'lake-como-2026';
 let customPack=safeParse(storageGet(CUSTOM_PACK_KEY),{});
+let incompleteOnly=false;
 
 function saveGearLocker(){storageSet(GEAR_LOCKER_KEY,JSON.stringify(gearLocker))}
 function savePackState(){storageSet(PACK_STATE_KEY,JSON.stringify(packState))}
@@ -454,16 +455,17 @@ function renderPackBuilder(){
  document.getElementById('packProfileDescription').textContent=profile.description;
  document.getElementById('packContextNote').innerHTML=profile.note;
  const sections=document.getElementById('packSections');
+ let visiblePackRows=0;
  sections.innerHTML=profileSections().map(section=>{
   let known=0,unknown=0;
   const rows=section.items.map(normalizePackEntry).map(entry=>{
-   const item=gearLocker[entry.id];if(!item)return '';
+   const item=gearLocker[entry.id];if(!item)return null;
    const key=packKey(packProfileId,section.id,entry.id),checked=!!packState[key];
    const isSelected=entry.required||checked;
    if(isSelected&&Number(item.weightOz)>0)known+=Number(item.weightOz);else if(isSelected&&item.weightOz!==0)unknown++;
    const note=entry.note||item.note||'';
    const weight=Number(item.weightOz)>0?ouncesLabel(Number(item.weightOz)):'';
-   return `<label class="pack-item">
+   return {checked,required:!!entry.required,html:`<label class="pack-item" data-pack-row="true" data-required="${entry.required?'true':'false'}" data-checked="${checked?'true':'false'}">
     <input type="checkbox" data-pack-check="${escapeHtml(key)}" ${checked?'checked':''}>
     <span class="pack-item-main"><b>${escapeHtml(item.name)}</b>${note?`<small>${escapeHtml(note)}</small>`:''}</span>
     <span class="pack-item-meta">
@@ -471,16 +473,21 @@ function renderPackBuilder(){
       <span class="gear-badge ${escapeHtml(item.status)}">${escapeHtml(statusLabel(item.status))}</span>
       ${weight?`<span class="gear-badge">${escapeHtml(weight)}</span>`:''}
     </span>
-   </label>`
-  }).join('');
+   </label>`}
+  }).filter(Boolean);
+  const visibleRows=incompleteOnly?rows.filter(row=>!row.checked):rows;
+  if(incompleteOnly&&!visibleRows.length)return '';
+  visiblePackRows+=visibleRows.length;
   const weightText=known?`${ouncesLabel(known)} known${unknown?` · ${unknown} unknown`:''}`:(unknown?`${unknown} weights unknown`:'No carried weight');
-  return `<article class="pack-section">
+  return `<article class="pack-section" data-pack-section="${escapeHtml(section.id)}">
    <div class="pack-section-head"><div><h3>${escapeHtml(section.title)}</h3><p>${escapeHtml(section.subtitle||'')}</p></div><span class="pack-section-weight">${escapeHtml(weightText)}</span></div>
-   <div class="pack-list">${rows}</div>
+   <div class="pack-list">${visibleRows.map(row=>row.html).join('')}</div>
   </article>`
  }).join('');
+ if(incompleteOnly&&!visiblePackRows){sections.innerHTML=''}
  renderPackSummary();
- renderCustomSectionOptions()
+ renderCustomSectionOptions();
+ renderIncompleteFilterState();
 }
 function renderPackSummary(){
  const c=packCounts(),pct=c.total?Math.round(c.checked/c.total*100):0;
@@ -551,14 +558,16 @@ function resetActivePack(){
  savePackState();renderPackBuilder();readiness();renderNextAction()
 }
 function setupGearBuilder(){
- migrateLegacyPacking();renderGearSelects();renderPackBuilder();renderGearLocker();
+ migrateLegacyPacking();renderGearSelects();renderPackBuilder();renderGearLocker();renderGearAdvisor();renderTripConditionsAdvisor();
  document.getElementById('packProfile').addEventListener('change',event=>{
   packProfileId=event.target.value;storageSet(PACK_PROFILE_KEY,packProfileId);
-  renderPackBuilder();readiness();renderNextAction()
+  renderPackBuilder();readiness();renderNextAction();renderIncompleteFilterState();renderGearAdvisor();renderTripConditionsAdvisor();renderTripConditionsAdvisor()
  });
  document.getElementById('packSections').addEventListener('change',event=>{
   const key=event.target.dataset.packCheck;if(!key)return;
-  packState[key]=event.target.checked;savePackState();renderPackSummary();readiness();renderNextAction()
+  packState[key]=event.target.checked;savePackState();
+  if(incompleteOnly)renderPackBuilder();else renderPackSummary();
+  readiness();renderNextAction();renderIncompleteFilterState();renderGearAdvisor();renderTripConditionsAdvisor()
  });
  document.getElementById('gearSearch').addEventListener('input',renderGearLocker);
  document.getElementById('gearCategoryFilter').addEventListener('change',renderGearLocker);
@@ -568,7 +577,7 @@ function setupGearBuilder(){
   if(event.target.matches('[data-gear-status]'))item.status=event.target.value;
   if(event.target.matches('[data-gear-location]'))item.location=event.target.value;
   if(event.target.matches('[data-gear-weight]'))item.weightOz=event.target.value===''?null:Number(event.target.value);
-  saveGearLocker();renderPackBuilder();readiness()
+  saveGearLocker();renderPackBuilder();readiness();renderIncompleteFilterState();renderGearAdvisor();renderTripConditionsAdvisor()
  });
  document.getElementById('gearLocker').addEventListener('click',event=>{
   const button=event.target.closest('[data-delete-gear]');if(!button)return;
@@ -584,7 +593,7 @@ function setupGearBuilder(){
 
 const staticBoxes=[...document.querySelectorAll('input[type=checkbox][data-save]')];
 const saved=safeParse(storageGet(CHECK_KEY),{});
-staticBoxes.forEach((b,i)=>{const k=b.dataset.save||i;b.checked=!!saved[k];b.addEventListener('change',()=>{saved[k]=b.checked;storageSet(CHECK_KEY,JSON.stringify(saved));readiness();renderNextAction()})});
+staticBoxes.forEach((b,i)=>{const k=b.dataset.save||i;b.checked=!!saved[k];b.addEventListener('change',()=>{saved[k]=b.checked;storageSet(CHECK_KEY,JSON.stringify(saved));readiness();renderNextAction();renderIncompleteFilterState()})});
 function readiness(){
  const pack=packCounts();
  const checked=pack.checked+staticBoxes.filter(b=>b.checked).length;
@@ -592,15 +601,223 @@ function readiness(){
  const pct=total?Math.round(checked/total*100):0;
  const pctEl=document.getElementById('readyPct'),bar=document.getElementById('readyBar');
  if(pctEl)pctEl.textContent=pct+'%';if(bar)bar.style.width=pct+'%';
+ const gearSummary=document.getElementById('readyGearSummary'),commSummary=document.getElementById('readyCommSummary');
+ if(gearSummary)gearSummary.textContent=`${pack.checked} / ${pack.total} active pack confirmations`;
+ if(commSummary)commSummary.textContent=`${staticBoxes.filter(b=>b.checked).length} / ${staticBoxes.length} communication checkmarks`;
  return pct
 }
 readiness();
+
+/* Version 7.7 — incomplete-only readiness filter */
+function incompleteCounts(){
+ const sections=profileSections();
+ let requiredRemaining=0,optionalRemaining=0,gearRequired=0;
+ sections.forEach(section=>section.items.map(normalizePackEntry).forEach(entry=>{
+  const key=packKey(packProfileId,section.id,entry.id);
+  if(packState[key])return;
+  if(entry.required){requiredRemaining++;gearRequired++}else optionalRemaining++;
+ }));
+ const commRemaining=staticBoxes.filter(box=>!box.checked).length;
+ requiredRemaining+=commRemaining;
+ return {packRemaining:gearRequired,packTotal:packCounts().total,commRemaining,commTotal:staticBoxes.length,optionalRemaining,requiredRemaining,remaining:requiredRemaining,totalVisible:requiredRemaining+optionalRemaining}
+}
+function renderCommunicationFilter(){
+ const card=document.getElementById('communicationChecksCard');
+ if(!card)return;
+ staticBoxes.forEach(box=>{
+  const row=box.closest('label');
+  if(row)row.hidden=!!(incompleteOnly&&box.checked);
+ });
+ const commRemaining=staticBoxes.filter(box=>!box.checked).length;
+ card.hidden=!!(incompleteOnly&&commRemaining===0);
+}
+function renderIncompleteFilterState(announce=false){
+ const btn=document.getElementById('incompleteOnlyToggle');
+ const status=document.getElementById('incompleteFilterStatus');
+ const empty=document.getElementById('incompleteOnlyEmpty');
+ const c=incompleteCounts();
+ renderCommunicationFilter();
+ if(btn){
+  btn.setAttribute('aria-pressed',incompleteOnly?'true':'false');
+  btn.textContent=incompleteOnly?'Show all checks':'Show incomplete only';
+ }
+ const message=incompleteOnly?(c.totalVisible?`${c.requiredRemaining} required remaining (${c.packRemaining} gear, ${c.commRemaining} communication). Plus ${c.optionalRemaining} optional item${c.optionalRemaining===1?'':'s'} not selected — decide these from the final forecast.`:'All items checked on this device'):'Showing all gear and communication checks.';
+ if(status)status.textContent=message;
+ if(empty)empty.hidden=!(incompleteOnly&&c.totalVisible===0);
+ if(announce&&typeof toast==='function')toast(message);
+}
+function setupIncompleteFilter(){
+ const btn=document.getElementById('incompleteOnlyToggle');
+ if(!btn)return;
+ incompleteOnly=false;
+ btn.setAttribute('aria-pressed','false');
+ btn.addEventListener('click',()=>{
+  incompleteOnly=!incompleteOnly;
+  renderPackBuilder();
+  renderIncompleteFilterState(true);
+ });
+ renderIncompleteFilterState(false);
+}
+
+/* Version 7.8 — plan-based Gear Advisor */
+function advisorItemState(itemId){
+ const sections=profileSections();
+ const entries=[];
+ sections.forEach(section=>section.items.map(normalizePackEntry).forEach(entry=>{
+  if(entry.id===itemId){
+   const key=packKey(packProfileId,section.id,entry.id);
+   entries.push({section,entry,checked:!!packState[key],required:!!entry.required});
+  }
+ }));
+ const required=entries.some(x=>x.required);
+ const checked=entries.some(x=>x.checked);
+ const item=gearLocker[itemId];
+ return {itemId,item,required,checked,listed:entries.length>0,sections:entries.map(x=>x.section.title)};
+}
+function advisorWeatherSummary(){
+ const items=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x&&x.fetchedAt);
+ const trip=items.map(x=>x.trip).filter(Boolean);
+ const next=items.flatMap(x=>(x.upcoming||[]).slice(0,8));
+ const winds=[...trip.map(t=>t.maxWind),...next.map(p=>p.windMph)].filter(Number.isFinite);
+ const pops=[...trip.map(t=>t.maxPop),...next.map(p=>p.pop)].filter(Number.isFinite);
+ const temps=[...trip.map(t=>t.minTemp),...next.map(p=>p.temp)].filter(Number.isFinite);
+ const text=items.flatMap(x=>[(x.current?.condition||''),...(x.upcoming||[]).map(p=>p.condition||''),...(x.trip?.conditions||[])]).join(' ').toLowerCase();
+ return {
+  loaded:items.length,
+  maxWind:winds.length?Math.max(...winds):null,
+  maxPop:pops.length?Math.max(...pops):null,
+  minTemp:temps.length?Math.min(...temps):null,
+  thunder:/thunder|storm|lightning/.test(text),
+  snow:/snow|ice|wintry|sleet/.test(text),
+  alerts:items.reduce((sum,x)=>sum+(x.alerts?.length||0),0),
+  stale:items.some(x=>x.fetchedAt&&ageHours(x.fetchedAt)>6)
+ }
+}
+function advisorAdd(list,level,title,body,itemIds=[]){
+ const actions=itemIds.map(id=>advisorItemState(id)).filter(x=>x.item).map(x=>({
+  id:x.itemId,
+  name:x.item.name,
+  checked:x.checked,
+  required:x.required,
+  status:x.item.status,
+  sections:x.sections
+ }));
+ list.push({level,title,body,actions});
+}
+function buildGearAdvisorRecommendations(){
+ const recs=[];
+ const profile=PACK_PRESETS[packProfileId]||PACK_PRESETS['lake-como-2026'];
+ const sections=profileSections();
+ const sectionIds=sections.map(s=>s.id);
+ const weather=advisorWeatherSummary();
+ const isLakeComo=packProfileId==='lake-como-2026';
+ const isOvernight=sectionIds.includes('main')&&sectionIds.includes('summit');
+ const hasSummit=sectionIds.includes('summit');
+ const isDay=packProfileId==='fourteener-day';
+ const c=packCounts();
+
+ if(isLakeComo){
+  advisorAdd(recs,'priority','Lake Como backpack + summit repack','This plan has two different loads: the Gregory Paragon 60 approach load and the REI Flash 18 summit load. Confirm both; do not assume an item checked in the approach pack is available in the summit pack.', ['paragon60','flash18','hydrationReservoir','trailFuel','rainShell','puffy','headlamp','inreach']);
+  advisorAdd(recs,'priority','Blanca + Ellingwood is a combo summit day','Treat Sunday as a longer exposed objective. Add margin for water, calories, headlamp time, route screenshots, helmet, and communication redundancy.', ['hydrationReservoir','waterFilter','trailFuel','electrolytes','headlamp','headlampBackup','routeScreens','helmet','inreach','emergencyBivy']);
+  advisorAdd(recs,'check','Lindsey is a separate access and waiver problem','Monday is not just a smaller repeat. Verify the waiver, trailhead access, vehicle plan, and whether the group still wants the objective after Sunday.', ['lindseyWaiver','audiQ5','fuelTopOff','vehicleWater','inreach']);
+ }
+ if(isOvernight){
+  advisorAdd(recs,'check','Heavy approach-pack discipline','For an overnight backpack, weight and placement matter. Keep camp gear in the main pack, summit essentials easy to repack, and avoid adding optional photo-verified items unless they solve a specific condition.', ['sweetSuite2','sleepingBag20','insulatedPad','waterFilter','sharedStove','sharedFuel','repairKit']);
+ }
+ if(hasSummit){
+  advisorAdd(recs,'check','Single vs double 14er margin','For a single standard summit day, the baseline day kit may be enough. For a double, long mileage, Class 3 terrain, or a pre-dawn start, add redundancy before speed: backup light, emergency layer, navigation, and communication.', ['headlampBackup','emergencyBivy','routeScreens','paperEmergency','phoneOffline','garmin965','inreach']);
+ }
+ if(isDay){
+  advisorAdd(recs,'check','Day-hike template needs condition decisions','The standard 14er day preset does not automatically add traction, wind shell, or extra insulation. Decide those from the current route report and point forecast.', ['microspikes','iceAxe','mhwWindShell','patagoniaVest','kahtoolaGaiters']);
+ }
+
+ if(Number.isFinite(weather.maxWind)&&weather.maxWind>=25){
+  advisorAdd(recs,weather.maxWind>=35?'priority':'check',`Wind margin: saved forecast shows wind to ${weather.maxWind} mph`,'Favor shell, beanie, gloves, secure hat, eye protection, and a conservative turnaround conversation. Wind is a planning flag, not a permission system.', ['rainShell','mhwWindShell','beanie','gloves','sunglasses','helmet']);
+ }
+ if(Number.isFinite(weather.minTemp)&&weather.minTemp<=40){
+  advisorAdd(recs,weather.minTemp<=32?'priority':'check',`Cold margin: saved forecast minimum ${weather.minTemp}°F`,'Start with usable warm layers and keep insulation reachable. Cold hands and pre-dawn stops make gloves, beanie, puffy, and backup light more important.', ['puffy','patagoniaVest','beanie','gloves','headlampBackup','drySocks']);
+ }
+ if(Number.isFinite(weather.maxPop)&&weather.maxPop>=30){
+  advisorAdd(recs,'priority',`Precipitation margin: saved forecast shows ${weather.maxPop}%`,'Protect warmth and navigation. Rain, graupel, or storms change the decision, especially above treeline.', ['rainShell','drySocks','routeScreens','paperEmergency','emergencyBivy']);
+ }
+ if(weather.thunder||weather.alerts){
+  advisorAdd(recs,'priority','Forecast language includes thunderstorm wording or alerts','This should affect timing and turnaround more than gear. Gear does not make exposed high terrain safe in lightning.', ['inreach','routeScreens','headlamp','rainShell','emergencyBivy']);
+ }
+ if(weather.snow){
+  advisorAdd(recs,'priority','Snow or ice wording appears in saved forecast','Verify actual route conditions before adding traction tools. Microspikes and axe are conditional items; carry them only when the route and skill requirement justify them.', ['microspikes','iceAxe','kahtoolaGaiters','pikeTrailGaiters','gloves']);
+ }
+ if(!weather.loaded){
+  advisorAdd(recs,'info','No saved trip forecast loaded on this device','Load trip weather before final gear decisions. Until then, keep the conservative August alpine baseline: shell, insulation, gloves, beanie, headlamp redundancy, water plan, and communication redundancy.', ['rainShell','puffy','beanie','gloves','headlampBackup','hydrationReservoir','inreach']);
+ }else if(weather.stale){
+  advisorAdd(recs,'info','Some saved forecasts are older than six hours','Refresh weather before using the advisor for final packing decisions.', []);
+ }
+
+ if(c.sourceActions>0){
+  advisorAdd(recs,'check',`${c.sourceActions} gear source action${c.sourceActions===1?'':'s'} still need verification`,'Borrowed, shared, rental, and verify-status items are not complete until the actual item and carrier are explicit.', []);
+ }
+ return recs;
+}
+function renderGearAdvisor(){
+ const summary=document.getElementById('gearAdvisorSummary');
+ const list=document.getElementById('gearAdvisorList');
+ if(!summary||!list)return;
+ const recs=buildGearAdvisorRecommendations();
+ const priority=recs.filter(r=>r.level==='priority').length;
+ const checks=recs.filter(r=>r.level==='check').length;
+ summary.textContent=`${recs.length} recommendations for ${PACK_PRESETS[packProfileId]?.title||'active preset'} · ${priority} priority · ${checks} checks.`;
+ list.innerHTML=recs.map(rec=>`<article class="advisor-card" data-level="${escapeHtml(rec.level)}">
+  <div class="advisor-card-head"><span>${escapeHtml(rec.level==='priority'?'Priority':rec.level==='check'?'Check':'Info')}</span><b>${escapeHtml(rec.title)}</b></div>
+  <p>${escapeHtml(rec.body)}</p>
+  ${rec.actions.length?`<div class="advisor-actions">${rec.actions.map(a=>`<span class="${a.checked?'done':''}"><b>${escapeHtml(a.name)}</b><small>${a.checked?'checked':a.required?'unchecked required':'optional / decision'}${a.sections.length?` · ${escapeHtml(a.sections.join(', '))}`:''}</small></span>`).join('')}</div>`:''}
+ </article>`).join('');
+}
+
+
+/* Version 7.9 — Trip Conditions Advisor */
+function tripConditionValues(){
+ const val=id=>document.getElementById(id)?.value||'';
+ return {length:val('conditionLength'),summits:val('conditionSummits'),distance:val('conditionDistance'),cold:val('conditionCold'),snow:val('conditionSnow'),terrain:val('conditionTerrain'),water:val('conditionWater'),wind:val('conditionWind'),exposure:val('conditionExposure')};
+}
+function tripConsideration(list,group,title,reason,items=[]){list.push({group,title,reason,items})}
+function buildTripConditionConsiderations(){
+ const c=tripConditionValues(),list=[];
+ if(c.length==='long'||c.length==='very-long'||c.distance==='excessive')tripConsideration(list,'Endurance margin','Extra water, calories, and time margin','Long mileage changes the failure mode: late descent, low calories, low water, and poor decisions compound. Add margin before adding speed.',['hydrationReservoir','waterFilter','trailFuel','electrolytes','headlampBackup','emergencyBivy']);
+ if(c.length==='very-long'||c.summits==='traverse')tripConsideration(list,'Commitment','Bailout and descent planning','A very long day or traverse needs explicit turnarounds, exit options, and a plan for the slowest person rather than the average pace.',['routeScreens','paperEmergency','inreach','headlamp','headlampBackup']);
+ if(c.summits==='double'||c.summits==='traverse')tripConsideration(list,'Combo objective','Second summit decision point','A double 14er should include a fresh decision before committing to the second summit. Weather, pace, water, and group condition decide whether the combo continues.',['hydrationReservoir','trailFuel','routeScreens','inreach']);
+ if(c.cold==='cold'||c.cold==='freezing')tripConsideration(list,'Cold margin','Keep warm layers reachable','Cold stops, wind, and slower group pace can make insulation more important than it looked at the trailhead.',['puffy','patagoniaVest','beanie','gloves','drySocks','headlampBackup']);
+ if(c.cold==='freezing')tripConsideration(list,'Freezing systems','Fuel and water can fail','Below freezing can weaken canister stove pressure and can permanently damage a wet hollow-fiber filter. Keep systems warm and decide whether the filter plan still fits.',['sharedFuel','waterFilter','gloves','puffy']);
+ if(c.snow==='patchy')tripConsideration(list,'Patchy snow / firm morning sections','Traction decision','Patchy snow can be trivial in the afternoon and consequential when firm in the morning. Decide from the current route report, not from the calendar.',['microspikes','kahtoolaGaiters','pikeTrailGaiters','poles']);
+ if(c.snow==='sustained')tripConsideration(list,'Sustained snow or ice','Axe, traction, and self-arrest skill','The real question is not only whether you own an axe or spikes. If self-arrest and movement on snow are not current for the whole group, the honest answer may be a different route or date.',['iceAxe','microspikes','helmet','gloves','kahtoolaGaiters']);
+ if(c.terrain==='class3'||c.terrain==='class4')tripConsideration(list,'Scrambling / exposure','Helmet, descent, and group ability','Exposed terrain makes descent planning and group ability central. Downclimbing is often harder than going up, especially when tired or weather moves in.',['helmet','routeScreens','inreach','headlampBackup']);
+ if(c.terrain==='class4')tripConsideration(list,'Class 4 seriousness','Do not let gear substitute for judgment','Class 4 terrain raises consequences. A helmet and route screenshots help, but they do not make the group prepared for exposure, route finding, or retreat.',['helmet','routeScreens','emergencyBivy','inreach']);
+ if(c.water==='limited'||c.water==='dry')tripConsideration(list,'Water plan','Carry or refill decision','Limited water changes pack weight and turnaround margin. Decide whether you are carrying all water or trusting a filter/refill point.',['hydrationReservoir','vapurBottle','waterFilter','electrolytes']);
+ if(c.water==='dry')tripConsideration(list,'Dry route','Do not assume a refill','A dry or unreliable route means the water plan is a required decision, not an optional comfort item.',['hydrationReservoir','vapurBottle','electrolytes']);
+ if(c.wind==='windy'||c.wind==='severe')tripConsideration(list,'Wind exposure','Shell, gloves, eye protection, secure layers','Wind strips heat and makes simple tasks harder. Secure hats and loose items, and keep hand protection available.',['rainShell','mhwWindShell','gloves','beanie','sunglasses']);
+ if(c.wind==='severe')tripConsideration(list,'Severe ridge wind','Gear may not solve the problem','Sustained ridge wind around 35–40 mph or higher can be hazardous regardless of what is packed. Treat this as a route, timing, and turnaround issue first.',['inreach','routeScreens','emergencyBivy']);
+ if(c.exposure==='bugs')tripConsideration(list,'Bugs','Headnet or repellent may matter at camp and trailhead','Bugs are rarely the core safety issue, but they affect sleep, comfort, and whether you actually rest before an alpine start.',['grayBoonie','sunHat']);
+ if(c.exposure==='sun')tripConsideration(list,'Sun / long exposure','Sun protection and fluid margin','Long exposure increases fluid loss and fatigue. Sun protection is part of preserving pace and decision quality.',['sunglasses','sunHat','grayBoonie','hydrationReservoir','electrolytes']);
+ if(!list.length)tripConsideration(list,'Baseline','Ordinary summer 14er day','For an easier summer day, the standard day kit may be enough, but still verify weather, water, navigation, communication, and group condition.',['rainShell','headlamp','routeScreens','inreach','hydrationReservoir']);
+ return list;
+}
+function renderTripConditionsAdvisor(){
+ const summary=document.getElementById('tripAdvisorSummary'),list=document.getElementById('tripAdvisorList');if(!summary||!list)return;
+ const recs=buildTripConditionConsiderations(),byGroup=new Map();
+ recs.forEach(r=>{if(!byGroup.has(r.group))byGroup.set(r.group,[]);byGroup.get(r.group).push(r)});
+ summary.textContent=`${recs.length} consideration${recs.length===1?'':'s'} · What does your own experience of this route add that this list cannot see?`;
+ list.innerHTML=[...byGroup.entries()].map(([group,items])=>`<section class="trip-consideration-group"><h4>${escapeHtml(group)}</h4>${items.map(item=>`<article class="advisor-card" data-level="check"><div class="advisor-card-head"><span>Consider</span><b>${escapeHtml(item.title)}</b></div><p>${escapeHtml(item.reason)}</p><div class="advisor-actions">${item.items.map(id=>{const s=advisorItemState(id),name=s.item?escapeHtml(s.item.name):escapeHtml(id);return `<span class="${s.checked?'done':''}"><b>${name}</b><small>${s.checked?'checked on this device':s.item?'review item / condition decision':'not in locker'}</small></span>`}).join('')}</div></article>`).join('')}</section>`).join('');
+}
+function setupTripConditionsAdvisor(){
+ ['conditionLength','conditionSummits','conditionDistance','conditionCold','conditionSnow','conditionTerrain','conditionWater','conditionWind','conditionExposure'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderTripConditionsAdvisor));
+ renderTripConditionsAdvisor();
+}
+document.addEventListener('DOMContentLoaded',setupTripConditionsAdvisor);
+
 function resetChecks(){
  if(confirm('Clear the active packing preset and communication checkmarks?')){
   staticBoxes.forEach(b=>b.checked=false);
   Object.keys(saved).forEach(k=>delete saved[k]);storageRemove(CHECK_KEY);
   Object.keys(packState).forEach(key=>{if(key.startsWith(`${packProfileId}:`))delete packState[key]});
-  savePackState();renderPackBuilder();readiness();renderNextAction()
+  savePackState();renderPackBuilder();readiness();renderNextAction();renderIncompleteFilterState();renderGearAdvisor();renderTripConditionsAdvisor();renderTripConditionsAdvisor()
  }
 }
 
@@ -829,7 +1046,7 @@ function renderWeatherFreshness(){
  const newest=loaded.sort((a,b)=>new Date(b.fetchedAt)-new Date(a.fetchedAt))[0],age=ageHours(newest.fetchedAt);
  document.getElementById('weatherFreshness').textContent=age<=1?'Current':`${Math.round(age)}h old`;document.getElementById('weatherFreshnessNote').textContent=`Last successful data: ${formatStamp(newest.fetchedAt)}`
 }
-function renderAllWeather(){TRIP_WEATHER_IDS.forEach(id=>renderWeatherCard(locationById(id)));renderWeatherFreshness();renderHeroWeather()}
+function renderAllWeather(){TRIP_WEATHER_IDS.forEach(id=>renderWeatherCard(locationById(id)));renderWeatherFreshness();renderHeroWeather();renderGearAdvisor();renderTripConditionsAdvisor();if(typeof riRenderPanel==='function')riRenderPanel()}
 
 async function refreshTripIntelligence(){
  if(!navigator.onLine){document.getElementById('refreshProgress').textContent='Offline: showing saved forecasts.';renderAllWeather();toast('Offline — saved trip intelligence remains available');return}
@@ -1474,15 +1691,517 @@ function setupSummitLedger(){
  renderRangeSummary();renderSummitLedger()
 }
 
+
+function flashReadinessTarget(el){
+ if(!el)return;
+ el.classList.add('readiness-target-flash');
+ setTimeout(()=>el.classList.remove('readiness-target-flash'),1400);
+}
+function openReadinessChecks(){
+ const panel=document.getElementById('readiness-checks');
+ if(!panel)return;
+ panel.scrollIntoView({behavior:'smooth',block:'start'});
+ flashReadinessTarget(panel);
+ setTimeout(()=>panel.focus({preventScroll:true}),350);
+}
+function openGearChecklistFromReadiness(){
+ const details=document.getElementById('smartPackBuilderPanel');
+ if(details)details.open=true;
+ const target=document.getElementById('packSections')||details;
+ target?.scrollIntoView({behavior:'smooth',block:'start'});
+ flashReadinessTarget(details||target);
+}
+function openCommunicationChecksFromReadiness(){
+ const target=document.getElementById('communicationChecksCard');
+ target?.scrollIntoView({behavior:'smooth',block:'center'});
+ flashReadinessTarget(target);
+ setTimeout(()=>target?.focus({preventScroll:true}),350);
+}
+function setupReadinessNavigation(){
+ const metric=document.getElementById('readinessMetric');
+ if(metric){
+  metric.addEventListener('click',openReadinessChecks);
+  metric.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openReadinessChecks()}});
+ }
+ document.getElementById('openGearChecklist')?.addEventListener('click',openGearChecklistFromReadiness);
+ document.getElementById('openCommunicationChecks')?.addEventListener('click',openCommunicationChecksFromReadiness);
+}
+
+
+/* Version 7.6 — tappable dashboard cards */
+function flashDashboardDestination(el){
+ if(!el)return;
+ el.classList.add('dashboard-destination-flash');
+ setTimeout(()=>el.classList.remove('dashboard-destination-flash'),1400);
+}
+function openDashboardShortcut(card){
+ const action=card.dataset.dashboardAction;
+ if(action==='focus'){
+  if(typeof openFocus==='function')openFocus();
+  else document.getElementById('focus')?.scrollIntoView({behavior:'smooth',block:'start'});
+  return;
+ }
+ const targetId=card.dataset.dashboardTarget;
+ const target=targetId?document.getElementById(targetId):null;
+ if(!target)return;
+ if(target.tagName==='DETAILS')target.open=true;
+ target.scrollIntoView({behavior:'smooth',block:'start'});
+ flashDashboardDestination(target);
+ try{target.focus({preventScroll:true})}catch(e){}
+}
+function setupDashboardShortcuts(){
+ document.querySelectorAll('.dashboard-shortcut[data-dashboard-target],.dashboard-shortcut[data-dashboard-action]').forEach(card=>{
+  card.addEventListener('click',event=>{
+   if(event.target.closest('a,button,input,label,select,textarea,summary'))return;
+   openDashboardShortcut(card);
+  });
+  card.addEventListener('keydown',event=>{
+   if(event.key==='Enter'||event.key===' '){
+    event.preventDefault();
+    openDashboardShortcut(card);
+   }
+  });
+ });
+}
+
 document.documentElement.classList.remove('field-mode');storageRemove('ddmg-v3-field');
 document.getElementById('nextActionPrimary').addEventListener('click',runNextAction);
 document.getElementById('shareStatusBtn').addEventListener('click',shareStatus);
 document.getElementById('shareIntelBtn').addEventListener('click',shareStatus);
 const initialNav=document.querySelector('.bottom-nav a.active');if(initialNav)initialNav.setAttribute('aria-current','page');
-setupGearBuilder();setupWeatherWidget();setupInstallNudge();setupBottomNav();setupStories();setupSummitLedger();
+setupGearBuilder();setupIncompleteFilter();setupReadinessNavigation();setupDashboardShortcuts();setupWeatherWidget();setupInstallNudge();setupBottomNav();setupStories();setupSummitLedger();
 renderAllWeather();renderReviews();updateIntelCheckProgress();updateIntelOverall();renderNextAction();setupV6();setupAi();
 
 
 
 
 
+
+
+/* ============================================================
+   Version 8.0 — Route Intelligence
+   Curated standard-route dataset sourced from 14ers.com.
+   Not scraped at runtime. Refresh manually; see RI_DATASET_STAMP.
+   ============================================================ */
+
+var riReady=false;
+const RI_DATASET_STAMP='2026-08-03';
+const RI_SOURCE_NOTE='Route statistics and risk factors curated from 14ers.com standard-route listings. Verify current conditions before every climb.';
+const RI_SELECTED_KEY='ddmg-v8-route-selected';
+const RI_START_KEY='ddmg-v8-route-startpoint';
+const RI_OVERRIDE_KEY='ddmg-v8-condition-overrides';
+
+/* Risk vocabulary matches 14ers.com: Low, Moderate, Considerable, High, Extreme */
+const RI_RISK_ORDER=['Low','Moderate','Considerable','High','Extreme'];
+function riRiskRank(v){const i=RI_RISK_ORDER.indexOf(v);return i<0?0:i}
+
+const ROUTE_PROFILES=[
+ /* ---------- Sangre de Cristo — August 2026 trip cluster ---------- */
+ {id:'como0',label:'Lake Como Approach',peaks:['Lake Como'],range:'Sangre de Cristo',cls:'Class 1',gain:3900,miles:11,
+  risk:{exposure:'Low',rockfall:'Low',routeFinding:'Low',commitment:'Low'},
+  url:'https://www.14ers.com/route.php?route=como0',
+  startPoints:[{id:'8000',label:'8,000 ft — 2WD / sedan limit',miles:11,gain:3900},
+               {id:'8800',label:'8,800 ft — 4WD SUV pull-offs',miles:8.25,gain:3100}],
+  startNote:'Distance from 8,800 ft is derived by subtracting the 3.25-mile road section and 800 ft of gain from the published 8,000-ft figures. It is an arithmetic derivation, not a separately published 14ers.com number.',
+  access:'The Lake Como road is rough and rocky. Where you park sets the entire day. The walking surface is road rock, not trail tread.',
+  trip:true},
+
+ {id:'blan1',label:'Blanca Peak — Northwest Ridge',peaks:['Blanca Peak'],range:'Sangre de Cristo',cls:'Difficult Class 2',gain:6500,miles:17,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Moderate',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=blan1',
+  startPoints:[{id:'8000',label:'8,000 ft — 2WD / sedan limit',miles:17,gain:6500},
+               {id:'8800',label:'8,800 ft — 4WD SUV pull-offs',miles:14.25,gain:5700},
+               {id:'lake',label:'Lake Como camp',miles:6,gain:2700}],
+  trip:true,standard:true},
+
+ {id:'elli2',label:'Ellingwood Point — South Face',peaks:['Ellingwood Point'],range:'Sangre de Cristo',cls:'Difficult Class 2',gain:6200,miles:17,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=elli2',
+  trip:true,standard:true},
+
+ {id:'elli3',label:'Combo: Blanca + Ellingwood',peaks:['Blanca Peak','Ellingwood Point'],range:'Sangre de Cristo',cls:'Class 3',gain:6800,miles:18,combo:true,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=elli3',
+  startPoints:[{id:'8000',label:'8,000 ft — 2WD / sedan limit',miles:18,gain:6800},
+               {id:'8800',label:'8,800 ft — 4WD SUV pull-offs',miles:15.25,gain:6000},
+               {id:'lake',label:'Lake Como camp',miles:7,gain:3000}],
+  access:'The connecting ridge has two options: a Class 3 line, or dropping back to the standard trail before reascending. Choosing the Class 3 line is a separate decision from choosing the combo.',
+  trip:true},
+
+ {id:'lind1',label:'Mount Lindsey — Northwest Gully',peaks:['Mount Lindsey'],range:'Sangre de Cristo',cls:'Easy Class 3',gain:3500,miles:8.25,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Moderate'},
+  url:'https://www.14ers.com/route.php?route=lind1',
+  access:'Waiver required. The summit and upper slopes are private Trinchera Blanca Ranch land. Legal access is only from the Lily Lake Trailhead via the standard gully or the ridge route. Any other basin or ridge approach is trespassing. Waiver: mountlindseywaiver.com',
+  accessCritical:true,trip:true,standard:true},
+
+ {id:'lind2',label:'Mount Lindsey — Northwest Ridge (Crux Wall variant)',peaks:['Mount Lindsey'],range:'Sangre de Cristo',cls:'Class 3',gain:3500,miles:8.25,
+  risk:{exposure:'High',rockfall:'Moderate',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=lind2',
+  access:'Same waiver and same trailhead as the gully route. The Crux Wall offers a Class 3 line on the left or a Class 4 direct pitch. That choice is made on the mountain, tired, and it also has to be reversed on descent.',
+  accessCritical:true,trip:true},
+
+ {id:'litt6',label:'Little Bear Peak — West Ridge and Hourglass',peaks:['Little Bear Peak'],range:'Sangre de Cristo',cls:'Class 4',gain:6200,miles:14,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'High',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=litt6',
+  objective:false,
+  access:'Reference only — not an objective on this trip or in the current plan. The Hourglass concentrates rockfall from every party above you.'},
+
+ {id:'litt3',label:'Combo: Little Bear + Blanca Traverse',peaks:['Little Bear Peak','Blanca Peak'],range:'Sangre de Cristo',cls:'Class 5',gain:8000,miles:17,combo:true,
+  risk:{exposure:'Extreme',rockfall:'Considerable',routeFinding:'High',commitment:'Extreme'},
+  url:'https://www.14ers.com/route.php?route=litt3',
+  objective:false,
+  access:'Reference only — not an objective. Extreme exposure and extreme commitment. Listed here so it is never confused with the Blanca + Ellingwood combo that shares the same basin.'},
+
+ {id:'cpea2',label:'Crestone Peak — South Face',peaks:['Crestone Peak'],range:'Sangre de Cristo',cls:'Class 3',gain:5700,miles:14,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=cpea2',standard:true},
+
+ {id:'cnee1',label:'Crestone Needle — South Face',peaks:['Crestone Needle'],range:'Sangre de Cristo',cls:'Class 4',gain:4400,miles:12,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'High',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=cnee1',standard:true},
+
+ {id:'cnee3',label:'Combo: Crestones Traverse',peaks:['Crestone Peak','Crestone Needle'],range:'Sangre de Cristo',cls:'Class 5',combo:true,gain:null,miles:null,unverified:true,
+  risk:{exposure:'Extreme',rockfall:'Considerable',routeFinding:'High',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=cnee3',
+  access:'Distance and gain are not in this dataset. Open the 14ers.com route page before planning.'},
+
+ {id:'humb1',label:'Humboldt Peak — West Ridge',peaks:['Humboldt Peak'],range:'Sangre de Cristo',cls:'Class 2',gain:4200,miles:11,
+  risk:{exposure:'Moderate',rockfall:'Moderate',routeFinding:'Moderate',commitment:'Low'},
+  url:'https://www.14ers.com/route.php?route=humb1',standard:true},
+
+ {id:'cule1',label:'Culebra Peak — Northwest Ridge',peaks:['Culebra Peak'],range:'Sangre de Cristo',cls:'Class 2',gain:2750,miles:5,
+  risk:{exposure:'Moderate',rockfall:'Moderate',routeFinding:'Moderate',commitment:'Moderate'},
+  url:'https://www.14ers.com/route.php?route=cule1',
+  access:'Private land. Advance reservation and fee required through the ranch. The access arrangement, not the terrain, is the limiting factor here.',
+  accessCritical:true,standard:true},
+
+ /* ---------- Elk Mountains ---------- */
+ {id:'cast1',label:'Castle Peak — Northeast Ridge',peaks:['Castle Peak'],range:'Elk Mountains',cls:'Difficult Class 2',gain:4600,miles:13.5,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=cast1',standard:true},
+
+ {id:'conu1',label:'Conundrum Peak — South Ridge',peaks:['Conundrum Peak'],range:'Elk Mountains',cls:'Difficult Class 2',gain:4400,miles:13.5,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Moderate',commitment:'Moderate'},
+  url:'https://www.14ers.com/route.php?route=conu1',standard:true},
+
+ {id:'cast4',label:'Combo: Castle + Conundrum',peaks:['Castle Peak','Conundrum Peak'],range:'Elk Mountains',cls:'Difficult Class 2',combo:true,gain:null,miles:null,unverified:true,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=cast4',
+  access:'Distance and gain are not in this dataset. Open the 14ers.com route page before planning.'},
+
+ {id:'maro1',label:'Maroon Peak — South Ridge',peaks:['Maroon Peak'],range:'Elk Mountains',cls:'Class 3',gain:4800,miles:12,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'Extreme',commitment:'Extreme'},
+  url:'https://www.14ers.com/route.php?route=maro1',standard:true},
+
+ {id:'nmar2',label:'North Maroon Peak — Northeast Ridge',peaks:['North Maroon Peak'],range:'Elk Mountains',cls:'Class 4',gain:4600,miles:9.25,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'High',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=nmar2',standard:true},
+
+ {id:'nmar4',label:'Combo: Bells Traverse',peaks:['Maroon Peak','North Maroon Peak'],range:'Elk Mountains',cls:'Class 5',combo:true,gain:null,miles:null,unverified:true,
+  risk:{exposure:'Extreme',rockfall:'High',routeFinding:'Extreme',commitment:'Extreme'},
+  url:'https://www.14ers.com/route.php?route=nmar4',
+  objective:false,
+  access:'Extreme in every risk category. Distance and gain are not in this dataset.'},
+
+ {id:'capi1',label:'Capitol Peak — Northeast Ridge',peaks:['Capitol Peak'],range:'Elk Mountains',cls:'Class 4',gain:5300,miles:17,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'High',commitment:'Extreme'},
+  url:'https://www.14ers.com/route.php?route=capi1',standard:true},
+
+ {id:'snow1',label:'Snowmass Mountain — East Slopes',peaks:['Snowmass Mountain'],range:'Elk Mountains',cls:'Class 3',gain:5800,miles:22,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'Considerable',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=snow1',standard:true},
+
+ {id:'pyra1',label:'Pyramid Peak — Northeast Ridge',peaks:['Pyramid Peak'],range:'Elk Mountains',cls:'Class 4',gain:4500,miles:8.25,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'High',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=pyra1',standard:true},
+
+ /* ---------- San Juan Mountains ---------- */
+ {id:'unco1',label:'Uncompahgre Peak — South Ridge',peaks:['Uncompahgre Peak'],range:'San Juan Mountains',cls:'Class 2',gain:3000,miles:7.5,
+  risk:{exposure:'Moderate',rockfall:'Considerable',routeFinding:'Moderate',commitment:'Moderate'},
+  url:'https://www.14ers.com/route.php?route=unco1',standard:true},
+
+ {id:'wett1',label:'Wetterhorn Peak — Southeast Ridge',peaks:['Wetterhorn Peak'],range:'San Juan Mountains',cls:'Class 3',gain:3300,miles:7,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=wett1',standard:true},
+
+ {id:'snef1',label:'Mount Sneffels — South Slopes',peaks:['Mount Sneffels'],range:'San Juan Mountains',cls:'Easy Class 3',gain:2900,miles:6,
+  risk:{exposure:'Considerable',rockfall:'Considerable',routeFinding:'Moderate',commitment:'Moderate'},
+  url:'https://www.14ers.com/route.php?route=snef1',standard:true},
+
+ {id:'mwil6',label:'Mount Wilson — Southwest Slopes',peaks:['Mount Wilson'],range:'San Juan Mountains',cls:'Class 3',gain:4400,miles:12.5,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=mwil6',standard:true},
+
+ {id:'mwil5',label:'Combo: Mount Wilson + El Diente Traverse',peaks:['Mount Wilson','El Diente Peak'],range:'San Juan Mountains',cls:'Class 4',combo:true,gain:null,miles:null,unverified:true,
+  risk:{exposure:'High',rockfall:'High',routeFinding:'High',commitment:'High'},
+  url:'https://www.14ers.com/route.php?route=mwil5',
+  access:'El Diente is already climbed. This entry exists only so the traverse is not mistaken for a shortcut to Mount Wilson. Distance and gain are not in this dataset.'},
+
+ {id:'eolu3',label:'Mount Eolus — Northeast Ridge',peaks:['Mount Eolus'],range:'San Juan Mountains',cls:'Class 3',gain:3100,miles:6,
+  risk:{exposure:'High',rockfall:'Considerable',routeFinding:'Considerable',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=eolu3',
+  access:'Statistics begin in Chicago Basin. The Needleton approach is a separate 12-mile, 2,800-ft trip that has to be added on top, plus the train schedule.',
+  standard:true},
+
+ {id:'redc1',label:'Redcloud Peak — Northeast Ridge',peaks:['Redcloud Peak'],range:'San Juan Mountains',cls:'Class 2',gain:3700,miles:9,
+  risk:{exposure:'Moderate',rockfall:'Moderate',routeFinding:'Low',commitment:'Low'},
+  url:'https://www.14ers.com/route.php?route=redc1',standard:true},
+
+ {id:'suns2',label:'Combo: Sunshine via Redcloud',peaks:['Redcloud Peak','Sunshine Peak'],range:'San Juan Mountains',cls:'Class 2',gain:4800,miles:12.25,combo:true,
+  risk:{exposure:'Moderate',rockfall:'Moderate',routeFinding:'Low',commitment:'Considerable'},
+  url:'https://www.14ers.com/route.php?route=suns2',standard:true},
+
+ {id:'sanl1',label:'San Luis Peak — Northeast Ridge',peaks:['San Luis Peak'],range:'San Juan Mountains',cls:'Class 1',gain:3600,miles:13.5,
+  risk:{exposure:'Low',rockfall:'Low',routeFinding:'Low',commitment:'Low'},
+  url:'https://www.14ers.com/route.php?route=sanl1',standard:true}
+];
+
+function riRouteById(id){return ROUTE_PROFILES.find(r=>r.id===id)||null}
+let riSelectedId=storageGet(RI_SELECTED_KEY)||'elli3';
+if(!riRouteById(riSelectedId))riSelectedId='elli3';
+let riStartId=storageGet(RI_START_KEY)||'8800';
+let riOverrides=safeParse(storageGet(RI_OVERRIDE_KEY),{});
+let riApplying=false;
+
+function riActiveStats(route){
+ if(!route)return{miles:null,gain:null,startLabel:null};
+ if(route.startPoints&&route.startPoints.length){
+  const sp=route.startPoints.find(s=>s.id===riStartId)||route.startPoints[0];
+  return{miles:sp.miles,gain:sp.gain,startLabel:sp.label};
+ }
+ return{miles:route.miles,gain:route.gain,startLabel:null};
+}
+
+/* ---------- Forecast horizon gate (per location, computed from targetDate) ---------- */
+const RI_FORECAST_HORIZON_DAYS=7;
+function riForecastWindow(spec){
+ if(!spec||!spec.targetDate)return{state:'none',label:'No target date'};
+ const days=daysTo(spec.targetDate);
+ if(days>RI_FORECAST_HORIZON_DAYS){
+  const opens=new Date(new Date(spec.targetDate+'T00:00:00-06:00').getTime()-RI_FORECAST_HORIZON_DAYS*86400000);
+  const label=opens.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Denver'});
+  return{state:'out-of-range',label:`Forecast not yet in range · opens about ${label}`};
+ }
+ if(days<-1)return{state:'past',label:'Date has passed'};
+ const saved=weatherStore[spec.id];
+ if(!saved||!saved.fetchedAt)return{state:'in-range-not-loaded',label:'In forecast range · not loaded on this device'};
+ if(ageHours(saved.fetchedAt)>6)return{state:'stale',label:'Forecast loaded but older than six hours'};
+ return{state:'available',label:'Forecast available on this device'};
+}
+function riAnyForecastUsable(){
+ return TRIP_WEATHER_IDS.some(id=>riForecastWindow(locationById(id)).state==='available');
+}
+
+/* ---------- Route-derived condition mapping ---------- */
+const RI_FIELDS=['conditionLength','conditionSummits','conditionDistance','conditionCold','conditionSnow','conditionTerrain','conditionWater','conditionWind','conditionExposure'];
+const RI_ROUTE_FIELDS=['conditionLength','conditionSummits','conditionDistance','conditionTerrain','conditionWater'];
+const RI_FORECAST_FIELDS=['conditionCold','conditionSnow','conditionWind'];
+
+function riDerivedFromRoute(route){
+ if(!route)return{};
+ const {miles}=riActiveStats(route);
+ const commit=riRiskRank(route.risk.commitment);
+ const out={};
+ if(Number.isFinite(miles)){
+  out.conditionLength=(miles>=14||commit>=3)?'very-long':(miles>=10?'long':'easy');
+  /* A short day off a high camp can still be committing. Do not let low mileage erase a Considerable commitment rating. */
+  if(out.conditionLength==='easy'&&commit>=2)out.conditionLength='long';
+  out.conditionDistance=miles>=16?'excessive':'normal';
+  out.conditionWater=miles>=12?'limited':'reliable';
+ }else if(commit>=3){
+  out.conditionLength='very-long';
+ }
+ out.conditionSummits=route.combo?(/traverse/i.test(route.label)?'traverse':'double'):'single';
+ const c=route.cls||'';
+ out.conditionTerrain=/Class [45]/.test(c)?'class4':(/Class 3/.test(c)?'class3':'class2');
+ return out;
+}
+function riDerivedFromForecast(){
+ const out={};
+ if(!riAnyForecastUsable())return out;
+ const w=advisorWeatherSummary();
+ if(Number.isFinite(w.minTemp))out.conditionCold=w.minTemp<=32?'freezing':(w.minTemp<=40?'cold':'mild');
+ if(Number.isFinite(w.maxWind))out.conditionWind=w.maxWind>=35?'severe':(w.maxWind>=25?'windy':'normal');
+ if(w.snow)out.conditionSnow='patchy';
+ return out;
+}
+
+function riFieldSource(id,routeDerived,forecastDerived){
+ if(riOverrides[id])return'yours';
+ if(RI_ROUTE_FIELDS.includes(id)&&routeDerived[id]!==undefined)return'route';
+ if(RI_FORECAST_FIELDS.includes(id)&&forecastDerived[id]!==undefined)return'forecast';
+ return'default';
+}
+
+function riApplyDerived(){
+ if(!riReady)return;
+ const route=riRouteById(riSelectedId);
+ const rd=riDerivedFromRoute(route),fd=riDerivedFromForecast();
+ riApplying=true;
+ Object.entries({...rd,...fd}).forEach(([id,val])=>{
+  if(riOverrides[id])return;
+  const el=document.getElementById(id);
+  if(el&&[...el.options].some(o=>o.value===val))el.value=val;
+ });
+ riApplying=false;
+ riRenderFieldSources(rd,fd);
+ if(typeof renderTripConditionsAdvisor==='function')renderTripConditionsAdvisor();
+}
+
+function riRenderFieldSources(rd,fd){
+ const host=document.getElementById('riFieldSources');
+ if(!host)return;
+ const labels={conditionLength:'Length',conditionSummits:'Summits',conditionDistance:'Distance',conditionCold:'Coldest temp',conditionSnow:'Snow / ice',conditionTerrain:'Terrain',conditionWater:'Water',conditionWind:'Wind',conditionExposure:'Bugs / sun'};
+ const badge={route:'from route',forecast:'from forecast',yours:'your override',default:'not derived'};
+ host.innerHTML=RI_FIELDS.map(id=>{
+  const src=riFieldSource(id,rd||{},fd||{});
+  return `<span class="ri-src" data-src="${src}"><b>${escapeHtml(labels[id])}</b><small>${escapeHtml(badge[src])}</small></span>`;
+ }).join('');
+}
+
+/* ---------- Panel rendering ---------- */
+function riRiskRow(route){
+ const r=route.risk;
+ return Object.entries({Exposure:r.exposure,Rockfall:r.rockfall,'Route-finding':r.routeFinding,Commitment:r.commitment})
+  .map(([k,v])=>`<span class="ri-risk" data-level="${escapeHtml(String(v).toLowerCase())}"><b>${escapeHtml(k)}</b><small>${escapeHtml(v)}</small></span>`).join('');
+}
+
+function riRenderPanel(){
+ if(!riReady)return;
+ const sel=document.getElementById('riRouteSelect');
+ const startWrap=document.getElementById('riStartWrap');
+ const startSel=document.getElementById('riStartSelect');
+ const detail=document.getElementById('riRouteDetail');
+ const fx=document.getElementById('riForecastState');
+ if(!sel||!detail)return;
+
+ if(!sel.dataset.built){
+  const byRange=new Map();
+  ROUTE_PROFILES.forEach(r=>{if(!byRange.has(r.range))byRange.set(r.range,[]);byRange.get(r.range).push(r)});
+  sel.innerHTML=[...byRange.entries()].map(([range,rows])=>
+   `<optgroup label="${escapeHtml(range)}">${rows.map(r=>`<option value="${escapeHtml(r.id)}">${escapeHtml(r.label)}${r.objective===false?' — reference only':''}</option>`).join('')}</optgroup>`
+  ).join('');
+  sel.dataset.built='1';
+ }
+ sel.value=riSelectedId;
+
+ const route=riRouteById(riSelectedId);
+ if(!route)return;
+
+ if(route.startPoints&&route.startPoints.length){
+  startWrap.hidden=false;
+  startSel.innerHTML=route.startPoints.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.label)}</option>`).join('');
+  if(![...startSel.options].some(o=>o.value===riStartId))riStartId=route.startPoints[0].id;
+  startSel.value=riStartId;
+ }else{
+  startWrap.hidden=true;
+ }
+
+ const {miles,gain,startLabel}=riActiveStats(route);
+ const stat=(v,suffix)=>v===null||v===undefined?'<b>—</b>':`<b>${v.toLocaleString()}${suffix}</b>`;
+
+ detail.innerHTML=`
+  <div class="ri-headline">
+   <a href="${escapeHtml(route.url)}" target="_blank" rel="noopener">${escapeHtml(route.label)}</a>
+   <span class="ri-class">${escapeHtml(route.cls)}</span>
+  </div>
+  ${route.objective===false?`<p class="ri-flag" data-tone="stop">Reference only — this is not an objective in the current plan.</p>`:''}
+  ${route.unverified?`<p class="ri-flag" data-tone="gap">Distance and gain are not in this dataset for this route.</p>`:''}
+  <div class="ri-stats">
+   <span>${stat(miles,' mi')}<small>Round trip</small></span>
+   <span>${stat(gain,' ft')}<small>Elevation gain</small></span>
+   <span><b>${route.peaks.length}</b><small>${route.peaks.length===1?'Summit':'Summits'}</small></span>
+  </div>
+  ${startLabel?`<p class="ri-start">Starting from ${escapeHtml(startLabel)}.</p>`:''}
+  ${route.startNote?`<p class="ri-note">${escapeHtml(route.startNote)}</p>`:''}
+  <div class="ri-risks">${riRiskRow(route)}</div>
+  ${route.access?`<p class="ri-flag" data-tone="${route.accessCritical?'access':'info'}">${escapeHtml(route.access)}</p>`:''}
+  <p class="ri-source">${escapeHtml(RI_SOURCE_NOTE)} Dataset curated ${escapeHtml(RI_DATASET_STAMP)}.</p>`;
+
+ if(fx){
+  fx.innerHTML=TRIP_WEATHER_IDS.map(id=>{
+   const spec=locationById(id),w=riForecastWindow(spec);
+   return `<span class="ri-fx" data-state="${escapeHtml(w.state)}"><b>${escapeHtml(spec.name)}</b><small>${escapeHtml(w.label)}</small></span>`;
+  }).join('');
+ }
+
+ riApplyDerived();
+}
+
+/* ---------- Route-derived Gear Advisor additions ---------- */
+const riBaseGearAdvisor=buildGearAdvisorRecommendations;
+buildGearAdvisorRecommendations=function(){
+ const recs=riBaseGearAdvisor();
+ if(!riReady)return recs;
+ const route=riRouteById(riSelectedId);
+ if(!route)return recs;
+ const {miles,gain,startLabel}=riActiveStats(route);
+ const out=[];
+
+ if(route.objective===false){
+  advisorAdd(out,'priority',`${route.label} is loaded as reference, not an objective`,'Nothing in this advisor should be read as planning support for this route. Change the selected route before using these recommendations for packing.',[]);
+ }
+ if(route.accessCritical&&route.access){
+  advisorAdd(out,'priority',`Access condition on ${route.peaks.join(' / ')}`,route.access,['lindseyWaiver','phoneOffline','routeScreens']);
+ }
+ if(route.unverified){
+  advisorAdd(out,'info','Route distance and gain are not in this dataset','Terrain and risk flags below still apply, but mileage-driven margin is not being calculated. Open the 14ers.com route page for the numbers.',[]);
+ }
+ if(Number.isFinite(gain)&&gain>=5000){
+  advisorAdd(out,'check',`Heavy gain: ${gain.toLocaleString()} ft${startLabel?` from ${startLabel.split(' — ')[0]}`:''}`,'Large vertical is a calorie, pacing, and descent-fatigue problem before it is a gear problem. Most descent injuries happen on tired legs in the last third.',['trailFuel','electrolytes','poles','hydrationReservoir','headlampBackup']);
+ }
+ if(Number.isFinite(miles)&&miles>=16){
+  advisorAdd(out,'priority',`Long day: ${miles} miles round trip`,'At this length the turnaround conversation matters more than any item in the pack. Plan the exit, not just the summit.',['headlamp','headlampBackup','emergencyBivy','routeScreens','inreach','trailFuel']);
+ }
+ if(riRiskRank(route.risk.rockfall)>=2){
+  advisorAdd(out,riRiskRank(route.risk.rockfall)>=3?'priority':'check',`Rockfall rated ${route.risk.rockfall}`,'Helmet, small group spacing, and avoiding parties directly above or below you. A helmet reduces one specific injury; it does not make loose terrain acceptable.',['helmet','firstAid','gloves']);
+ }
+ if(riRiskRank(route.risk.routeFinding)>=3){
+  advisorAdd(out,'priority',`Route-finding rated ${route.risk.routeFinding}`,'Cairns can be wrong and descent route-finding is harder than ascent. Carry offline maps and screenshots, and agree in advance on what "we are off route" looks like.',['routeScreens','phoneOffline','paperEmergency','garmin965','inreach']);
+ }
+ if(riRiskRank(route.risk.commitment)>=3){
+  advisorAdd(out,'priority',`Commitment rated ${route.risk.commitment}`,'High commitment means retreat is slow and expensive. This is a weather-window and start-time decision far more than a packing decision.',['inreach','emergencyBivy','headlamp','headlampBackup','rainShell','trailFuel']);
+ }
+ if(riRiskRank(route.risk.exposure)>=3){
+  advisorAdd(out,'check',`Exposure rated ${route.risk.exposure}`,'A fall here could be serious or fatal. Gear does not change that. What changes it is whether every person in the group is comfortable downclimbing the hardest section.',['helmet','routeScreens']);
+ }
+
+ const fxOut=TRIP_WEATHER_IDS.map(id=>riForecastWindow(locationById(id))).filter(w=>w.state==='out-of-range');
+ if(fxOut.length){
+  advisorAdd(out,'info',`${fxOut.length} trip location${fxOut.length===1?' is':'s are'} outside the forecast window`,'No weather-driven recommendation is being generated for those dates. Until the window opens, use the conservative August alpine baseline and refresh then.',[]);
+ }
+ return out.concat(recs);
+};
+
+/* ---------- Wiring ---------- */
+function riSetupRouteIntelligence(){
+ const sel=document.getElementById('riRouteSelect');
+ const startSel=document.getElementById('riStartSelect');
+ const reset=document.getElementById('riResetOverrides');
+ if(!sel)return;
+
+ sel.addEventListener('change',()=>{
+  riSelectedId=sel.value;storageSet(RI_SELECTED_KEY,riSelectedId);
+  riOverrides={};storageSet(RI_OVERRIDE_KEY,JSON.stringify(riOverrides));
+  riRenderPanel();if(typeof renderGearAdvisor==='function')renderGearAdvisor();
+ });
+ startSel?.addEventListener('change',()=>{
+  riStartId=startSel.value;storageSet(RI_START_KEY,riStartId);
+  riRenderPanel();if(typeof renderGearAdvisor==='function')renderGearAdvisor();
+ });
+ RI_FIELDS.forEach(id=>{
+  document.getElementById(id)?.addEventListener('change',()=>{
+   if(riApplying)return;
+   riOverrides[id]=true;storageSet(RI_OVERRIDE_KEY,JSON.stringify(riOverrides));
+   const route=riRouteById(riSelectedId);
+   riRenderFieldSources(riDerivedFromRoute(route),riDerivedFromForecast());
+  });
+ });
+ reset?.addEventListener('click',()=>{
+  riOverrides={};storageSet(RI_OVERRIDE_KEY,JSON.stringify(riOverrides));
+  riApplyDerived();toast('Conditions reset to route defaults');
+ });
+ riRenderPanel();
+}
+riReady=true;
+document.addEventListener('DOMContentLoaded',riSetupRouteIntelligence);

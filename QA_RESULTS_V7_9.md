@@ -1,0 +1,25 @@
+# Version 7.9 QA Results
+
+- app.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs: none
+- missing JavaScript DOM targets: none
+- footer version 7.9: passed
+- plan-based Gear Advisor preserved: passed
+- Trip Conditions Advisor present: passed
+- manual advisor inputs not persisted: passed
+- advisor no sufficiency verdict: passed
+- optional incomplete counts present: passed
+- optional rows included in incomplete filter: passed
+- empty state wording correct: passed
+- 44px pack tap targets: passed
+- v7.6 tappable cards preserved: passed
+- v7.5.1 hardening preserved: passed
+- v7.4 ledger facts preserved: passed
+- gear/fuel refresh flags preserved: passed
+- ascent escaping preserved: passed
+- no green state: passed
+- all turnaround countdown states remain question-framed
+- summit partner corrections preserved
+- service-worker cache: ddmg-v7-9-2026-08-03-1

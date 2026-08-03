@@ -128,3 +128,34 @@ VERSION 7.5.1 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v7.5.1 Data Transfer hardening
+
+VERSION 7.5.2 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.5.2 clickable readiness checks
+
+VERSION 7.6 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.6 tappable dashboard cards
+
+VERSION 7.7 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.7 incomplete-only readiness checks
+
+VERSION 7.8 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.8 Gear Advisor
+
+
+VERSION 7.9 COMMIT MESSAGE
+
+Replace “Add files via upload” with:
+
+Deploy Mountain Guide v7.9 integrated trip gear advisor

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: Colorado fourteener and Lake Como expedition guide with hardened local data transfer, this-device data stamp, single-source ledger facts, corrected partners, photo-verified gear, weather, lodging, and mountain stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: Colorado fourteener and Lake Como expedition guide with integrated plan-based and manual trip-condition gear advisors, incomplete-only checks, local data transfer, single-source ledger facts, corrected partners, weather, lodging, and mountain stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -54,10 +54,10 @@
 <section>
 <div class="section-head"><div><div class="kicker">Dashboard</div><h2>Lake Como 2026</h2></div><p>August 19–24, with August 25 reserved for weather or recovery.</p></div>
 <div class="grid g4 dashboard-grid">
-<div class="card metric"><div><div class="kicker">Departure</div><strong class="countdown" id="countdown">Calculating…</strong><small>until the expedition begins</small></div><div class="status"><span class="dot"></span><span id="net">Checking connection</span></div></div>
-<div class="card metric"><div><div class="kicker">Summit goal</div><strong id="goalSummary">—</strong><small>projected after the planned trip</small></div><div class="progress"><span id="goalBar" style="width:0%"></span></div></div>
-<div class="card metric"><div><div class="kicker">Readiness · this device</div><strong id="readyPct">0%</strong><small>of saved gear and communication checks on this device only</small></div><div class="progress"><span id="readyBar" style="width:0%"></span></div><p class="device-note">Checkmarks are stored on each device separately. Your iPhone and Mac will show different percentages unless you export a backup from one and import it on the other.</p></div>
-<div class="card metric sun-metric"><div><div class="kicker">Sunday first light</div><strong id="sunMetric">Calculating…</strong><small id="sunMetricNote">Lake Como · Aug 23</small></div><div aria-hidden="true" class="sun-arc"><span></span></div></div>
+<div aria-label="Open expedition itinerary" class="card metric dashboard-shortcut" data-dashboard-target="expedition" data-shortcut-hint="Tap to open itinerary →" id="departureMetric" role="button" tabindex="0" title="Open expedition itinerary"><div><div class="kicker">Departure</div><strong class="countdown" id="countdown">Calculating…</strong><small>until the expedition begins</small></div><div class="status"><span class="dot"></span><span id="net">Checking connection</span></div></div>
+<div aria-label="Open Colorado 14er record" class="card metric dashboard-shortcut" data-dashboard-target="progress" data-shortcut-hint="Tap to open 14er record →" id="summitGoalMetric" role="button" tabindex="0" title="Open Colorado 14er record"><div><div class="kicker">Summit goal</div><strong id="goalSummary">—</strong><small>projected after the planned trip</small></div><div class="progress"><span id="goalBar" style="width:0%"></span></div></div>
+<div aria-label="Open readiness gear and communication checks" class="card metric clickable-readiness dashboard-shortcut" data-shortcut-hint="Tap to open gear &amp; communication checks →" id="readinessMetric" role="button" tabindex="0" title="Open readiness gear and communication checks"><div><div class="kicker">Readiness · this device</div><strong id="readyPct">0%</strong><small>of saved gear and communication checks on this device only</small></div><div class="progress"><span id="readyBar" style="width:0%"></span></div><p class="device-note">Checkmarks are stored on each device separately. Your iPhone and Mac will show different percentages unless you export a backup from one and import it on the other.</p></div>
+<div aria-label="Open Summit Focus for first light and objective timing" class="card metric sun-metric dashboard-shortcut" data-dashboard-action="focus" data-shortcut-hint="Tap to open Summit Focus →" id="firstLightMetric" role="button" tabindex="0" title="Open Summit Focus for first light and objective timing"><div><div class="kicker">Sunday first light</div><strong id="sunMetric">Calculating…</strong><small id="sunMetricNote">Lake Como · Aug 23</small></div><div aria-hidden="true" class="sun-arc"><span></span></div></div>
 </div>
 <div class="next-action" id="nextAction">
 <div aria-hidden="true" class="next-action-icon">↗</div>
@@ -90,9 +90,9 @@
 <div class="intel-actions"><button class="intel-primary" id="refreshIntelBtn" onclick="refreshTripIntelligence()">Refresh Trip Intelligence</button><button id="shareIntelBtn" type="button">Share status</button><button onclick="document.getElementById('intelDetails').open=true;document.getElementById('intelDetails').scrollIntoView({behavior:'smooth'})">Review details</button></div>
 </div>
 <div class="grid g3 intel-metrics">
-<div class="card metric"><div><div class="kicker">Live weather</div><strong id="weatherFreshness">Not loaded</strong><small id="weatherFreshnessNote">NOAA/NWS data will be saved for offline use.</small></div></div>
-<div class="card metric"><div><div class="kicker">14ers.com reviews</div><strong id="reviewCount">0 / 5</strong><small>peak and trailhead reports reviewed recently</small></div><div class="progress"><span id="reviewBar" style="width:0%"></span></div></div>
-<div class="card metric"><div><div class="kicker">Review workflow</div><strong id="intelCheckPct">0%</strong><small>night-before and morning-of tasks</small></div><div class="progress"><span id="intelCheckBar" style="width:0%"></span></div></div>
+<div aria-label="Open Weather center" class="card metric dashboard-shortcut" data-dashboard-target="weather" data-shortcut-hint="Tap to open weather center →" id="liveWeatherMetric" role="button" tabindex="0" title="Open Weather center"><div><div class="kicker">Live weather</div><strong id="weatherFreshness">Not loaded</strong><small id="weatherFreshnessNote">NOAA/NWS data will be saved for offline use.</small></div></div>
+<div aria-label="Open trip intelligence and 14ers.com review workflow" class="card metric dashboard-shortcut" data-dashboard-target="intelligence" data-shortcut-hint="Tap to open trip intelligence →" id="reviewReportsMetric" role="button" tabindex="0" title="Open trip intelligence and 14ers.com review workflow"><div><div class="kicker">14ers.com reviews</div><strong id="reviewCount">0 / 5</strong><small>peak and trailhead reports reviewed recently</small></div><div class="progress"><span id="reviewBar" style="width:0%"></span></div></div>
+<div aria-label="Open review workflow" class="card metric dashboard-shortcut" data-dashboard-target="intelligence" data-shortcut-hint="Tap to open review workflow →" id="reviewWorkflowMetric" role="button" tabindex="0" title="Open review workflow"><div><div class="kicker">Review workflow</div><strong id="intelCheckPct">0%</strong><small>night-before and morning-of tasks</small></div><div class="progress"><span id="intelCheckBar" style="width:0%"></span></div></div>
 </div>
 <details id="intelDetails" open=""><summary>Live NOAA weather and alerts</summary><div class="detail-body">
 <div class="intel-note"><b>How this works:</b> Refresh retrieves the current National Weather Service hourly forecast and active alerts. If the trip date is still beyond the forecast horizon, the app says so rather than showing unrelated weather.</div>
@@ -398,6 +398,91 @@
 <p class="data-transfer-warning">
     For the Lake Como trip, use the iPhone as the field source of truth. Export/import is a manual transfer; this app has no server-side cloud sync.
   </p>
+</div><div class="readiness-source-panel" id="readiness-checks" tabindex="-1">
+<div class="readiness-source-head">
+<div>
+<p class="eyebrow">Readiness sources</p>
+<h3>Saved gear and communication checks</h3>
+</div>
+<span class="device-pill">This device only</span>
+</div>
+<p class="readiness-source-note">
+    The dashboard readiness percentage is calculated from the active pack confirmations plus the saved inReach / communication checkmarks on this device.
+  </p>
+<div class="readiness-source-grid">
+<button class="readiness-source-card" id="openGearChecklist" type="button">
+<b>Gear checklist</b>
+<span id="readyGearSummary">Calculating…</span>
+<em>Open Smart Pack Builder</em>
+</button>
+<button class="readiness-source-card" id="openCommunicationChecks" type="button">
+<b>Communication checks</b>
+<span id="readyCommSummary">Calculating…</span>
+<em>Open inReach checklist</em>
+</button>
+</div>
+<div class="incomplete-filter-controls" id="incompleteFilterControls">
+<button aria-pressed="false" class="secondary incomplete-toggle" id="incompleteOnlyToggle" type="button">Show incomplete only</button>
+<span aria-live="polite" class="incomplete-filter-status" id="incompleteFilterStatus">Showing all gear and communication checks.</span>
+</div>
+<div class="incomplete-empty-state" hidden="" id="incompleteOnlyEmpty">All items checked on this device</div>
+</div><div class="gear-advisor-panel" id="gearAdvisorPanel" tabindex="-1">
+<div class="gear-advisor-head">
+<div>
+<p class="eyebrow">Plan-based recommendations</p>
+<h3>Gear Advisor</h3>
+</div>
+<span class="device-pill">Planning aid</span>
+</div>
+<p class="gear-advisor-note">
+    This advisor reads the active pack preset, route context, saved forecast flags, and unchecked items. It recommends margin; it does not certify that the climb or gear system is safe.
+  </p>
+<div class="gear-advisor-summary" id="gearAdvisorSummary">Calculating recommendations…</div>
+<div class="gear-advisor-list" id="gearAdvisorList"></div>
+</div><div class="route-intel-panel" id="routeIntelPanel" tabindex="-1">
+<div class="gear-advisor-head">
+<div>
+<p class="eyebrow">Curated standard-route data</p>
+<h3>Route Intelligence</h3>
+</div>
+<span class="device-pill">Planning data, not clearance</span>
+</div>
+<p class="gear-advisor-note">
+    Select a route to load its published distance, gain, class, and risk factors. These figures feed the Gear Advisor and pre-fill the conditions below. They describe the route on a normal day; they say nothing about the day you are actually on.
+  </p>
+<div class="conditions-grid">
+<label>Route<select id="riRouteSelect"></select></label>
+<label id="riStartWrap" hidden>Parking / start<select id="riStartSelect"></select></label>
+</div>
+<div class="ri-detail" id="riRouteDetail"></div>
+<h4 class="ri-subhead">Forecast window</h4>
+<div class="ri-forecast" id="riForecastState"></div>
+</div><div class="trip-conditions-panel" id="tripConditionsAdvisorPanel" tabindex="-1">
+<div class="gear-advisor-head">
+<div>
+<p class="eyebrow">Manual route judgment</p>
+<h3>Trip Conditions Advisor</h3>
+</div>
+<span class="device-pill">Considerations, not clearance</span>
+</div>
+<p class="gear-advisor-note">
+    Use this when planning a future climb whose conditions differ from the current Lake Como packing plan. It raises considerations and reasons; it never declares your pack complete or the climb safe.
+  </p>
+<div class="conditions-grid">
+<label>Length<select id="conditionLength"><option value="easy">Short / ordinary day</option><option value="long">Long day</option><option value="very-long">Very long / committing day</option></select></label>
+<label>Summits<select id="conditionSummits"><option value="single">Single 14er</option><option value="double">Double / combo day</option><option value="traverse">Traverse or multi-summit ridge</option></select></label>
+<label>Distance<select id="conditionDistance"><option value="normal">Normal mileage</option><option value="excessive">Excessive mileage / long exit</option></select></label>
+<label>Coldest temp<select id="conditionCold"><option value="mild">Above 40°F</option><option value="cold">32–40°F</option><option value="freezing">Below freezing</option></select></label>
+<label>Snow / ice<select id="conditionSnow"><option value="none">None expected</option><option value="patchy">Patchy snow / firm morning sections</option><option value="sustained">Sustained snow or ice</option></select></label>
+<label>Hardest terrain<select id="conditionTerrain"><option value="class2">Class 1–2</option><option value="class3">Class 3 / exposed scrambling</option><option value="class4">Class 4 / serious exposure</option></select></label>
+<label>Water<select id="conditionWater"><option value="reliable">Reliable water or short day</option><option value="limited">Limited refill options</option><option value="dry">Dry route / long carry</option></select></label>
+<label>Wind<select id="conditionWind"><option value="normal">Ordinary wind</option><option value="windy">Windy ridge expected</option><option value="severe">Severe wind possible</option></select></label>
+<label>Bugs / sun / exposure<select id="conditionExposure"><option value="normal">Normal</option><option value="bugs">Bugs likely</option><option value="sun">High sun / long exposure</option></select></label>
+</div>
+<div class="ri-sources" id="riFieldSources"></div>
+<button class="ri-reset" id="riResetOverrides" type="button">Reset conditions to route defaults</button>
+<div class="trip-advisor-summary" id="tripAdvisorSummary">Choose conditions to see considerations.</div>
+<div class="trip-advisor-list" id="tripAdvisorList"></div>
 </div>
 <div class="gear-principle">
 <span aria-hidden="true">↻</span>
@@ -406,7 +491,7 @@
 <p>Choose a preset, confirm the items assigned to each stage, and refine weights or ownership over time. Checkmarks and gear details remain on this device and are included in exported backups.</p>
 </div>
 </div>
-<details class="gear-panel" open="">
+<details class="gear-panel" id="smartPackBuilderPanel" open="">
 <summary>Smart Pack Builder</summary>
 <div class="detail-body">
 <div class="pack-builder-controls">
@@ -511,7 +596,7 @@
 </section>
 <section id="emergency"><div class="section-head"><div><div class="kicker">Redundancy</div><h2>Communication and emergency</h2></div><p>The app supports decisions; it does not replace the inReach, downloaded navigation, paper guide or group judgment.</p></div>
 <div class="grid g2">
-<div class="card"><h3>inReach check-ins</h3><div class="checks">
+<div class="card" id="communicationChecksCard" tabindex="-1"><h3>inReach check-ins</h3><div class="checks">
 <label><input data-save="c1" type="checkbox"/>Vehicle departure</label><label><input data-save="c2" type="checkbox"/>Lake Como camp</label><label><input data-save="c3" type="checkbox"/>Summit start</label><label><input data-save="c4" type="checkbox"/>Summit or high point</label><label><input data-save="c5" type="checkbox"/>Below exposed terrain</label><label><input data-save="c6" type="checkbox"/>Back at camp</label><label><input data-save="c7" type="checkbox"/>Back at vehicle</label><label><input data-save="c8" type="checkbox"/>Fort Garland</label><label><input data-save="c9" type="checkbox"/>Home</label>
 </div></div>
 <div class="card"><h3>Turn or descend</h3><ul><li>Thunder or rapidly building convection.</li><li>Wind impairs balance.</li><li>Worsening altitude symptoms, ataxia, confusion or unusual breathlessness.</li><li>Rockfall or route conditions exceed group comfort.</li><li>Any climber declines the Class 3 traverse.</li><li>The group remains exposed after the agreed turnaround.</li></ul>
@@ -519,7 +604,7 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 7.5.1</div>
+<div class="footer">Don Downs Mountain Guide · Version 8.0</div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
 <div class="story-viewer-top">

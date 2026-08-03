@@ -181,3 +181,53 @@ Version 7.5.1 hardens the Data Transfer feature: confirmation before import, app
 GitHub commit message:
 
 `Deploy Mountain Guide v7.5.1 Data Transfer hardening`
+
+## Version 7.5.2
+
+Version 7.5.2 makes the dashboard readiness card clickable and opens a Readiness Sources panel for active pack confirmations and communication checkmarks.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.5.2 clickable readiness checks`
+
+## Version 7.6
+
+Version 7.6 makes every dashboard metric a navigation shortcut while preserving 7.5.2 readiness navigation, 7.5.1 hardened Data Transfer, and 7.4 single-source ledger facts.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.6 tappable dashboard cards`
+
+## Version 7.7
+
+Version 7.7 adds a non-persistent Incomplete only toggle for readiness checks and larger 44px tap targets for gear and communication check rows.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.7 incomplete-only readiness checks`
+
+## Version 7.8
+
+Version 7.8 adds a plan-based Gear Advisor that recommends gear and margin based on the active climb plan, pack type, weather flags, and unchecked items.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.8 Gear Advisor`
+
+
+## Version 7.9
+
+Version 7.9 integrates the plan-based Gear Advisor, manual Trip Conditions Advisor, incomplete-only optional-item corrections, and 44px gear-row tap targets.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v7.9 integrated trip gear advisor`
+
+
+## Version 8.0
+
+Version 8.0 adds Route Intelligence: a curated 31-profile standard-route dataset sourced from 14ers.com covering all 23 remaining and planned peaks, a parking-elevation switch for the Lake Como road, auto-populated trip conditions with per-field source labels and overrides, and a per-location forecast horizon gate that reports when a forecast is not yet in range instead of inventing one.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v8.0 Route Intelligence`
