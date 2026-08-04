@@ -231,3 +231,105 @@ Version 8.0 adds Route Intelligence: a curated 31-profile standard-route dataset
 GitHub commit message:
 
 `Deploy Mountain Guide v8.0 Route Intelligence`
+
+
+## Version 8.1
+
+Version 8.1 adds collapsible Planned/Completed/Remaining groups to the summit ledger with persistent state and search override, and locks the page to vertical scrolling by removing the iOS-hostile fixed background attachment, clamping horizontal overflow on html and body, and containing overscroll on the horizontal strips. It also closes the two v8.0 audit findings.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v8.1 collapsible summit groups and scroll fix`
+
+
+## Version 8.3
+
+Version 8.3 removes the self-contradicting Source discipline note, reunites the summit ledger with the Version 8.0 route dataset so all 23 unclimbed peaks show full route intelligence, retires the redundant Status dropdown and rewires its shortcuts to the collapsible groups, moves the ledger live region to a compact status line, consolidates two incompatible backup formats into one import that still reads legacy files, and eliminates version-stamp drift with a single APP_VERSION constant.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v8.3 ledger cleanup and route data reunification`
+
+
+## Version 8.4
+
+Version 8.4 is a deep-clean release: it completes the backup consolidation that v8.3 left partially done, replaces the stale 50-entry PEAKS array with a list derived from the 58-entry ledger, converts all twelve inline onclick handlers to listener bindings, removes dead code, and deduplicates double advisor renders. No new features.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v8.4 deep clean dead code and duplicate data`
+
+
+## Version 8.5
+
+Version 8.5 adds 34 stored weather points — summit and access coordinates for every remaining 14er — to the existing NWS engine, grouped in the forecast selector under Future Elk, San Juan, and Sangre de Cristo. Summit coordinates are published USGS values; access points are labeled approximate; future points carry no trip date and say so honestly instead of inventing a forecast window. Bulk trip refresh is unchanged.
+
+GitHub commit message:
+
+`Deploy Mountain Guide v8.5 future weather points`
+
+
+## Version 8.6.1
+
+`Deploy Mountain Guide v8.6.1 final stabilization`
+
+
+## Version 9.0
+
+Trip Builder Foundation with reusable local trip records.
+
+`Deploy Mountain Guide v9.0 Trip Builder Foundation`
+
+
+## Version 9.1
+
+Generated itinerary and trip-specific readiness.
+
+`Deploy Mountain Guide v9.1 generated itinerary and readiness`
+
+
+## Version 10.0
+
+Intelligent Expedition Builder.
+
+`Deploy Mountain Guide v10.0 Intelligent Expedition Builder`
+
+
+## Version 11.0
+
+Searchable Mountain Intelligence Database.
+
+`Deploy Mountain Guide v11.0 Mountain Intelligence Database`
+
+
+## Version 12.0
+
+Expedition Command Center field companion.
+
+`Deploy Mountain Guide v12.0 Expedition Command Center`
+
+
+## Version 13.0
+
+Climbing Journal and Expedition Archive.
+
+`Deploy Mountain Guide v13.0 Climbing Journal and Expedition Archive`
+
+
+## Version 14.0
+
+Mountain Intelligence Engine.
+
+`Deploy Mountain Guide v14.0 Mountain Intelligence Engine`
+
+
+## Version 14.1
+
+`Deploy Mountain Guide v14.1 Audit Fix Weather Cross-Checks and Agreement`
+
+
+## Version 15.0
+
+Modular Architecture and Mountain Knowledge Base.
+
+`Deploy Mountain Guide v15.0 Modular Architecture and Mountain Knowledge Base`

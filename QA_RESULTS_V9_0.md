@@ -1,0 +1,25 @@
+# Version 9.0 QA Results
+
+- app.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs: none
+- Trip Builder DOM targets: resolved; legacy null-safe missing references: 0
+- footer version 9.0: passed
+- APP_VERSION 9.0: passed
+- Trip Builder section: passed
+- Trip Library storage: passed
+- Lake Como seeded: passed
+- standard-route default: passed
+- trip save/load/duplicate/delete: passed
+- weather bindings: passed
+- offline preparation: passed
+- AI active trip context: passed
+- v8.6.1 dynamic summit text: passed
+- route verification metadata: passed
+- future weather points: passed
+- data transfer hardening: passed
+- no green all-clear: passed
+- ledger totals preserved: 58 / 35 / 3 / 20
+- all five turnaround prompts remain question-framed
+- service-worker cache: ddmg-v9-0-2026-08-03-1

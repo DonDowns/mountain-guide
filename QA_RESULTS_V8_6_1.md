@@ -1,0 +1,22 @@
+# Version 8.6.1 QA Results
+
+- app.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs: none
+- footer version: passed
+- APP_VERSION: passed
+- stale wording removed: passed
+- dynamic ledger sentence: passed
+- route disclosure: passed
+- trip disclosure: passed
+- verified route metadata: passed
+- future weather points preserved: passed
+- Dunes Friday date: passed
+- AI version binding: passed
+- refresh binding: passed
+- transfer hardening: passed
+- no all-clear state: passed
+- ledger totals: 58 total / 35 completed / 3 planned / 20 remaining
+- all five turnaround prompts remain question-framed
+- service-worker cache: ddmg-v8-6-1-2026-08-03-1

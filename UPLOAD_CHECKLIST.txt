@@ -159,3 +159,58 @@ VERSION 7.9 COMMIT MESSAGE
 Replace “Add files via upload” with:
 
 Deploy Mountain Guide v7.9 integrated trip gear advisor
+
+
+VERSION 8.6 COMMIT MESSAGE
+
+Deploy Mountain Guide v8.6 verified route and weather intelligence
+
+
+VERSION 8.6.1 COMMIT MESSAGE
+
+Deploy Mountain Guide v8.6.1 final stabilization
+
+
+VERSION 9.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v9.0 Trip Builder Foundation
+
+
+VERSION 9.1 COMMIT MESSAGE
+
+Deploy Mountain Guide v9.1 generated itinerary and readiness
+
+
+VERSION 10.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v10.0 Intelligent Expedition Builder
+
+
+VERSION 11.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v11.0 Mountain Intelligence Database
+
+
+VERSION 12.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v12.0 Expedition Command Center
+
+
+VERSION 13.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v13.0 Climbing Journal and Expedition Archive
+
+
+VERSION 14.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v14.0 Mountain Intelligence Engine
+
+
+VERSION 14.1 COMMIT MESSAGE
+
+Deploy Mountain Guide v14.1 Audit Fix Weather Cross-Checks and Agreement
+
+
+VERSION 15.0 COMMIT MESSAGE
+
+Deploy Mountain Guide v15.0 Modular Architecture and Mountain Knowledge Base

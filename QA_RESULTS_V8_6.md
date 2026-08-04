@@ -1,0 +1,23 @@
+# Version 8.6 QA Results
+
+- app.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs absent: passed
+- refresh button binding fixed: passed
+- AI version uses APP_VERSION: passed
+- Great Sand Dunes Friday date: passed
+- APP_VERSION 8.6: passed
+- footer 8.6: passed
+- cache 8.6: passed
+- 31 route profiles: passed
+- all profiles verified metadata: passed
+- Lake Como corrected: passed
+- published combo figures populated: passed
+- 34 future weather points: passed
+- no green all-clear state: passed
+- countdown prompt Are you descending? If: passed
+- countdown prompt What do cloud growth, : passed
+- countdown prompt What do the weather, y: passed
+- countdown prompt Where are you now, and: passed
+- countdown prompt What do the sky and yo: passed

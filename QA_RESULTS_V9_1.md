@@ -1,0 +1,23 @@
+# Version 9.1 QA Results
+
+- app.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs: none
+- generated-plan DOM targets: present
+- footer version 9.1: passed
+- APP_VERSION 9.1: passed
+- generated schedule: passed
+- generated readiness: passed
+- weather horizon: passed
+- food/water planning: passed
+- generated checks stored in trip: passed
+- no readiness all-clear: passed
+- Trip Builder preserved: passed
+- Lake Como protected: passed
+- v8.6.1 dynamic summit text: passed
+- data transfer hardening: passed
+- no green all-clear: passed
+- ledger totals preserved: 58 / 35 / 3 / 20
+- all five turnaround prompts remain question-framed
+- service-worker cache: ddmg-v9-1-2026-08-03-1

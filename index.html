@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide: Colorado fourteener and Lake Como expedition guide with integrated plan-based and manual trip-condition gear advisors, incomplete-only checks, local data transfer, single-source ledger facts, corrected partners, weather, lodging, and mountain stories." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide Version 15 with modular JavaScript architecture and living mountain knowledge pages combining route, weather, trip, archive, partner, gear, photo, lesson, and spiritual records." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -45,7 +45,7 @@
 </div>
 </aside>
 </div></header>
-<nav class="nav"><div class="navin"><a href="#home">Home</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
+<nav class="nav"><div class="navin"><a href="#home">Home</a><a href="#trip-builder">Trips</a><a href="#mountain-intelligence">Mountains</a><a href="#command-center">Field</a><a href="#expedition-archive">Archive</a><a href="#intelligence-engine">Insights</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
 <div class="install-nudge" hidden="" id="installNudge">
 <div><b>Add Mountain Guide to your iPhone</b><span>Open in Safari, tap Share, then Add to Home Screen.</span></div>
 <div class="install-nudge-actions"><a href="#install">Show steps</a><button aria-label="Dismiss installation message" id="dismissInstall" type="button">×</button></div>
@@ -63,6 +63,243 @@
 <div aria-hidden="true" class="next-action-icon">↗</div>
 <div class="next-action-copy"><div class="kicker">Next best action</div><strong id="nextActionTitle">Build expedition readiness</strong><p id="nextActionText">Complete the approach and summit checklists while the trip remains outside the live forecast horizon.</p></div>
 <div class="next-action-buttons"><button class="intel-primary" id="nextActionPrimary" type="button">Open gear checklist</button><button id="shareStatusBtn" type="button">Share status</button></div>
+</div>
+</section><section class="trip-builder-section" id="trip-builder">
+<div class="section-head">
+<div>
+<div class="kicker">Version 9 · reusable expedition planning</div>
+<h2>Trip Builder</h2>
+</div>
+<p>Load a standard route, create the trip context, and preserve dates, partners, transportation, lodging, weather points, route-file preparation, and field timing in one reusable record.</p>
+</div>
+<div class="expedition-builder-panel" id="expeditionBuilderPanel">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Version 10 · intelligent setup</div>
+<h3>Build an expedition</h3>
+</div>
+<span class="device-pill">Standard route default</span>
+</div>
+<p class="expedition-builder-intro">
+    Choose a mountain and climb date. The app will assemble a conservative first draft from the verified route database, future weather points, Trip Builder, and Gear Advisor. Review every generated field before saving.
+  </p>
+<div class="expedition-builder-grid">
+<label class="trip-field">
+<span>Mountain</span>
+<select id="expeditionPeak"></select>
+</label>
+<label class="trip-field">
+<span>Climb date</span>
+<input id="expeditionDate" type="date"/>
+</label>
+<label class="trip-field">
+<span>Trip style</span>
+<select id="expeditionStyle">
+<option value="auto">Auto-detect</option>
+<option value="day">Day trip</option>
+<option value="overnight">Overnight / backpack</option>
+<option value="combo">Combo / multi-summit</option>
+</select>
+</label>
+<label class="trip-field">
+<span>Planning posture</span>
+<select id="expeditionPosture">
+<option value="conservative">Conservative</option>
+<option value="standard">Standard</option>
+<option value="fast">Fast-moving group</option>
+</select>
+</label>
+</div>
+<div class="trip-builder-actions">
+<button class="intel-primary" id="buildExpeditionBtn" type="button">Build expedition draft</button>
+<button id="previewExpeditionBtn" type="button">Preview only</button>
+</div>
+<div aria-live="polite" class="expedition-builder-preview" id="expeditionBuilderPreview">
+    Select a mountain and date to generate the expedition draft.
+  </div>
+</div><div class="trip-builder-layout">
+<aside class="trip-library-card">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Trip library</div>
+<h3>Saved trips</h3>
+</div>
+<button class="secondary" id="newTripBtn" type="button">New trip</button>
+</div>
+<label class="trip-field">
+<span>Load saved trip</span>
+<select id="tripLibrarySelect"></select>
+</label>
+<div class="trip-library-actions">
+<button id="loadTripBtn" type="button">Load selected</button>
+<button id="duplicateTripBtn" type="button">Duplicate</button>
+<button id="deleteTripBtn" type="button">Delete</button>
+</div>
+<div aria-live="polite" class="trip-library-list" id="tripLibraryList"></div>
+</aside>
+<div class="trip-builder-form-card">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Active trip record</div>
+<h3 id="tripBuilderHeading">New mountain trip</h3>
+</div>
+<span class="device-pill">Stored on this device</span>
+</div>
+<div class="trip-form-grid">
+<label class="trip-field trip-field-wide">
+<span>Trip name</span>
+<input id="tripName" maxlength="100" placeholder="Example: Mount Sneffels — October 2026" type="text"/>
+</label>
+<label class="trip-field">
+<span>Primary peak</span>
+<select id="tripPeak"></select>
+</label>
+<label class="trip-field">
+<span>Standard route</span>
+<select id="tripRoute"></select>
+</label>
+<label class="trip-field">
+<span>Starting point</span>
+<select id="tripStartPoint"></select>
+</label>
+<label class="trip-field">
+<span>Climb date</span>
+<input id="tripClimbDate" type="date"/>
+</label>
+<label class="trip-field">
+<span>Trip begins</span>
+<input id="tripStartDate" type="date"/>
+</label>
+<label class="trip-field">
+<span>Trip ends</span>
+<input id="tripEndDate" type="date"/>
+</label>
+<label class="trip-field">
+<span>Planned trail start</span>
+<input id="tripPlannedStart" type="time"/>
+</label>
+<label class="trip-field">
+<span>Turnaround / exit target</span>
+<input id="tripTurnaround" type="time"/>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Partners</span>
+<input id="tripPartners" maxlength="250" placeholder="Names or group" type="text"/>
+</label>
+<label class="trip-field">
+<span>Transportation</span>
+<input id="tripVehicle" maxlength="120" placeholder="Audi Q5, rental, train…" type="text"/>
+</label>
+<label class="trip-field">
+<span>Lodging / camp</span>
+<input id="tripLodging" maxlength="180" placeholder="Hotel, trailhead, basin camp…" type="text"/>
+</label>
+<label class="trip-field">
+<span>Summit weather point</span>
+<select id="tripSummitWeather"></select>
+</label>
+<label class="trip-field">
+<span>Access weather point</span>
+<select id="tripAccessWeather"></select>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Additional objectives or notes</span>
+<textarea id="tripNotes" maxlength="1500" placeholder="Secondary summit, permit, waiver, travel, family day, recovery day, or other context." rows="4"></textarea>
+</label>
+</div>
+<div class="trip-builder-actions">
+<button class="intel-primary" id="saveTripBtn" type="button">Save trip</button>
+<button id="resetTripFormBtn" type="button">Reset form</button>
+</div>
+</div>
+</div>
+<div class="trip-generated-grid">
+<article class="trip-generated-card">
+<div class="kicker">Generated route context</div>
+<div id="tripRouteContext"></div>
+</article>
+<article class="trip-generated-card">
+<div class="kicker">Timing and travel context</div>
+<div id="tripTimingContext"></div>
+</article>
+<article class="trip-generated-card">
+<div class="kicker">Offline route preparation</div>
+<div id="tripOfflineContext"></div>
+</article>
+</div>
+<div class="trip-offline-prep">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Route file &amp; offline maps</div>
+<h3>Preparation status</h3>
+</div>
+<span class="device-pill">Manual confirmation</span>
+</div>
+<div class="trip-prep-checks">
+<label><input id="tripGpxReady" type="checkbox"/> GPX or KML route file downloaded</label>
+<label><input id="tripMapReady" type="checkbox"/> Offline map downloaded in the navigation app</label>
+<label><input id="tripPhotosReady" type="checkbox"/> 14ers.com route photos/maps saved for offline use</label>
+<label><input id="tripScreensReady" type="checkbox"/> Critical route and forecast screenshots saved</label>
+</div>
+<div class="trip-resource-actions">
+<a href="#" id="tripOpenRoute" rel="noopener" target="_blank">Open standard route on 14ers.com</a>
+<a href="https://www.14ers.com/mobileapp-faq" rel="noopener" target="_blank">14ers.com offline maps/images instructions</a>
+</div>
+<p class="route-disclaimer">Version 9.0 tracks whether route files and offline media have been prepared. It does not yet redistribute third-party GPX files or provide turn-by-turn navigation.</p>
+</div><div class="trip-generated-plan" id="tripGeneratedPlan">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Generated planning blueprint</div>
+<h3>Itinerary &amp; readiness</h3>
+</div>
+<span class="device-pill">Active trip</span>
+</div>
+<div class="trip-plan-summary" id="tripPlanSummary">Generate or load a trip to see its planning blueprint.</div>
+<div class="trip-plan-grid">
+<article class="trip-plan-card">
+<div class="kicker">Schedule</div>
+<div id="tripGeneratedSchedule"></div>
+</article>
+<article class="trip-plan-card">
+<div class="kicker">Route review</div>
+<div id="tripGeneratedRouteReview"></div>
+</article>
+<article class="trip-plan-card">
+<div class="kicker">Food &amp; water</div>
+<div id="tripGeneratedFuelWater"></div>
+</article>
+<article class="trip-plan-card">
+<div class="kicker">Communication</div>
+<div id="tripGeneratedCommunication"></div>
+</article>
+<article class="trip-plan-card">
+<div class="kicker">Weather window</div>
+<div id="tripGeneratedWeatherWindow"></div>
+</article>
+<article class="trip-plan-card">
+<div class="kicker">Trip-specific readiness</div>
+<div id="tripGeneratedReadiness"></div>
+</article>
+</div>
+</div><div class="expedition-brief-panel" id="expeditionBriefPanel">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Generated expedition brief</div>
+<h3 id="expeditionBriefTitle">No expedition loaded</h3>
+</div>
+<button id="copyExpeditionBriefBtn" type="button">Copy brief</button>
+</div>
+<div class="expedition-brief-grid">
+<article><div class="kicker">Route</div><div id="expeditionBriefRoute"></div></article>
+<article><div class="kicker">Timing</div><div id="expeditionBriefTiming"></div></article>
+<article><div class="kicker">Weather</div><div id="expeditionBriefWeather"></div></article>
+<article><div class="kicker">Pack strategy</div><div id="expeditionBriefPack"></div></article>
+<article><div class="kicker">Travel &amp; access</div><div id="expeditionBriefTravel"></div></article>
+<article><div class="kicker">Required decisions</div><div id="expeditionBriefDecisions"></div></article>
+</div>
+<p class="route-disclaimer">
+    This brief is a planning draft. It does not verify current route conditions, access, permits, weather, group ability, or safe passage.
+  </p>
 </div>
 </section>
 <section class="focus-intro" id="focus">
@@ -87,7 +324,7 @@
 <div class="section-head"><div><div class="kicker">Night-before and morning-of</div><h2>Trip Intelligence</h2></div><p>Live NOAA weather updates automatically. Current 14ers.com condition and trailhead pages open from the exact authoritative links, then you record when each was reviewed.</p></div>
 <div class="intel-banner" data-state="neutral" id="intelBanner">
 <div><div class="kicker">Overall status</div><strong id="intelHeadline">Planning phase</strong><p id="intelSummary">Forecasts and reviews will become critical as the trip enters the seven-day weather horizon.</p></div>
-<div class="intel-actions"><button class="intel-primary" id="refreshIntelBtn" onclick="refreshTripIntelligence()">Refresh Trip Intelligence</button><button id="shareIntelBtn" type="button">Share status</button><button onclick="document.getElementById('intelDetails').open=true;document.getElementById('intelDetails').scrollIntoView({behavior:'smooth'})">Review details</button></div>
+<div class="intel-actions"><button class="intel-primary" id="refreshIntelBtn">Refresh Trip Intelligence</button><button id="shareIntelBtn" type="button">Share status</button><button id="openIntelDetailsBtn">Review details</button></div>
 </div>
 <div class="grid g3 intel-metrics">
 <div aria-label="Open Weather center" class="card metric dashboard-shortcut" data-dashboard-target="weather" data-shortcut-hint="Tap to open weather center →" id="liveWeatherMetric" role="button" tabindex="0" title="Open Weather center"><div><div class="kicker">Live weather</div><strong id="weatherFreshness">Not loaded</strong><small id="weatherFreshnessNote">NOAA/NWS data will be saved for offline use.</small></div></div>
@@ -107,13 +344,13 @@
 <details open=""><summary>14ers.com Quick Actions and review timestamps</summary><div class="detail-body">
 <div class="intel-note"><b>Deliberate review:</b> 14ers.com does not provide a documented public API for this app. Open the exact current page, read the newest entries, return here and tap <b>Mark reviewed now</b>. The app stores the review time offline.</div>
 <div class="review-grid">
-<article class="review-card" data-review-card="blanca"><div><div class="kicker">Peak conditions</div><h3>Blanca Peak</h3></div><p id="review-blanca-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004" rel="noopener" target="_blank">Open current reports</a><button onclick="markReviewed('blanca')">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="ellingwood"><div><div class="kicker">Peak conditions</div><h3>Ellingwood Point</h3></div><p id="review-ellingwood-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10042" rel="noopener" target="_blank">Open current reports</a><button onclick="markReviewed('ellingwood')">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="lindsey"><div><div class="kicker">Peak conditions + access</div><h3>Mount Lindsey</h3></div><p id="review-lindsey-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10043" rel="noopener" target="_blank">Open current reports</a><a href="https://www.mountlindseywaiver.com/" rel="noopener" target="_blank">Open required waiver</a><button onclick="markReviewed('lindsey')">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="lakeComo"><div><div class="kicker">Trailhead status</div><h3>Lake Como</h3></div><p id="review-lakeComo-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01" rel="noopener" target="_blank">Open trailhead status</a><button onclick="markReviewed('lakeComo')">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="huerfano"><div><div class="kicker">Trailhead status</div><h3>Huerfano / Lily Lake</h3></div><p id="review-huerfano-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc02" rel="noopener" target="_blank">Open trailhead status</a><button onclick="markReviewed('huerfano')">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="blanca"><div><div class="kicker">Peak conditions</div><h3>Blanca Peak</h3></div><p id="review-blanca-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004" rel="noopener" target="_blank">Open current reports</a><button data-mark-reviewed="blanca">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="ellingwood"><div><div class="kicker">Peak conditions</div><h3>Ellingwood Point</h3></div><p id="review-ellingwood-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10042" rel="noopener" target="_blank">Open current reports</a><button data-mark-reviewed="ellingwood">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="lindsey"><div><div class="kicker">Peak conditions + access</div><h3>Mount Lindsey</h3></div><p id="review-lindsey-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10043" rel="noopener" target="_blank">Open current reports</a><a href="https://www.mountlindseywaiver.com/" rel="noopener" target="_blank">Open required waiver</a><button data-mark-reviewed="lindsey">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="lakeComo"><div><div class="kicker">Trailhead status</div><h3>Lake Como</h3></div><p id="review-lakeComo-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01" rel="noopener" target="_blank">Open trailhead status</a><button data-mark-reviewed="lakeComo">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="huerfano"><div><div class="kicker">Trailhead status</div><h3>Huerfano / Lily Lake</h3></div><p id="review-huerfano-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc02" rel="noopener" target="_blank">Open trailhead status</a><button data-mark-reviewed="huerfano">Mark reviewed now</button></div></article>
 </div>
-<div class="toolbar" style="margin-top:12px"><button onclick="clearReviews()">Clear report-review timestamps</button></div>
+<div class="toolbar" style="margin-top:12px"><button id="clearReviewsBtn">Clear report-review timestamps</button></div>
 </div></details>
 <div class="grid g2 intel-checklists">
 <details open=""><summary>Night-Before Review</summary><div class="detail-body checks">
@@ -134,7 +371,7 @@
 <label><input data-intel-check="morning-turn" type="checkbox"/>State the group’s turnaround decision aloud</label>
 </div></details>
 </div>
-<div class="toolbar"><button onclick="resetIntelWorkflow()">Reset intelligence workflow</button><button onclick="exportData()">Export app backup</button></div>
+<div class="toolbar"><button id="resetIntelWorkflowBtn">Reset intelligence workflow</button><button data-export-device="1" type="button">Export this device’s data</button></div>
 </section>
 <section class="photo-strip mountain-stories" id="stories">
 <div class="section-head">
@@ -203,15 +440,6 @@
 <input id="summitSearch" placeholder="Search by peak or range" type="search"/>
 </label>
 <label>
-<span>Status</span>
-<select id="summitStatusFilter">
-<option value="all">All statuses</option>
-<option value="completed">Completed</option>
-<option value="planned">Planned</option>
-<option value="remaining">Remaining</option>
-</select>
-</label>
-<label>
 <span>Range</span>
 <select id="summitRangeFilter">
 <option value="all">All ranges</option>
@@ -220,8 +448,10 @@
 <button class="secondary" id="resetSummitFilters" type="button">Reset</button>
 </div>
 <div aria-label="Progress by mountain range" class="range-summary" id="rangeSummary"></div>
-<div aria-live="polite" class="summit-grid" id="summitGrid"><div class="summit-loading">Loading summit ledger…</div></div>
-<div class="ledger-note"><b>Source discipline:</b> Version 7.3 uses Don’s transcript from his 14ers.com review as the governing record for dates, partners, memories, and gear notes. Pikes Peak is now treated as the user-corrected first climb and Longs Peak as the second climb. Standard-route statistics remain current 14ers.com reference data, not reconstructed GPS totals.</div>
+<p class="summit-group-note" id="summitGroupNote">Tap a group header to open it; tap again to collapse. Searching opens every matching group automatically.</p>
+<div class="summit-group-controls"><button class="secondary" id="expandAllSummits" type="button">Expand all</button><button class="secondary" id="collapseAllSummits" type="button">Collapse all</button></div>
+<p aria-live="polite" class="summit-group-status" id="summitGroupStatus" role="status"></p>
+<div class="summit-groups" id="summitGrid"><div class="summit-loading">Loading summit ledger…</div></div>
 </section>
 <section id="expedition">
 <div class="section-head"><div><div class="kicker">Start to finish</div><h2>Expedition itinerary</h2></div><p>Open a day for its operating timeline, then begin and close it with a brief Scripture, reflection, and question.</p></div>
@@ -439,7 +669,7 @@
   </p>
 <div class="gear-advisor-summary" id="gearAdvisorSummary">Calculating recommendations…</div>
 <div class="gear-advisor-list" id="gearAdvisorList"></div>
-</div><div class="route-intel-panel" id="routeIntelPanel" tabindex="-1">
+</div><details class="advanced-planning-disclosure" id="routeIntelDisclosure"><summary>Route-derived recommendations</summary><div class="advanced-planning-body"><div class="route-intel-panel" id="routeIntelPanel" tabindex="-1">
 <div class="gear-advisor-head">
 <div>
 <p class="eyebrow">Curated standard-route data</p>
@@ -452,12 +682,12 @@
   </p>
 <div class="conditions-grid">
 <label>Route<select id="riRouteSelect"></select></label>
-<label id="riStartWrap" hidden>Parking / start<select id="riStartSelect"></select></label>
+<label hidden="" id="riStartWrap">Parking / start<select id="riStartSelect"></select></label>
 </div>
 <div class="ri-detail" id="riRouteDetail"></div>
 <h4 class="ri-subhead">Forecast window</h4>
 <div class="ri-forecast" id="riForecastState"></div>
-</div><div class="trip-conditions-panel" id="tripConditionsAdvisorPanel" tabindex="-1">
+</div></div></details><details class="advanced-planning-disclosure" id="tripConditionsDisclosure"><summary>Plan a different or future climb</summary><div class="advanced-planning-body"><div class="trip-conditions-panel" id="tripConditionsAdvisorPanel" tabindex="-1">
 <div class="gear-advisor-head">
 <div>
 <p class="eyebrow">Manual route judgment</p>
@@ -483,7 +713,7 @@
 <button class="ri-reset" id="riResetOverrides" type="button">Reset conditions to route defaults</button>
 <div class="trip-advisor-summary" id="tripAdvisorSummary">Choose conditions to see considerations.</div>
 <div class="trip-advisor-list" id="tripAdvisorList"></div>
-</div>
+</div></div></details>
 <div class="gear-principle">
 <span aria-hidden="true">↻</span>
 <div>
@@ -528,9 +758,6 @@
 <div class="pack-sections" id="packSections"></div>
 <div class="toolbar gear-toolbar">
 <button id="resetActivePack" type="button">Reset this preset</button>
-<button id="exportGearBackup" type="button">Export gear &amp; app backup</button>
-<button id="importGearBackup" type="button">Import backup</button>
-<input accept="application/json" hidden="" id="importBackupFile" type="file"/>
 </div>
 </div>
 </details>
@@ -574,13 +801,410 @@
 <div class="card"><div class="kicker">High summits</div><h3>40–50°F morning</h3><p>Wind chill may approach freezing. Carry insulation and shell.</p></div>
 <div class="card"><div class="kicker">Operational target</div><h3>Below exposure by late morning</h3><p>Cloud growth, thunder, wind and team condition outrank the summit schedule.</p></div>
 </div>
-<div class="links" style="margin-top:14px">
-<a class="link" href="https://www.weather.gov/" rel="noopener" target="_blank">National Weather Service<small>Point forecast and hourly detail</small></a>
-<a class="link" href="https://opensnow.com/news/post/colorado-14er-weather-forecasts" rel="noopener" target="_blank">OpenSnow 14er forecasts<small>Summit-oriented planning</small></a>
-<a class="link" href="https://www.windy.com/" rel="noopener" target="_blank">Windy<small>Wind and model comparison</small></a>
-<a class="link" href="https://support.garmin.com/en-US/?faq=6yhhs5lLq01fp1S5460Pf9" rel="noopener" target="_blank">inReach weather<small>Satellite weather request instructions</small></a>
+<div class="links weather-source-links" style="margin-top:14px">
+<a class="link" href="https://www.weather.gov/pub/colorado14ers" rel="noopener" target="_blank">NWS Colorado 14ers<small>Official point/grid forecasts · primary automated source</small></a>
+<a class="link" href="https://www.14ers.com/14ers" rel="noopener" target="_blank">14ers.com Weather &amp; Conditions<small>Peak-specific NOAA links, route conditions and trailhead updates</small></a>
+<a class="link" href="https://www.mountain-forecast.com/" rel="noopener" target="_blank">Mountain-Forecast<small>Base, mid-mountain and summit elevation comparison</small></a>
+<a class="link" href="https://bouldercast.com/summitcast-hiking-forecast/" rel="noopener" target="_blank">BoulderCAST SummitCAST<small>Colorado base/mid/summit and lightning-oriented cross-check</small></a>
+<a class="link" href="https://opensnow.com/news/post/colorado-14er-weather-forecasts" rel="noopener" target="_blank">OpenSnow 14er Forecasts<small>Hourly summit and selectable-elevation forecast cross-check</small></a>
+<a class="link" href="https://www.windy.com/" rel="noopener" target="_blank">Windy<small>Wind and model visualization</small></a>
+<a class="link" href="https://support.garmin.com/en-US/?faq=6yhhs5lLq01fp1S5460Pf9" rel="noopener" target="_blank">inReach Weather<small>Satellite weather-request instructions</small></a>
+</div><div class="weather-source-review-card">
+<div class="trip-builder-head"><div><div class="kicker">Forecast triangulation</div><h3 id="weatherAgreementTitle">Active-trip source comparison</h3></div><span class="device-pill">Manual source comparison</span></div>
+<p>NWS remains the automated source. Other forecasts open externally. Record only the degree of agreement you observe between published forecasts; the app does not decide which source is correct.</p>
+<div class="weather-source-review-list" id="weatherSourceReviewList"></div>
+<div class="weather-agreement-grid">
+<label class="trip-field"><span>Wind agreement</span><select id="weatherAgreementWind"><option value="">Not compared</option><option value="high">High agreement</option><option value="moderate">Moderate agreement</option><option value="low">Low agreement</option></select></label>
+<label class="trip-field"><span>Temperature agreement</span><select id="weatherAgreementTemp"><option value="">Not compared</option><option value="high">High agreement</option><option value="moderate">Moderate agreement</option><option value="low">Low agreement</option></select></label>
+<label class="trip-field"><span>Storm / precipitation timing</span><select id="weatherAgreementStorm"><option value="">Not compared</option><option value="high">High agreement</option><option value="moderate">Moderate agreement</option><option value="low">Low agreement</option></select></label>
+<label class="trip-field"><span>Cloud-cover agreement</span><select id="weatherAgreementCloud"><option value="">Not compared</option><option value="high">High agreement</option><option value="moderate">Moderate agreement</option><option value="low">Low agreement</option></select></label>
+</div><div class="weather-agreement-summary" id="weatherAgreementSummary"></div>
+<div class="trip-builder-actions"><button id="weatherAgreementSaveBtn" type="button">Save comparison</button><button id="weatherSourceReviewClearBtn" type="button">Clear active-trip comparison</button></div>
+<p class="route-disclaimer">Agreement means only that the reviewed sources are similar. It does not establish forecast accuracy or safe conditions.</p>
 </div></section>
-<section id="progress"><div class="section-head"><div><div class="kicker">Long horizon</div><h2>Colorado 14er record</h2></div><p>Search the combined list of 35 completed named summits and 15 selected objectives.</p></div>
+<section class="command-center-section" id="command-center">
+<div class="section-head">
+<div>
+<div class="kicker">Version 12 · field companion</div>
+<h2>Expedition Command Center</h2>
+</div>
+<p>A one-screen operational view for the active trip. It organizes your own timing, saved forecast, route preparation, communication, nutrition, notes, and decision questions. It does not track your location or decide whether to continue.</p>
+</div>
+<div class="command-activation-card">
+<div>
+<div class="kicker">Active expedition</div>
+<h3 id="commandTripName">No active trip</h3>
+<p id="commandTripMeta">Load or create a trip before starting field mode.</p>
+</div>
+<div class="command-activation-actions">
+<button class="intel-primary" id="beginExpeditionBtn" type="button">Begin expedition</button>
+<button id="pauseExpeditionBtn" type="button">Pause</button>
+<button id="endExpeditionBtn" type="button">End &amp; archive session</button>
+</div>
+</div>
+<div class="command-status-strip">
+<div><span>Local time</span><strong id="commandClock">—</strong></div>
+<div><span>Elapsed</span><strong id="commandElapsed">—</strong></div>
+<div><span>Turn target</span><strong id="commandTurnTarget">—</strong></div>
+<div><span>Turn margin</span><strong id="commandTurnMargin">—</strong></div>
+<div><span>Current stage</span><strong id="commandCurrentStage">Not started</strong></div>
+</div>
+<div class="command-grid">
+<article class="command-panel command-stage-panel">
+<div class="command-panel-head">
+<div><div class="kicker">Timeline</div><h3>Current stage</h3></div>
+<button id="advanceStageBtn" type="button">Advance stage</button>
+</div>
+<div class="command-stage-list" id="commandStageList"></div>
+</article>
+<article class="command-panel">
+<div class="kicker">Weather snapshot</div>
+<h3>Saved forecast evidence</h3>
+<div id="commandWeatherSnapshot"></div>
+<div class="command-inline-actions">
+<button id="commandRefreshWeatherBtn" type="button">Open weather center</button>
+<button id="commandOpenFocusBtn" type="button">Open Summit Focus</button>
+</div>
+</article>
+<article class="command-panel command-decision-panel">
+<div class="kicker">Decision center</div>
+<h3>Reassess what is actually happening</h3>
+<div class="command-decision-questions" id="commandDecisionQuestions"></div>
+<button id="commandDecisionResetBtn" type="button">Clear field answers</button>
+</article>
+<article class="command-panel">
+<div class="kicker">Navigation</div>
+<h3>Offline route access</h3>
+<div class="command-nav-readiness" id="commandNavigationReadiness"></div>
+<div class="command-resource-grid">
+<a href="#" id="commandOpenRouteLink" rel="noopener" target="_blank">Open standard route</a>
+<button id="commandOpenTripBuilderBtn" type="button">Open trip record</button>
+<button id="commandOpenMountainBtn" type="button">Open mountain page</button>
+<button id="commandOpenGearBtn" type="button">Open gear checks</button>
+</div>
+</article>
+<article class="command-panel">
+<div class="kicker">Communication</div>
+<h3>Check-in system</h3>
+<div class="command-check-list" id="commandCommunicationChecks"></div>
+<label class="command-field">
+<span>Next planned check-in</span>
+<input id="commandNextCheckin" type="time"/>
+</label>
+<p class="command-small" id="commandCheckinStatus"></p>
+</article>
+<article class="command-panel">
+<div class="kicker">Food &amp; water</div>
+<h3>Manual field tracking</h3>
+<div class="command-consumption-grid">
+<label><span>Water started</span><input id="commandWaterStarted" inputmode="decimal" min="0" step="0.25" type="number"/><small>liters</small></label>
+<label><span>Water remaining</span><input id="commandWaterRemaining" inputmode="decimal" min="0" step="0.25" type="number"/><small>liters</small></label>
+<label><span>Calories started</span><input id="commandCaloriesStarted" inputmode="numeric" min="0" step="50" type="number"/><small>kcal</small></label>
+<label><span>Calories remaining</span><input id="commandCaloriesRemaining" inputmode="numeric" min="0" step="50" type="number"/><small>kcal</small></label>
+</div>
+<div class="command-inline-actions">
+<button id="commandLogDrinkBtn" type="button">Log drink</button>
+<button id="commandLogFoodBtn" type="button">Log food</button>
+</div>
+<p class="command-small" id="commandNutritionStatus"></p>
+</article>
+<article class="command-panel command-emergency-panel">
+<div class="kicker">Emergency reference</div>
+<h3>Immediate priorities</h3>
+<details><summary>Lightning</summary><p>Leave exposed summits, ridges, and isolated high points. Do not rely on the app for real-time lightning clearance.</p></details>
+<details><summary>Lost route</summary><p>Stop, preserve battery, compare offline map/GPX, retrace only when the route is understood, and communicate early.</p></details>
+<details><summary>Injury or illness</summary><p>Protect the person from further harm and exposure, assess communication and evacuation options, and escalate promptly when self-evacuation is unsafe.</p></details>
+<details><summary>Altitude symptoms</summary><p>Worsening headache, vomiting, confusion, ataxia, severe breathlessness, or reduced responsiveness require descent and urgent escalation.</p></details>
+<details><summary>SOS</summary><p>Use the inReach or emergency services when the situation warrants it. Provide location, problem, number of people, hazards, and resources available.</p></details>
+<p class="route-disclaimer">This is a compact field reference, not medical, rescue, or navigation certification.</p>
+</article>
+<article class="command-panel">
+<div class="kicker">Mountain notes</div>
+<h3>Your route-specific reminders</h3>
+<textarea id="commandMountainNotes" maxlength="2500" placeholder="Loose rock below saddle, missed cairn, water source, mosquitoes, helmet point, photography location…" rows="7"></textarea>
+<button id="commandSaveMountainNotesBtn" type="button">Save notes to this trip</button>
+</article>
+<article class="command-panel command-journal-panel">
+<div class="command-panel-head">
+<div><div class="kicker">Live journal</div><h3>Timestamped field notes</h3></div>
+<button id="commandCopyJournalBtn" type="button">Copy journal</button>
+</div>
+<div class="command-journal-entry">
+<textarea id="commandJournalInput" maxlength="1200" placeholder="Wind stronger than forecast, saw mountain goats, partner fatigue, great campsite…" rows="3"></textarea>
+<button class="intel-primary" id="commandAddJournalBtn" type="button">Add note</button>
+</div>
+<div class="command-journal-list" id="commandJournalList"></div>
+</article>
+</div>
+</section><section class="archive-section" id="expedition-archive">
+<div class="section-head">
+<div>
+<div class="kicker">Version 13 · climbing journal</div>
+<h2>Expedition Archive</h2>
+</div>
+<p>Preserve completed trips as searchable expedition records with actual timing, partners, route, field journal, weather observations, gear and nutrition reflections, photographs, lessons learned, favorite memory, and Scripture or prayer.</p>
+</div>
+<div class="archive-toolbar">
+<label class="trip-field archive-search">
+<span>Search archive</span>
+<input id="archiveSearch" placeholder="Peak, partner, route, memory, weather, gear, Scripture…" type="search"/>
+</label>
+<label class="trip-field">
+<span>Result</span>
+<select id="archiveResultFilter">
+<option value="all">All results</option>
+<option value="summited">Summited</option>
+<option value="turned">Turned before summit</option>
+<option value="partial">Partial / modified objective</option>
+<option value="unknown">Not recorded</option>
+</select>
+</label>
+<label class="trip-field">
+<span>Sort</span>
+<select id="archiveSort">
+<option value="newest">Newest first</option>
+<option value="oldest">Oldest first</option>
+<option value="mountain">Mountain</option>
+</select>
+</label>
+<button class="intel-primary" id="archiveCurrentSessionBtn" type="button">Archive current session</button>
+</div>
+<div class="archive-layout">
+<aside class="archive-index-card">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Saved expeditions</div>
+<h3 id="archiveCount">0 records</h3>
+</div>
+</div>
+<div class="archive-index-list" id="archiveList"></div>
+</aside>
+<article class="archive-detail-card" id="archiveDetail">
+<div class="archive-empty">
+<h3>No archived expedition selected</h3>
+<p>Archive an ended Command Center session or select a saved expedition record.</p>
+</div>
+</article>
+</div>
+<div class="archive-editor-card" id="archiveEditor">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Expedition debrief record</div>
+<h3 id="archiveEditorTitle">Create or edit archive</h3>
+</div>
+<span class="device-pill">Stored on this device</span>
+</div>
+<div class="archive-form-grid">
+<label class="trip-field">
+<span>Summit result</span>
+<select id="archiveResult">
+<option value="unknown">Not recorded</option>
+<option value="summited">Summited</option>
+<option value="turned">Turned before summit</option>
+<option value="partial">Partial / modified objective</option>
+</select>
+</label>
+<label class="trip-field">
+<span>Actual trail start</span>
+<input id="archiveActualStart" type="time"/>
+</label>
+<label class="trip-field">
+<span>Actual summit / high point</span>
+<input id="archiveActualSummit" type="time"/>
+</label>
+<label class="trip-field">
+<span>Actual turnaround</span>
+<input id="archiveActualTurn" type="time"/>
+</label>
+<label class="trip-field">
+<span>Actual finish</span>
+<input id="archiveActualFinish" type="time"/>
+</label>
+<label class="trip-field">
+<span>Weather encountered</span>
+<input id="archiveWeatherObserved" maxlength="250" placeholder="Clear pre-dawn, wind increased on ridge, clouds after noon…"/>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Partners and roles</span>
+<input id="archivePartners" maxlength="300" placeholder="Names, who carried shared items, photographer, driver…"/>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Gear used and gear not used</span>
+<textarea id="archiveGearReflection" maxlength="1600" placeholder="What was used, unnecessary, missing, damaged, or should change next time." rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Food and water reality</span>
+<textarea id="archiveNutritionReflection" maxlength="1200" placeholder="Starting amounts, remaining amounts, what worked, what was difficult to consume." rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Route and hazard observations</span>
+<textarea id="archiveRouteReflection" maxlength="1600" placeholder="Navigation errors, loose rock, water, mosquitoes, crux, bailout, road access…" rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>What went well</span>
+<textarea id="archiveWentWell" maxlength="1200" rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>What should change next time</span>
+<textarea id="archiveChangeNext" maxlength="1200" rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Favorite memory</span>
+<textarea id="archiveFavoriteMemory" maxlength="1200" rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Scripture, prayer, or spiritual reflection</span>
+<textarea id="archiveSpiritualReflection" maxlength="1600" rows="3"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Photo references</span>
+<textarea id="archivePhotoReferences" maxlength="1200" placeholder="File names, album link description, or which photos belong with this expedition." rows="2"></textarea>
+</label>
+<label class="trip-field trip-field-wide">
+<span>Additional lessons</span>
+<textarea id="archiveLessons" maxlength="1600" rows="3"></textarea>
+</label>
+</div>
+<div class="trip-builder-actions">
+<button class="intel-primary" id="saveArchiveBtn" type="button">Save archived expedition</button>
+<button id="deleteArchiveBtn" type="button">Delete archive</button>
+<button id="copyArchiveBtn" type="button">Copy archive as text</button>
+</div>
+</div>
+</section><section class="intelligence-engine-section" id="intelligence-engine">
+<div class="section-head">
+<div>
+<div class="kicker">Version 14.1 · experience intelligence</div>
+<h2>Expedition Insights</h2>
+</div>
+<p>Connect archived expeditions, partner history, gear reflections, route observations, and mountain records into evidence-based patterns from your own data. No invented conclusions and no safety clearance.</p>
+</div>
+<div class="engine-summary-strip">
+<div><span>Archived expeditions</span><strong id="engineArchiveCount">0</strong></div>
+<div><span>Mountains represented</span><strong id="engineMountainCount">0</strong></div>
+<div><span>Partners represented</span><strong id="enginePartnerCount">0</strong></div>
+<div><span>Gear terms found</span><strong id="engineGearCount">0</strong></div>
+<div><span>Lessons recorded</span><strong id="engineLessonCount">0</strong></div>
+</div>
+<div class="engine-toolbar">
+<label class="trip-field engine-search">
+<span>Search all recorded mountain history</span>
+<input id="engineSearch" placeholder="David, mosquitoes, headlamp, wind, Scripture, Holy Cross…" type="search"/>
+</label>
+<label class="trip-field">
+<span>Insight view</span>
+<select id="engineView">
+<option value="overview">Overview</option>
+<option value="partners">Partners</option>
+<option value="gear">Gear</option>
+<option value="routes">Route observations</option>
+<option value="weather">Weather reality</option>
+<option value="spiritual">Scripture &amp; reflection</option>
+</select>
+</label>
+<button class="intel-primary" id="engineRefreshBtn" type="button">Refresh insights</button>
+</div>
+<div class="engine-grid">
+<article class="engine-card">
+<div class="kicker">Personal patterns</div>
+<h3>What the archive currently supports</h3>
+<div id="enginePatterns"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Planning observations</div>
+<h3>Useful evidence for future trips</h3>
+<div id="engineRecommendations"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Partner history</div>
+<h3>Shared expedition record</h3>
+<div id="enginePartners"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Gear intelligence</div>
+<h3>Recorded use, gaps, and failures</h3>
+<div id="engineGear"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Route learning</div>
+<h3>Repeated route observations</h3>
+<div id="engineRoutes"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Weather learning</div>
+<h3>Forecast versus encountered conditions</h3>
+<div id="engineWeather"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Spiritual record</div>
+<h3>Scripture, prayer, and significance</h3>
+<div id="engineSpiritual"></div>
+</article>
+<article class="engine-card">
+<div class="kicker">Global search results</div>
+<h3 id="engineSearchTitle">Recorded mountain history</h3>
+<div id="engineSearchResults"></div>
+</article>
+</div>
+<div class="engine-confidence-card">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Planning completeness</div>
+<h3 id="engineCompletenessTitle">No active trip</h3>
+</div>
+<strong id="engineCompletenessValue">—</strong>
+</div>
+<div class="engine-progress"><span id="engineCompletenessBar"></span></div>
+<div id="engineCompletenessDetails"></div>
+<p class="route-disclaimer">This percentage reflects recorded planning fields and confirmed checks only. It does not determine whether conditions are safe or whether an objective should be attempted.</p>
+</div>
+</section><section class="mountain-intelligence-section" id="mountain-intelligence">
+<div class="section-head">
+<div>
+<div class="kicker">Version 11 · personal mountain database</div>
+<h2>Mountain Intelligence</h2>
+</div>
+<p>Search all 58 Colorado 14ers and open a mountain page built from the summit ledger, verified route profiles, weather points, climb history, and personal photographs already stored in this app.</p>
+</div>
+<div class="mountain-intel-toolbar">
+<label class="trip-field mountain-search-field">
+<span>Search mountains, ranges, routes, partners, or notes</span>
+<input id="mountainIntelSearch" placeholder="Example: Sneffels, Elk, David Harbin, Class 3" type="search"/>
+</label>
+<label class="trip-field">
+<span>Status</span>
+<select id="mountainIntelStatus">
+<option value="all">All mountains</option>
+<option value="completed">Completed</option>
+<option value="planned">Planned</option>
+<option value="remaining">Remaining</option>
+</select>
+</label>
+<label class="trip-field">
+<span>Range</span>
+<select id="mountainIntelRange">
+<option value="all">All ranges</option>
+</select>
+</label>
+</div>
+<div class="mountain-intel-layout">
+<aside class="mountain-index-card">
+<div class="trip-builder-head">
+<div>
+<div class="kicker">Mountain index</div>
+<h3 id="mountainIntelCount">58 mountains</h3>
+</div>
+</div>
+<div class="mountain-index-list" id="mountainIntelList"></div>
+</aside>
+<article class="mountain-profile-card" id="mountainIntelProfile" tabindex="-1">
+<div class="mountain-profile-empty">
+<h3>Select a mountain</h3>
+<p>Open a mountain page to review route, weather, history, partners, photographs, and planning gaps.</p>
+</div>
+</article>
+</div>
+</section><section id="progress"><div class="section-head"><div><div class="kicker">Long horizon</div><h2>Colorado 14er record</h2></div><p id="summitRecordDescription">Loading summit record…</p></div>
 <input aria-label="Search peaks" class="search" id="peakSearch" placeholder="Search peak, range or status…"/>
 <div class="peaks" id="peakList"></div>
 </section>
@@ -592,7 +1216,7 @@
 </div></section>
 <section id="journal"><div class="section-head"><div><div class="kicker">Saved locally</div><h2>Field journal</h2></div><p>Notes remain only in this browser’s local storage. Export a backup after the trip.</p></div>
 <div class="card"><textarea id="journalText" placeholder="Weather, summit times, partners, gear observations, nutrition, lessons learned, gratitude, photos to add…"></textarea>
-<div class="toolbar" style="margin-top:10px"><button onclick="exportData()">Export backup</button><button onclick="clearJournal()">Clear journal</button></div></div>
+<div class="toolbar" style="margin-top:10px"><button data-export-device="1" type="button">Export this device’s data</button><button id="clearJournalBtn">Clear journal</button></div></div>
 </section>
 <section id="emergency"><div class="section-head"><div><div class="kicker">Redundancy</div><h2>Communication and emergency</h2></div><p>The app supports decisions; it does not replace the inReach, downloaded navigation, paper guide or group judgment.</p></div>
 <div class="grid g2">
@@ -604,7 +1228,7 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 8.0</div>
+<div class="footer">Don Downs Mountain Guide · Version 15.0</div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
 <div class="story-viewer-top">
@@ -717,6 +1341,6 @@
 </a>
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
-<div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button onclick="applyUpdate()">Update now</button></div>
-<script src="app.js"></script>
-</body></html>
+<div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn">Update now</button></div>
+
+<script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script></body></html>
