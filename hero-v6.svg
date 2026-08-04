@@ -1,20 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 980" role="img" aria-labelledby="title desc">
-<title id="title">Sangre de Cristo alpine sunrise</title><desc id="desc">A cinematic original illustration of snow-lined mountains, Lake Como, dawn light and subtle topographic contours.</desc>
-<defs>
- <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#061923"/><stop offset=".28" stop-color="#214b60"/><stop offset=".56" stop-color="#d18058"/><stop offset=".76" stop-color="#f2c477"/><stop offset="1" stop-color="#6e9eaa"/></linearGradient>
- <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#315f71"/><stop offset="1" stop-color="#061923"/></linearGradient>
- <linearGradient id="ridge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eff5f4"/><stop offset="1" stop-color="#879da5"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="28"/></filter>
- <pattern id="contours" width="180" height="100" patternUnits="userSpaceOnUse"><path d="M-20 70 C30 20 100 20 200 72" fill="none" stroke="#fff" stroke-opacity=".055" stroke-width="1.5"/><path d="M-10 94 C55 48 115 46 205 92" fill="none" stroke="#fff" stroke-opacity=".04" stroke-width="1"/></pattern>
-</defs>
-<rect width="1800" height="980" fill="url(#sky)"/>
-<g fill="#fff" opacity=".7"><circle cx="130" cy="122" r="2"/><circle cx="292" cy="86" r="1.5"/><circle cx="492" cy="147" r="2"/><circle cx="716" cy="80" r="1.4"/><circle cx="1020" cy="123" r="1.7"/><circle cx="1180" cy="70" r="1.3"/></g>
-<circle cx="1410" cy="272" r="96" fill="#ffd995"/><circle cx="1410" cy="272" r="162" fill="#ffd995" opacity=".20" filter="url(#glow)"/>
-<path d="M0 602 L180 390 L355 520 L565 270 L735 505 L1005 138 L1210 495 L1425 315 L1800 585 L1800 980 L0 980Z" fill="url(#ridge)"/>
-<path d="M0 666 L225 505 L410 625 L625 390 L790 620 L1030 278 L1245 635 L1460 455 L1800 646 L1800 980 L0 980Z" fill="#66808b"/>
-<path d="M0 748 L270 612 L520 720 L760 535 L1020 735 L1280 590 L1800 728 L1800 980 L0 980Z" fill="#17394b"/>
-<path d="M0 715 C300 682 610 750 900 714 C1180 680 1450 748 1800 690 L1800 980 L0 980Z" fill="url(#lake)"/>
-<path d="M615 980 C720 890 810 808 930 720 C870 812 812 897 780 980Z" fill="#efb65f" opacity=".78"/>
-<rect width="1800" height="980" fill="url(#contours)"/>
-<g opacity=".12" stroke="#fff" fill="none"><path d="M1100 675c80-60 170-58 260 0s170 58 250 0"/><path d="M1030 705c100-78 210-76 325 0s220 78 330 0"/></g>
-</svg>
+# Version 15.3.2 Emergency Contact Source Ledger
+
+**Verified:** August 4, 2026
+
+Colorado backcountry search and rescue is activated through **911 and the responsible county sheriff/dispatch**. The volunteer-team name is provided for jurisdictional context; the app does not direct the user to bypass 911 or county dispatch.
+
+Official statewide guidance: https://cpw.state.co.us/backcountry-search-and-rescue-program
+
+Route and county boundaries can differ. These are verified defaults for the current expedition and Road to 50 targets. Alternate routes require confirmation.
+
+| County / covered peaks | App contact | Sheriff office | Source | SAR / dispatch source |
+|---|---|---|---|---|
+| **Alamosa County**<br>Blanca Peak, Ellingwood Point, Little Bear Peak | County dispatch: 719-589-5807 | 719-589-6608 | https://www.alamosacounty.org/185/Sheriff | https://www.avsar.us/ |
+| **Huerfano County**<br>Mount Lindsey | County dispatch: 719-738-1044 | 719-738-1600 | https://huerfano.us/sheriff/ | https://coloradosar.org/sar-county-map/ |
+| **Pitkin County**<br>Castle Peak, Conundrum Peak | Regional emergency dispatch: 970-920-5310 | 970-920-5300 | https://www.pitkincounty.com/337/Emergency-Dispatch | https://coloradosar.org/sar-county-map/ |
+| **Hinsdale County**<br>Redcloud Peak, Sunshine Peak, Uncompahgre Peak, Wetterhorn Peak | Sheriff / non-emergency: 970-944-2291 | — | https://hinsdalecounty.colorado.gov/sheriff-6 | https://coloradosar.org/sar-county-map/ |
+| **Ouray County**<br>Mount Sneffels | Non-emergency dispatch: 970-249-9110 | 970-325-7272 | https://www.ouraycountyco.gov/152/Sheriff | https://coloradosar.org/sar-county-map/ |
+| **Dolores County**<br>Mount Wilson | Sheriff / non-emergency: 970-677-2257 | — | https://www.cortezco.gov/212/Victim-Services | https://www.cortezco.gov/358/Cortez-Communications-Center |
+| **La Plata County**<br>Mount Eolus | Non-emergency dispatch: 970-385-2900 | — | https://www.durangoco.gov/217/911-Communications | https://coloradosar.org/sar-county-map/ |
+| **Saguache County**<br>San Luis Peak | Sheriff / non-emergency: 719-655-2544 | — | https://saguachecounty.colorado.gov/departments/sheriff | https://coloradosar.org/sar-county-map/ |
+| **Custer County**<br>Humboldt Peak | Non-emergency dispatch: 719-276-5555, ext. 8 | 719-783-2270 | https://custercounty-co.gov/government/elected-officials/sheriffs-office/ | https://coloradosar.org/sar-county-map/ |
+| **Costilla County**<br>Culebra Peak | County dispatch: 719-672-3302 | 719-672-0673 | https://www.costillacounty.gov/sheriff | https://coloradosar.org/sar-county-map/ |
+
+## Personal-contact privacy
+
+No personal phone number or email address is included in the public release. The recipient is entered on the user's device and stored only in that browser's local storage. If no recipient is stored, the app opens a prepared draft without an addressee.

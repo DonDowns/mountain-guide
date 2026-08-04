@@ -2739,3 +2739,53 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
 .elevation-segments .loss span::before{content:'↓ ';font-weight:900}
 .elevation-segments .unavailable span{font-weight:700;color:var(--muted)}
 @media(max-width:520px){.elevation-segments>div{grid-template-columns:1fr}.elevation-segments span{text-align:left}}
+
+/* Version 15.3 — Road to 50 and reliable field controls */
+.road50-card{display:grid;grid-template-columns:minmax(0,1.5fr) auto;gap:1rem;align-items:center;margin:1rem 0 1.25rem;padding:1.15rem}
+.road50-copy h3{margin:.18rem 0 .35rem}.road50-copy p{margin:0;max-width:68ch}
+.road50-progress{text-align:right}.road50-progress strong{display:block;font-size:clamp(1.8rem,5vw,3rem);line-height:1}.road50-progress span{display:block;margin-top:.35rem}
+.road50-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.55rem}.road50-actions .active{outline:3px solid currentColor;outline-offset:2px}
+.road50-combos{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.5rem}.road50-combos span{padding:.38rem .58rem;border-radius:999px;background:rgba(255,255,255,.08)}
+.my50-badge{display:inline-flex;margin-left:.4rem;padding:.12rem .35rem;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.06em;background:#d9a441;color:#13242d;vertical-align:middle}
+.field-launch{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;border-radius:.65rem;text-decoration:none;font-weight:800;border:1px solid currentColor}
+html.campfire-mode body{background:#120000!important;color:#ffb0a4!important}html.campfire-mode .card,html.campfire-mode section,html.campfire-mode header,html.campfire-mode .focus-sheet{background-color:#160000!important;color:#ffb0a4!important}html.campfire-mode button,html.campfire-mode a{color:#ffb0a4!important;border-color:#8a3129!important}html.campfire-mode img{filter:brightness(.22) sepia(1) saturate(2) hue-rotate(315deg)}
+@media(max-width:680px){.road50-card{grid-template-columns:1fr}.road50-progress{text-align:left}.road50-progress,.road50-actions,.road50-combos{grid-column:1}}
+
+/* v15.3 app-wide navigation-density audit */
+.trip-builder-disclosure{margin:14px 0;border:1px solid var(--line,rgba(20,58,74,.18));border-radius:18px;background:var(--card,#fff);overflow:hidden}
+.trip-builder-disclosure>summary{cursor:pointer;list-style:none;padding:17px 20px;font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.trip-builder-disclosure>summary::-webkit-details-marker{display:none}
+.trip-builder-disclosure>summary::after{content:'Open';font-size:.78rem;font-weight:800;opacity:.68}
+.trip-builder-disclosure[open]>summary::after{content:'Collapse'}
+.trip-builder-disclosure[open]>summary{border-bottom:1px solid var(--line,rgba(20,58,74,.18))}
+.trip-builder-disclosure-body{padding:18px}
+@media(max-width:640px){.trip-builder-disclosure>summary{padding:15px 16px}.trip-builder-disclosure-body{padding:12px}}
+
+/* Version 15.3.2 — objective-specific emergency contacts and device-local update drafts */
+.button-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font-weight:850;text-decoration:none;text-align:center}
+.emergency-local-card,.emergency-vonda-card{margin-top:14px}
+.emergency-local-head{margin:0 0 14px;align-items:flex-end}
+.emergency-local-head h3{margin:4px 0 0;font-size:25px}
+.emergency-objective-field{min-width:min(100%,260px)}
+#emergencyLocalDetails{display:grid;gap:7px;line-height:1.5}
+#emergencyLocalDetails p{margin:0}
+#emergencyLocalDetails strong{font-size:18px}
+.emergency-contact-actions,.emergency-send-actions{margin:14px 0 9px}
+.emergency-contact-actions>*{flex:1 1 210px}
+.emergency-send-actions>*{flex:1 1 180px}
+.emergency-vonda-card textarea{min-height:94px}
+#emergencyLocalVerified,#emergencyVondaStatus{display:block;color:var(--muted);margin-top:8px}
+@media(max-width:650px){.emergency-local-head{align-items:stretch;flex-direction:column}.emergency-objective-field{width:100%}.emergency-contact-actions>*,.emergency-send-actions>*{flex-basis:100%}}
+
+
+/* Version 15.3.2 — device-local personal emergency contact setup */
+.contact-setup{margin:14px 0;border:1px solid var(--line);border-radius:14px;background:var(--cream);overflow:hidden}
+.contact-setup>summary{cursor:pointer;padding:13px 15px;font-weight:850}
+.contact-setup[open]>summary{border-bottom:1px solid var(--line)}
+.contact-setup-body{padding:14px;display:grid;gap:11px}
+.contact-setup-body p{margin:0}
+.contact-setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.contact-setup-actions{margin:0}.contact-setup-actions button{flex:1 1 190px}
+.contact-privacy,#emergencyContactStatus{color:var(--muted);font-size:12px;line-height:1.45}
+.campfire-mode .contact-setup{background:#1b0705;border-color:rgba(255,106,60,.28)}
+@media(max-width:650px){.contact-setup-grid{grid-template-columns:1fr}.contact-setup-actions button{flex-basis:100%}}
