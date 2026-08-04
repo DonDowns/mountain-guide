@@ -1,0 +1,29 @@
+# Version 15.1 QA Results
+
+- archive.js syntax: passed
+- bootstrap.js syntax: passed
+- command.js syntax: passed
+- core.js syntax: passed
+- expedition.js syntax: passed
+- insights.js syntax: passed
+- mountains.js syntax: passed
+- trips.js syntax: passed
+- sw.js syntax: passed
+- manifest JSON: passed
+- duplicate HTML IDs: none
+- footer version 15.1: passed
+- APP_VERSION 15.1: passed
+- search input present: passed
+- search input visible CSS: passed
+- search input runtime hardening: passed
+- search event fallback: passed
+- Evans alias support: passed
+- expanded ascent search: passed
+- service worker cache 15.1: passed
+- modules still used: passed
+- no app.js script: passed
+- data transfer hardening: passed
+- no Storage prototype patch: passed
+- no green all-clear: passed
+- ledger totals preserved: 58 / 35 / 3 / 20
+- all five turnaround prompts remain question-framed

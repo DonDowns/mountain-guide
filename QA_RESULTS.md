@@ -1,12 +1,5 @@
-# Version 6.1 QA Results
+# Current QA Results
 
-- app.js syntax: pass
-- sw.js syntax: pass
-- manifest JSON: pass
-- duplicate HTML IDs: none
-- missing getElementById targets: none
-- missing local assets: none
-- Field Mode controls remaining: no
-- Quick-status ribbon remaining: no
-- Flat-horizon caveat present: yes
-- Service-worker cache: ddmg-v6-1-2026-08-02-1
+The current release is **Version 15.2 — Full-System Audit and Elevation Profile Integrity**.
+
+See `QA_RESULTS_V15_2.md` for the complete release decision, defect list, test coverage, external-link audit, locked regression results, and remaining device-specific verification.

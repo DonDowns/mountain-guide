@@ -1,34 +1,80 @@
-# Don Downs Mountain Guide — Version 6.2 Daily Formation Edition
+# Don Downs Mountain Guide — Version 15.2
 
-Version 6.1 keeps the audited Version 5.1 reliability baseline and adds a focused premium experience rather than feature clutter.
+Version 15.2 is a full-system audit and elevation-profile integrity release built directly on the authoritative Version 15.1 modular package.
 
-## Material additions
-- Cinematic alpine visual system with original artwork
-- Summit Focus: a one-screen field sheet for the approach, Blanca–Ellingwood, or Lindsey
-- Calculated civil dawn, sunrise, and sunset in Mountain Time
-- Night-vision display for pre-dawn use
-- Schematic route-elevation stories clearly labeled as planning profiles, not GPS
-- Native-style expedition pulse strip and central mobile Focus button
-- More polished typography, spacing, imagery, transitions, and responsive behavior
-- Existing audited weather, offline caching, condition review, checklist, journal, 14er, privacy, and service-worker corrections preserved
+## Current architecture
+
+The application uses eight ordered deferred JavaScript modules:
+
+1. `js/core.js`
+2. `js/trips.js`
+3. `js/expedition.js`
+4. `js/mountains.js`
+5. `js/command.js`
+6. `js/archive.js`
+7. `js/insights.js`
+8. `js/bootstrap.js`
+
+`js/bootstrap.js` is the single dependency-aware startup coordinator. All eight modules and all runtime assets are precached by the service worker.
+
+## Version 15.2 release scope
+
+- Corrected a critical startup-order defect that could stop `core.js` before route and mountain data finished loading.
+- Stabilized Mountain Intelligence and Summit Ledger aliases for Mount Blue Sky / Mount Evans.
+- Corrected Route Intelligence rendering, weather-store references, and ledger summary fields.
+- Added explicit absolute elevations and gain/loss labels to every applicable elevation profile.
+- Filled all missing summit elevations from data already stored in the app; no summit totals changed.
+- Completed interface, accessibility, button, link, URL, service-worker, security, migration, data, and safety regression audits.
+- Normalized current titles, metadata, documentation, and deployment instructions.
+
+## Locked integrity requirements
+
+- One authoritative `COLORADO_SUMMITS` ledger
+- `PEAKS` derived from the ledger
+- Ledger totals: **58 total / 35 completed / 3 planned / 20 remaining**
+- No hardcoded summit totals
+- Hardened `ddmg-` export/import and migration behavior
+- No `Storage.prototype` modification
+- `escapeHtml` discipline and no inline `onclick`
+- No green or all-clear state
+- All five turnaround prompts remain question-framed
+- Protected Lake Como system trip
+- NWS remains the automated weather source
+- Weather cross-check links and agreement scoring retained
+- Offline/PWA behavior and service-worker cache updates retained
 
 ## Deploy
-1. Upload every file in this package to the root of `DonDowns/mountain-guide`.
-2. Keep the existing `CNAME` file.
-3. Commit directly to `main` with: `Deploy Mountain Guide v6 Refined Alpine Edition`.
-4. Wait 1–3 minutes, then hard-refresh the live site.
-5. In the installed iPhone app, accept the update banner or fully close and reopen after the new service worker installs.
 
-## Device verification
-- Open Summit Focus and switch among all three objectives.
-- Confirm civil dawn/sunrise/sunset appear.
-- Turn Night Vision on and off.
-- Refresh Lake Como weather and confirm the NWS grid elevation remains near the lake/camp elevation rather than the valley floor.
-- Test Airplane Mode after one online launch.
+1. Extract the Version 15.2 ZIP.
+2. Upload every extracted file and folder to the root of `DonDowns/mountain-guide`.
+3. Preserve the repository's existing `CNAME` file.
+4. Commit directly to `main` with:
+
+   `Deploy Mountain Guide v15.2 Full-System Audit and Elevation Profile Integrity`
+
+5. Wait for GitHub Pages deployment to complete, then hard-refresh the browser.
+6. Open the installed iPhone app while online, fully close and reopen it, and use **Update now** if the service-worker banner appears.
+7. Confirm the footer reads **Version 15.2** before relying on the update.
+
+## Required device verification
+
+- Search `Evans`, `Mount Evans`, and `Mt Evans`; Mount Blue Sky must appear first.
+- Open Route Intelligence and confirm route detail renders without a blank panel.
+- Inspect all three elevation profiles and confirm every shown waypoint has an absolute elevation and every segment has gain/loss or an explicit unavailable label.
+- Create, save, duplicate, and reload a non-system trip.
+- Confirm the Lake Como system trip remains protected.
+- Refresh an NWS forecast while online, then relaunch in Airplane Mode after the cache has updated.
+- Export local data and confirm the downloaded file begins with `ddmg-`.
+
+## QA evidence
+
+See `QA_RESULTS_V15_2.md` and the four `QA_EVIDENCE_V15_2_*.json` files included with this release.
 
 ## Privacy
-The public version excludes exact addresses, reservation numbers, private phone numbers, and other sensitive details.
 
+The public package excludes exact private addresses, reservation numbers, private phone numbers, and other sensitive information. Personal app data remains in local browser storage unless the user explicitly exports it.
+
+## Historical release record
 
 ## Version 6.2
 
@@ -333,3 +379,16 @@ Mountain Intelligence Engine.
 Modular Architecture and Mountain Knowledge Base.
 
 `Deploy Mountain Guide v15.0 Modular Architecture and Mountain Knowledge Base`
+
+
+## Version 15.1
+
+Mountain Intelligence search stabilization and Mount Evans alias support.
+
+`Deploy Mountain Guide v15.1 Mountain Intelligence Search Stabilization`
+
+## Version 15.2
+
+Full-System Audit and Elevation Profile Integrity.
+
+`Deploy Mountain Guide v15.2 Full-System Audit and Elevation Profile Integrity`

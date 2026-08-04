@@ -1,216 +1,57 @@
-DON DOWNS MOUNTAIN GUIDE — VERSION 6.1 UPLOAD
+DON DOWNS MOUNTAIN GUIDE — VERSION 15.2 DEPLOYMENT CHECKLIST
 
+SOURCE OF TRUTH
+- Use only the complete Version 15.2 package.
+- Do not merge files from Version 15.1 or an earlier release.
+- Preserve the repository's existing CNAME file.
+
+UPLOAD
 1. Open DonDowns / mountain-guide on GitHub.
-2. Add file → Upload files.
-3. Upload every extracted file from this folder.
-4. Keep CNAME.
+2. Select Add file → Upload files.
+3. Upload every extracted Version 15.2 file and the complete js folder.
+4. Confirm these eight module files are present:
+   - js/core.js
+   - js/trips.js
+   - js/expedition.js
+   - js/mountains.js
+   - js/command.js
+   - js/archive.js
+   - js/insights.js
+   - js/bootstrap.js
 5. Commit directly to main.
-6. Commit message: Deploy Mountain Guide v6.1 Refined Alpine Edition
-7. Wait 1–3 minutes.
-8. Hard refresh: Command + Shift + R.
-9. Open the installed iPhone app and use Update now if shown.
-10. Verify Summit Focus, Night Vision, live weather, and Airplane Mode relaunch.
 
-The obsolete capital-I Index.html is not included, but an upload cannot delete an already-existing repository file.
-
-
-VERSION 6.2 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.2 Daily Formation Edition
-
-
-VERSION 6.3 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.3 AI Companion Edition
-
-
-VERSION 6.5.1 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.5.1 Safety Language Fix
-
-
-VERSION 6.6 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.6 Gear Locker and Pack Builder
-
-
-VERSION 6.7 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.7 Mountain Stories
-
-
-VERSION 6.8 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v6.8 Itinerary and Readiness Update
-
-
-VERSION 7.0 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.0 Colorado Summit Ledger
-
-
-VERSION 7.1 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.1 Completed Climb History
-
-
-VERSION 7.1.1 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.1.1 Climb History Corrections
-
-
-VERSION 7.1.2 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.1.2 Mobile Navigation Fix
-
-
-VERSION 7.1.3 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.1.3 Fort Garland Lodging
-
-
-VERSION 7.1.4 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.1.4 Lodging Contact and Directions
-
-
-VERSION 7.2 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.2 Photo Gear Integration
-
-
-VERSION 7.3 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.3 Transcript Climb History
-
-VERSION 7.4.1 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.4.1 single source truth partner corrections
-
-VERSION 7.5 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.5 Data Transfer and Local Stamp
-
-VERSION 7.5.1 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.5.1 Data Transfer hardening
-
-VERSION 7.5.2 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.5.2 clickable readiness checks
-
-VERSION 7.6 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.6 tappable dashboard cards
-
-VERSION 7.7 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.7 incomplete-only readiness checks
-
-VERSION 7.8 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.8 Gear Advisor
-
-
-VERSION 7.9 COMMIT MESSAGE
-
-Replace “Add files via upload” with:
-
-Deploy Mountain Guide v7.9 integrated trip gear advisor
-
-
-VERSION 8.6 COMMIT MESSAGE
-
-Deploy Mountain Guide v8.6 verified route and weather intelligence
-
-
-VERSION 8.6.1 COMMIT MESSAGE
-
-Deploy Mountain Guide v8.6.1 final stabilization
-
-
-VERSION 9.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v9.0 Trip Builder Foundation
-
-
-VERSION 9.1 COMMIT MESSAGE
-
-Deploy Mountain Guide v9.1 generated itinerary and readiness
-
-
-VERSION 10.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v10.0 Intelligent Expedition Builder
-
-
-VERSION 11.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v11.0 Mountain Intelligence Database
-
-
-VERSION 12.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v12.0 Expedition Command Center
-
-
-VERSION 13.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v13.0 Climbing Journal and Expedition Archive
-
-
-VERSION 14.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v14.0 Mountain Intelligence Engine
-
-
-VERSION 14.1 COMMIT MESSAGE
-
-Deploy Mountain Guide v14.1 Audit Fix Weather Cross-Checks and Agreement
-
-
-VERSION 15.0 COMMIT MESSAGE
-
-Deploy Mountain Guide v15.0 Modular Architecture and Mountain Knowledge Base
+GITHUB COMMIT MESSAGE
+Deploy Mountain Guide v15.2 Full-System Audit and Elevation Profile Integrity
+
+BROWSER VERIFICATION
+1. Wait for the GitHub Pages deployment to finish.
+2. Hard refresh the browser: Command + Shift + R.
+3. Confirm the footer reads Version 15.2.
+4. Open Mountain Intelligence and search:
+   - Evans
+   - Mount Evans
+   - Mt Evans
+   Mount Blue Sky must appear first for each search.
+5. Open the Summit Ledger and repeat the Evans alias search.
+6. Open Route Intelligence and confirm the route detail panel renders.
+7. Review all elevation profiles. Every displayed waypoint must show an absolute elevation; every segment must show gain/loss or explicitly say the value is unavailable.
+
+IPHONE / INSTALLED PWA VERIFICATION
+1. Open the installed app while online.
+2. Fully close and reopen it.
+3. Select Update now if the update banner appears.
+4. Confirm the footer reads Version 15.2.
+5. Repeat the Evans search and Route Intelligence checks.
+6. After one complete online load, enable Airplane Mode and relaunch the app.
+7. Confirm the app opens and the core interface, modules, icons, and stored data remain available offline.
+
+DATA AND SAFETY VERIFICATION
+- Ledger totals remain 58 total / 35 completed / 3 planned / 20 remaining.
+- Lake Como remains a protected system trip.
+- Export creates a ddmg- JSON file.
+- Import accepts the current hardened export format without changing unrelated storage.
+- No green or all-clear forecast state appears.
+- All five turnaround countdown messages remain questions.
+
+ROLLBACK RULE
+If the footer does not show Version 15.2 or the installed app behaves like an earlier version, do not edit data in the stale instance. Reopen online, apply the service-worker update, and verify Version 15.2 first.
