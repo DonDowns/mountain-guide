@@ -230,6 +230,6 @@ function expeditionSetup(){
  document.getElementById('copyExpeditionBriefBtn')?.addEventListener('click',copyExpeditionBrief);
  expeditionBuild(false);renderExpeditionBrief();
 }
-document.addEventListener('DOMContentLoaded',expeditionSetup);
+
 
 

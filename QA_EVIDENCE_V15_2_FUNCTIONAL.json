@@ -1,0 +1,480 @@
+{
+  "checks": [
+    {
+      "name": "initial no runtime errors",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ledger totals exact",
+      "passed": true,
+      "detail": "{'completed': 35, 'planned': 3, 'projected': 38, 'ranked': 31, 'ascentCount': 35, 'solo': 7, 'total': 58, 'totalNamed': 58, 'remaining': 20, 'goal': 50, 'firstAscent': {'peak': {'name': 'Longs Peak', 'range': 'Front Range', 'status': 'completed', 'ranked': True, 'elevation': 14259, 'route': 'Keyhole Route', 'difficulty': 'Class 3', 'miles': 14.5, 'gain': 5100, 'url': 'https://www.14ers.com/route.php?route=long1', 'ascents': [{'date': '2011-09-04', 'partners': 'Started with Greg and Calvin; summited separately after the group became separated', 'solo': False, 'note': 'Loved this climb. Very challenging, and one Don wants to repeat.', 'gear': 'Sling pack, running CamelBak, basketball shorts, gray Under Armour, and black muscle shirt.', 'memory': 'Don had no camera after getting separated from Greg and Calvin, then met another climber who promised to send a summit photo.', 'milestone': 'Don\u2019s first 14er \u2014 September 4, 2011.'}]}, 'ascent': {'date': '2011-09-04', 'partners': 'Started with G"
+    },
+    {
+      "name": "all ledger elevations present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "PEAKS derived count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route IDs unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route peaks exist",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "weather point IDs unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trip seed protected",
+      "passed": true,
+      "detail": "[{'id': 'lake-como-2026', 'schemaVersion': 1, 'name': 'Lake Como / Blanca / Ellingwood / Mount Lindsey 2026', 'peak': 'Blanca Peak', 'routeId': 'elli3', 'startPointId': 'lake', 'climbDate': '2026-08-23', 'startDate': '2026-08-19', 'endDate': '2026-08-25', 'plannedStart': '04:15', 'turnaround': '11:30', 'partners': 'Don Downs and climbing group', 'vehicle': 'Audi Q5', 'lodging': 'Lake Como camp; Fort Garland lodging before Mount Lindsey', 'summitWeatherId': 'blanca', 'accessWeatherId': 'lake', 'notes': 'Blanca + Ellingwood primary summit day; Mount Lindsey separate Monday objective; Great Sand Dunes and Zapata Falls family day Friday.', 'prep': {'gpx': False, 'map': False, 'photos': False, 'screens': False}, 'generatedChecks': {}, 'systemTrip': True, 'createdAt': '2026-08-03T00:00:00.000Z', 'updatedAt': '2026-08-04T04:26:14.523Z'}]"
+    },
+    {
+      "name": "ledger description has no undefined",
+      "passed": true,
+      "detail": "Search all 58 named summits: 35 completed, 3 planned, and 20 remaining."
+    },
+    {
+      "name": "footer current version",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Mountain Intelligence field editable",
+      "passed": true,
+      "detail": "{'disabled': False, 'readOnly': False, 'color': 'rgb(21, 37, 45)', 'fill': 'rgb(21, 37, 45)', 'opacity': '1', 'pointer': 'auto', 'bg': 'rgb(247, 241, 229)'}"
+    },
+    {
+      "name": "Mountain Intelligence field visible",
+      "passed": true,
+      "detail": "{'disabled': False, 'readOnly': False, 'color': 'rgb(21, 37, 45)', 'fill': 'rgb(21, 37, 45)', 'opacity': '1', 'pointer': 'auto', 'bg': 'rgb(247, 241, 229)'}"
+    },
+    {
+      "name": "Mountain Intelligence search: Evans",
+      "passed": true,
+      "detail": "Mount Blue Sky\nFront Range\nCOMPLETED\nMount Bierstadt\nFront Range\nCOMPLETED"
+    },
+    {
+      "name": "Mountain Intelligence search: Mount Evans",
+      "passed": true,
+      "detail": "Mount Blue Sky\nFront Range\nCOMPLETED\nMount Bierstadt\nFront Range\nCOMPLETED"
+    },
+    {
+      "name": "Mountain Intelligence search: Mt Evans",
+      "passed": true,
+      "detail": "Mount Blue Sky\nFront Range\nCOMPLETED"
+    },
+    {
+      "name": "Mountain Intelligence search: David Harbin",
+      "passed": true,
+      "detail": "El Diente Peak\nSan Juan Mountains\nCOMPLETED\nNorth Eolus\nSan Juan Mountains\nCOMPLETED\nWilson Peak\nSan Juan Mountains\nCOMPLETED\nChallenger Point\nSangre de Cristo Range\nCOMPLETED\nKit Carson Peak\nSangre de Cristo Range\nCOMPLETED\nMount Antero\nSawatch Range\nCOMPLETED\nMount Columbia\nSawatch Range\nCOMPLETED\nMount Harvard\nSawatch Range\nCOMPLETED\nMount Shavano\nSawatch Range\nCOMPLETED\nTabeguache Peak\nSawatch Range\nCOMPLETED"
+    },
+    {
+      "name": "Mountain Intelligence search: Class 4",
+      "passed": true,
+      "detail": "Capitol Peak\nElk Mountains\nREMAINING\nNorth Maroon Peak\nElk Mountains\nREMAINING\nPyramid Peak\nElk Mountains\nREMAINING\nEl Diente Peak\nSan Juan Mountains\nCOMPLETED\nMount Wilson\nSan Juan Mountains\nREMAINING\nSunlight Peak\nSan Juan Mountains\nCOMPLETED\nCrestone Needle\nSangre de Cristo Range\nREMAINING\nLittle Bear Peak\nSangre de Cristo Range\nREMAINING\nMount Lindsey\nSangre de Cristo Range\nPLANNED"
+    },
+    {
+      "name": "Summit ledger alias search: Evans",
+      "passed": true,
+      "detail": "Completed\nRecorded summits\n2\nCOLLAPSE\n\u25be\nCOMPLETED\nRANKED\nMount Blue Sky\n\nFront Range \u00b7 Class 2 \u00b7 14,268'\n\nJul 19, 2014\n1 recorded ascent\nView details \u2192\nCOMPLETED\nRANKED\nMount Bierstadt\n\nFront Range \u00b7 Class 2 \u00b7 14,066'\n\nJul 19, 2014\n1 recorded ascent\nView details \u2192"
+    },
+    {
+      "name": "Summit ledger alias search: Mount Evans",
+      "passed": true,
+      "detail": "Completed\nRecorded summits\n2\nCOLLAPSE\n\u25be\nCOMPLETED\nRANKED\nMount Blue Sky\n\nFront Range \u00b7 Class 2 \u00b7 14,268'\n\nJul 19, 2014\n1 recorded ascent\nView details \u2192\nCOMPLETED\nRANKED\nMount Bierstadt\n\nFront Range \u00b7 Class 2 \u00b7 14,066'\n\nJul 19, 2014\n1 recorded ascent\nView details \u2192"
+    },
+    {
+      "name": "Summit ledger alias search: Mt Evans",
+      "passed": true,
+      "detail": "Completed\nRecorded summits\n1\nCOLLAPSE\n\u25be\nCOMPLETED\nRANKED\nMount Blue Sky\n\nFront Range \u00b7 Class 2 \u00b7 14,268'\n\nJul 19, 2014\n1 recorded ascent\nView details \u2192"
+    },
+    {
+      "name": "summit detail opens",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "summit detail content",
+      "passed": true,
+      "detail": "RECORDED CLIMB HISTORY\nSep 24, 2011\nDan Downs, John Chisholm, and Matthew Bates\n\nMemory: Combo climb with Torreys Peak.\n\nGear noted: ASICS running shoes, cargo shorts, black leggings, Skins top, black muscle shirt, sling pack, and The North Face running CamelBak.\n\nCURRENT 14ERS.COM STANDARD-ROUTE REFERENCE\nNorth Slopes\nROUTE\nClass 1\nDIFFICULTY\n7.5 mi\nROUND TRIP\n3,000'\nELEVATION GAIN\n\nThese are current standard-route reference values, not a reconstruction of Don\u2019s historical GPS track or exact st"
+    },
+    {
+      "name": "route intelligence renders",
+      "passed": true,
+      "detail": "Combo: Blanca + Ellingwood\nCLASS 3\n15.25 mi\nROUND TRIP\n6,000 ft\nELEVATION GAIN\n2\nSUMMITS\n\nStarting from 8,800 ft \u2014 4WD SUV pull-offs.\n\nEXPOSURE\nConsiderable\nROCKFALL\nConsiderable\nROUTE-FINDING\nConsiderable\nCOMMITMENT\nConsiderable\n\nThe connecting ridge has two options: a Class 3 line, or dropping back to the standard trail before reascending. Choosing the Class 3 line is a separate decision from choosing the combo.\n\nRoute statistics and risk factors curated from 14ers.com standard-route listings. Verify current conditions before every climb. Dataset curated 2026-08-03."
+    },
+    {
+      "name": "Little Bear standard route flagged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "elevation profile label 8,000\u20138,800 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label +2,950\u20133,750 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label 11,750 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label +2,600 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label 14,350 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label \u2212293 ft net",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label 14,057 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label \u22122,307 ft net",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label +3,500 ft published total gain",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label Elevation change unavailable",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "elevation profile label 14,055 ft",
+      "passed": true,
+      "detail": "01\nLake Como approach\nPlanning profile \u00b7 not GPS\nParking\nLake Como\nParking\n8,000\u20138,800 ft\nAscent segment\n+2,950\u20133,750 ft\nDepends on actual parking elevation\nLake Como camp\n11,750 ft\n\nLet road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.\n\n02\nBlanca + Ellingwood\nSchematic traverse\nLake Como\nBlanca\nEllingwood\nReturn\nLake Como camp\n11,750 ft\nLake Como \u2192 Blanca\n+2,600 ft\nBlanca Peak\n14,350 ft\nBlanca \u2192 Ellingwood\n\u2212293 ft net\nEndpoint difference; actual traverse includes additional loss and regain\nEllingwood Point\n14,057 ft\nEllingwood \u2192 Lake Como\n\u22122,307 ft net\nEndpoint difference; not total descent mileage or cumulative change\nReturn to Lake Como\n11,750 ft\n\nThe traverse remains optional. Weather, rock, time and every climber\u2019s comfort decide the sequence.\n\n03\nMount Lindsey\nSchematic out-and-back\nTrailhead\nSummit\nReturn\nTrailhead\nAbsolute elevation unavailable\nNot stored in the authoritative route profile\nAscent\n+3,500 ft published "
+    },
+    {
+      "name": "three elevation data panels",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "expedition preview generated",
+      "passed": true,
+      "detail": "Mount Sneffels \u2014 South Slopes\nStandard route\nEasy Class 3\nClass\n6 mi\nDistance\n2,900 ft\nGain\n04:15\nPlanned start\n07:58\nTurn target\n\nStandard vehicle may be suitable; verify current trailhead road and parking conditions.\n\nEstimated moving time: 6 hours. Review against your pace, current conditions, access, and group."
+    },
+    {
+      "name": "expedition build adds trip",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trip save",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trip duplicate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "protected seed still present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "custom gear add",
+      "passed": true,
+      "detail": "r\n  AvailabilityOwnedRentBorrowShared / assignedConditions-dependentVerify before trip\n  Default placeWear / immediate accessMain packSummit or day packVehicle / lodgingShared group gearConditional\n  Weight oz\n  \n \n  Vehicle reserve waterWater \u00b7 Travel, trailhead, and post-hike reserve.\n  AvailabilityOwnedRentBorrowShared / assignedConditions-dependentVerify before trip\n  Default placeWear / immediate accessMain packSummit or day packVehicle / lodgingShared group gearConditional\n  Weight oz\n  \n "
+    },
+    {
+      "name": "custom gear persisted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "focus opens",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "AI opens",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "AI context uses active trip",
+      "passed": true,
+      "detail": "{'active': 'Audit Test Trip \u2014 copy', 'preview': 'MOUNTAIN GUIDE CONTEXT\\nApp: Don Downs Mountain Guide, Version 15.2\\nTrip: Audit Test Trip \u2014 copy; primary peak Mount Sneffels; route Mount Sneffels \u2014 South Slopes; climb date 2026-09-15; trail start 04:15; turnaround 07:58; partners not set; transportation Audi Q5; lodging/camp Consider nearby lodging or camping to protect an early trail start.\\nSelected objective: Blanca + Ellingwood; planned start 4:15 AM; turnaround/exit 11:30 AM; Below exposed high terrain by late morning.\\nReadiness: 0% of sav'}"
+    },
+    {
+      "name": "journal persisted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "command starts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "command pauses",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "command journal added",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "archive created",
+      "passed": true,
+      "detail": "[{'id': 'archive-1785817576761-s8d4dv', 'tripId': 'trip-1785817576370-1engh5', 'tripName': 'Audit Test Trip \u2014 copy', 'peak': 'Mount Sneffels', 'routeId': 'snef1', 'climbDate': '2026-09-15', 'partners': '', 'result': 'unknown', 'actualStart': '04:26', 'actualSummit': '', 'actualTurn': '', 'actualFinish': '', 'weatherObserved': '', 'gearReflection': '', 'nutritionReflection': '', 'routeReflection': 'Generated as a day expedition using the verified standard-route profile. Review all fields before saving.', 'wentWell': '', 'changeNext': '', 'favoriteMemory': '', 'spiritualReflection': '', 'photoReferences': '', 'lessons': '', 'fieldJournal': [{'id': 'journal-1785817576725', 'time': '2026-08-04T04:26:16.725Z', 'kind': 'note', 'text': 'Audit field note'}], 'decisionSnapshot': {}, 'communicationSnapshot': {}, 'nutritionLog': [], 'stageIndex': 0, 'elapsedMs': 114, 'commandSessionStartedAt': '2026-08-04T04:26:16.629Z', 'commandSessionEndedAt': '', 'createdAt': '2026-08-04T04:26:16.761Z', 'updat"
+    },
+    {
+      "name": "archive saved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Insights finds archive",
+      "passed": true,
+      "detail": "{'title': 'Results for \u201caudit success\u201d', 'results': '\\n  \\n   Mount Sneffels\\n   Tue, Sep 15, 2026 \u00b7 partners not recorded \u00b7 Not recorded\\n  '}"
+    },
+    {
+      "name": "data export download",
+      "passed": true,
+      "detail": "don-downs-mountain-guide-backup-2026-08-04.json"
+    },
+    {
+      "name": "no document horizontal overflow",
+      "passed": true,
+      "detail": "0"
+    },
+    {
+      "name": "no runtime errors after scenarios",
+      "passed": true,
+      "detail": "[]"
+    }
+  ],
+  "logs": [],
+  "dialogs": [],
+  "errors": [],
+  "style": {
+    "disabled": false,
+    "readOnly": false,
+    "color": "rgb(21, 37, 45)",
+    "fill": "rgb(21, 37, 45)",
+    "opacity": "1",
+    "pointer": "auto",
+    "bg": "rgb(247, 241, 229)"
+  },
+  "facts": {
+    "completed": 35,
+    "planned": 3,
+    "projected": 38,
+    "ranked": 31,
+    "ascentCount": 35,
+    "solo": 7,
+    "total": 58,
+    "totalNamed": 58,
+    "remaining": 20,
+    "goal": 50,
+    "firstAscent": {
+      "peak": {
+        "name": "Longs Peak",
+        "range": "Front Range",
+        "status": "completed",
+        "ranked": true,
+        "elevation": 14259,
+        "route": "Keyhole Route",
+        "difficulty": "Class 3",
+        "miles": 14.5,
+        "gain": 5100,
+        "url": "https://www.14ers.com/route.php?route=long1",
+        "ascents": [
+          {
+            "date": "2011-09-04",
+            "partners": "Started with Greg and Calvin; summited separately after the group became separated",
+            "solo": false,
+            "note": "Loved this climb. Very challenging, and one Don wants to repeat.",
+            "gear": "Sling pack, running CamelBak, basketball shorts, gray Under Armour, and black muscle shirt.",
+            "memory": "Don had no camera after getting separated from Greg and Calvin, then met another climber who promised to send a summit photo.",
+            "milestone": "Don\u2019s first 14er \u2014 September 4, 2011."
+          }
+        ]
+      },
+      "ascent": {
+        "date": "2011-09-04",
+        "partners": "Started with Greg and Calvin; summited separately after the group became separated",
+        "solo": false,
+        "note": "Loved this climb. Very challenging, and one Don wants to repeat.",
+        "gear": "Sling pack, running CamelBak, basketball shorts, gray Under Armour, and black muscle shirt.",
+        "memory": "Don had no camera after getting separated from Greg and Calvin, then met another climber who promised to send a summit photo.",
+        "milestone": "Don\u2019s first 14er \u2014 September 4, 2011."
+      }
+    },
+    "milestones": [
+      {
+        "peak": {
+          "name": "Longs Peak",
+          "range": "Front Range",
+          "status": "completed",
+          "ranked": true,
+          "elevation": 14259,
+          "route": "Keyhole Route",
+          "difficulty": "Class 3",
+          "miles": 14.5,
+          "gain": 5100,
+          "url": "https://www.14ers.com/route.php?route=long1",
+          "ascents": [
+            {
+              "date": "2011-09-04",
+              "partners": "Started with Greg and Calvin; summited separately after the group became separated",
+              "solo": false,
+              "note": "Loved this climb. Very challenging, and one Don wants to repeat.",
+              "gear": "Sling pack, running CamelBak, basketball shorts, gray Under Armour, and black muscle shirt.",
+              "memory": "Don had no camera after getting separated from Greg and Calvin, then met another climber who promised to send a summit photo.",
+              "milestone": "Don\u2019s first 14er \u2014 September 4, 2011."
+            }
+          ]
+        },
+        "ascent": {
+          "date": "2011-09-04",
+          "partners": "Started with Greg and Calvin; summited separately after the group became separated",
+          "solo": false,
+          "note": "Loved this climb. Very challenging, and one Don wants to repeat.",
+          "gear": "Sling pack, running CamelBak, basketball shorts, gray Under Armour, and black muscle shirt.",
+          "memory": "Don had no camera after getting separated from Greg and Calvin, then met another climber who promised to send a summit photo.",
+          "milestone": "Don\u2019s first 14er \u2014 September 4, 2011."
+        }
+      },
+      {
+        "peak": {
+          "name": "Mount Massive",
+          "range": "Sawatch Range",
+          "status": "completed",
+          "ranked": true,
+          "elevation": 14427,
+          "route": "East Slopes",
+          "difficulty": "Class 2",
+          "miles": 13.75,
+          "gain": 4500,
+          "url": "https://www.14ers.com/route.php?route=mass1",
+          "ascents": [
+            {
+              "date": "2016-07-30",
+              "partners": "Caleb Downs",
+              "solo": false,
+              "gear": "Yellow North Face rain jacket, Cabela\u2019s pack, and trail running shoes.",
+              "memory": "Don and Caleb\u2019s first 14er with just the two of them, beginning at 2:30 AM for a sunrise summit.",
+              "milestone": "First sunrise summit",
+              "conditions": "Great weather, cool morning, dark headlamp start, and one early wrong turn that added about half a mile."
+            }
+          ]
+        },
+        "ascent": {
+          "date": "2016-07-30",
+          "partners": "Caleb Downs",
+          "solo": false,
+          "gear": "Yellow North Face rain jacket, Cabela\u2019s pack, and trail running shoes.",
+          "memory": "Don and Caleb\u2019s first 14er with just the two of them, beginning at 2:30 AM for a sunrise summit.",
+          "milestone": "First sunrise summit",
+          "conditions": "Great weather, cool morning, dark headlamp start, and one early wrong turn that added about half a mile."
+        }
+      },
+      {
+        "peak": {
+          "name": "Mount Princeton",
+          "range": "Sawatch Range",
+          "status": "completed",
+          "ranked": true,
+          "elevation": 14200,
+          "route": "East Slopes",
+          "difficulty": "Class 2",
+          "miles": 6.5,
+          "gain": 3200,
+          "url": "https://www.14ers.com/route.php?route=prin1",
+          "ascents": [
+            {
+              "date": "2019-09-17",
+              "partners": "Vonda Downs, Caleb Downs, Shelby Downs, Marin Holm, and LinZhi Downs",
+              "solo": false,
+              "note": "LinZhi climbed her first 14er. Vonda fought through knee pain on the descent.",
+              "memory": "A family climb and summit pregnancy announcement for Caleb and Shelby\u2019s first child, Fennec Scott Downs.",
+              "milestone": "Family summit celebration."
+            }
+          ]
+        },
+        "ascent": {
+          "date": "2019-09-17",
+          "partners": "Vonda Downs, Caleb Downs, Shelby Downs, Marin Holm, and LinZhi Downs",
+          "solo": false,
+          "note": "LinZhi climbed her first 14er. Vonda fought through knee pain on the descent.",
+          "memory": "A family climb and summit pregnancy announcement for Caleb and Shelby\u2019s first child, Fennec Scott Downs.",
+          "milestone": "Family summit celebration."
+        }
+      },
+      {
+        "peak": {
+          "name": "Pikes Peak",
+          "range": "Front Range",
+          "status": "completed",
+          "ranked": true,
+          "elevation": 14109,
+          "route": "East Slopes",
+          "difficulty": "Class 1",
+          "miles": 24,
+          "gain": 7600,
+          "url": "https://www.14ers.com/route.php?route=pikeeast",
+          "ascents": [
+            {
+              "date": "2019-10-02",
+              "partners": "Caleb Downs, Levi, Justin, and Chin",
+              "solo": false,
+              "note": "Summited in about six hours.",
+              "gear": "Cargo pants, sling pack, bottle belt; Levi used Don\u2019s runner\u2019s CamelBak.",
+              "memory": "A beautiful day and Caleb and Don\u2019s first 14er together.",
+              "milestone": "First 14er climbed with Caleb \u2014 October 2, 2019."
+            }
+          ]
+        },
+        "ascent": {
+          "date": "2019-10-02",
+          "partners": "Caleb Downs, Levi, Justin, and Chin",
+          "solo": false,
+          "note": "Summited in about six hours.",
+          "gear": "Cargo pants, sling pack, bottle belt; Levi used Don\u2019s runner\u2019s CamelBak.",
+          "memory": "A beautiful day and Caleb and Don\u2019s first 14er together.",
+          "milestone": "First 14er climbed with Caleb \u2014 October 2, 2019."
+        }
+      }
+    ]
+  },
+  "passed": 56,
+  "total": 56
+}

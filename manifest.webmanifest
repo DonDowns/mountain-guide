@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Don Downs Mountain Guide \u2014 Alpine Edition",
+  "name": "Don Downs Mountain Guide",
   "short_name": "Mountain Guide",
-  "description": "A refined offline Colorado mountain guide with live forecasts, honest astronomical light times, Summit Focus, checklists and a personal 14er record.",
+  "description": "An offline-capable Colorado mountain planning and personal summit-history app with NWS forecasts, route intelligence, expedition tools, safety prompts, and local data export.",
   "start_url": "./?source=homescreen",
   "scope": "./",
   "display": "standalone",

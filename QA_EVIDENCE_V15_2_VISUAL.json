@@ -1,0 +1,20 @@
+[
+  {
+    "viewport": "mobile",
+    "width": 390,
+    "overflow": 0,
+    "errors": []
+  },
+  {
+    "viewport": "tablet",
+    "width": 768,
+    "overflow": 0,
+    "errors": []
+  },
+  {
+    "viewport": "desktop",
+    "width": 1440,
+    "overflow": 0,
+    "errors": []
+  }
+]

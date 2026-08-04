@@ -2,7 +2,6 @@
    Version 11.0 — Mountain Intelligence Database
    ============================================================ */
 let activeMountainIntelName='';
-
 function mountainSlug(name){
  return String(name||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }
@@ -50,11 +49,21 @@ function mountainAscents(peak){
 function mountainSearchText(peak){
  const routes=mountainRoutes(peak.name);
  const ascents=mountainAscents(peak);
+ const aliases=MOUNTAIN_SEARCH_ALIASES[peak.name]||[];
  return [
-  peak.name,peak.range,peak.status,peak.milestone||'',peak.memory||'',
-  ...routes.flatMap(r=>[r.label,r.cls,r.commitment||'',r.access||'',r.water||'']),
-  ...ascents.flatMap(a=>[a.date||'',a.partners||'',a.memory||'',a.gear||'',a.notes||''])
+  peak.name,peak.range,peak.status,peak.route||'',peak.difficulty||'',peak.note||'',peak.milestone||'',peak.memory||'',...aliases,
+  ...routes.flatMap(r=>[r.label,r.cls,r.commitment||'',r.access||'',r.water||'',r.note||'',r.url||'']),
+  ...ascents.flatMap(a=>[a.date||'',a.partners||'',a.memory||'',a.gear||'',a.notes||'',a.note||'',a.conditions||'',a.outingName||'',a.outingClass||''])
  ].join(' ').toLowerCase();
+}
+function mountainSearchRank(peak,q){
+ if(!q)return 0;
+ const name=peak.name.toLowerCase();
+ const aliases=(MOUNTAIN_SEARCH_ALIASES[peak.name]||[]).map(x=>x.toLowerCase());
+ if(name===q||aliases.includes(q))return 0;
+ if(name.startsWith(q))return 1;
+ if(aliases.some(x=>x.startsWith(q)))return 2;
+ return 3;
 }
 function mountainFilteredData(){
  const q=(document.getElementById('mountainIntelSearch')?.value||'').trim().toLowerCase();
@@ -65,7 +74,7 @@ function mountainFilteredData(){
   if(range!=='all'&&p.range!==range)return false;
   if(q&&!mountainSearchText(p).includes(q))return false;
   return true;
- }).sort((a,b)=>a.range.localeCompare(b.range)||a.name.localeCompare(b.name));
+ }).sort((a,b)=>mountainSearchRank(a,q)-mountainSearchRank(b,q)||a.range.localeCompare(b.range)||a.name.localeCompare(b.name));
 }
 function mountainPopulateRanges(){
  const el=document.getElementById('mountainIntelRange');if(!el||el.options.length>1)return;
@@ -282,15 +291,32 @@ async function mountainCopySummary(peak,route,gaps){
  try{await navigator.clipboard.writeText(lines.join('\n'));toast('Mountain summary copied')}
  catch(e){toast('Copy was not available')}
 }
+function mountainSearchInputReady(){
+ const input=document.getElementById('mountainIntelSearch');
+ if(!input)return null;
+ input.disabled=false;
+ input.readOnly=false;
+ input.removeAttribute('disabled');
+ input.removeAttribute('readonly');
+ input.style.pointerEvents='auto';
+ input.style.opacity='1';
+ return input;
+}
+function mountainSearchChanged(){
+ window.requestAnimationFrame(mountainRenderList);
+}
 function mountainIntelSetup(){
  mountainPopulateRanges();
- ['mountainIntelSearch','mountainIntelStatus','mountainIntelRange'].forEach(id=>{
-  const el=document.getElementById(id);
-  el?.addEventListener(id==='mountainIntelSearch'?'input':'change',mountainRenderList);
- });
+ const input=mountainSearchInputReady();
+ input?.addEventListener('input',mountainSearchChanged);
+ input?.addEventListener('keyup',mountainSearchChanged);
+ input?.addEventListener('search',mountainSearchChanged);
+ document.getElementById('mountainIntelStatus')?.addEventListener('change',mountainRenderList);
+ document.getElementById('mountainIntelRange')?.addEventListener('change',mountainRenderList);
  activeMountainIntelName=COLORADO_SUMMITS.find(p=>p.status==='planned')?.name||COLORADO_SUMMITS[0]?.name||'';
  mountainRenderList();
 }
-document.addEventListener('DOMContentLoaded',mountainIntelSetup);
+
+window.addEventListener('pageshow',()=>{mountainSearchInputReady();});
 
 

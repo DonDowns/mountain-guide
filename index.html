@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide Version 15 with modular JavaScript architecture and living mountain knowledge pages combining route, weather, trip, archive, partner, gear, photo, lesson, and spiritual records." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="#0b2b3d" name="theme-color"/><meta content="Don Downs Mountain Guide Version 15.2 with audited modular startup, full-system interface hardening, consistent mountain aliases, and explicit elevation-segment data." name="description"/><meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="Mountain Guide" name="apple-mobile-web-app-title"/>
 <link href="manifest.webmanifest" rel="manifest"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="styles.css" rel="stylesheet"/>
 <title>Don Downs Mountain Guide</title>
@@ -67,7 +67,7 @@
 </section><section class="trip-builder-section" id="trip-builder">
 <div class="section-head">
 <div>
-<div class="kicker">Version 9 · reusable expedition planning</div>
+<div class="kicker">Reusable expedition planning</div>
 <h2>Trip Builder</h2>
 </div>
 <p>Load a standard route, create the trip context, and preserve dates, partners, transportation, lodging, weather points, route-file preparation, and field timing in one reusable record.</p>
@@ -75,7 +75,7 @@
 <div class="expedition-builder-panel" id="expeditionBuilderPanel">
 <div class="trip-builder-head">
 <div>
-<div class="kicker">Version 10 · intelligent setup</div>
+<div class="kicker">Intelligent expedition setup</div>
 <h3>Build an expedition</h3>
 </div>
 <span class="device-pill">Standard route default</span>
@@ -245,7 +245,7 @@
 <a href="#" id="tripOpenRoute" rel="noopener" target="_blank">Open standard route on 14ers.com</a>
 <a href="https://www.14ers.com/mobileapp-faq" rel="noopener" target="_blank">14ers.com offline maps/images instructions</a>
 </div>
-<p class="route-disclaimer">Version 9.0 tracks whether route files and offline media have been prepared. It does not yet redistribute third-party GPX files or provide turn-by-turn navigation.</p>
+<p class="route-disclaimer">This app tracks whether route files and offline media have been prepared. It does not redistribute third-party GPX files or provide turn-by-turn navigation.</p>
 </div><div class="trip-generated-plan" id="tripGeneratedPlan">
 <div class="trip-builder-head">
 <div>
@@ -324,7 +324,7 @@
 <div class="section-head"><div><div class="kicker">Night-before and morning-of</div><h2>Trip Intelligence</h2></div><p>Live NOAA weather updates automatically. Current 14ers.com condition and trailhead pages open from the exact authoritative links, then you record when each was reviewed.</p></div>
 <div class="intel-banner" data-state="neutral" id="intelBanner">
 <div><div class="kicker">Overall status</div><strong id="intelHeadline">Planning phase</strong><p id="intelSummary">Forecasts and reviews will become critical as the trip enters the seven-day weather horizon.</p></div>
-<div class="intel-actions"><button class="intel-primary" id="refreshIntelBtn">Refresh Trip Intelligence</button><button id="shareIntelBtn" type="button">Share status</button><button id="openIntelDetailsBtn">Review details</button></div>
+<div class="intel-actions"><button type="button" class="intel-primary" id="refreshIntelBtn">Refresh Trip Intelligence</button><button id="shareIntelBtn" type="button">Share status</button><button type="button" id="openIntelDetailsBtn">Review details</button></div>
 </div>
 <div class="grid g3 intel-metrics">
 <div aria-label="Open Weather center" class="card metric dashboard-shortcut" data-dashboard-target="weather" data-shortcut-hint="Tap to open weather center →" id="liveWeatherMetric" role="button" tabindex="0" title="Open Weather center"><div><div class="kicker">Live weather</div><strong id="weatherFreshness">Not loaded</strong><small id="weatherFreshnessNote">NOAA/NWS data will be saved for offline use.</small></div></div>
@@ -344,13 +344,13 @@
 <details open=""><summary>14ers.com Quick Actions and review timestamps</summary><div class="detail-body">
 <div class="intel-note"><b>Deliberate review:</b> 14ers.com does not provide a documented public API for this app. Open the exact current page, read the newest entries, return here and tap <b>Mark reviewed now</b>. The app stores the review time offline.</div>
 <div class="review-grid">
-<article class="review-card" data-review-card="blanca"><div><div class="kicker">Peak conditions</div><h3>Blanca Peak</h3></div><p id="review-blanca-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004" rel="noopener" target="_blank">Open current reports</a><button data-mark-reviewed="blanca">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="ellingwood"><div><div class="kicker">Peak conditions</div><h3>Ellingwood Point</h3></div><p id="review-ellingwood-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10042" rel="noopener" target="_blank">Open current reports</a><button data-mark-reviewed="ellingwood">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="lindsey"><div><div class="kicker">Peak conditions + access</div><h3>Mount Lindsey</h3></div><p id="review-lindsey-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10043" rel="noopener" target="_blank">Open current reports</a><a href="https://www.mountlindseywaiver.com/" rel="noopener" target="_blank">Open required waiver</a><button data-mark-reviewed="lindsey">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="lakeComo"><div><div class="kicker">Trailhead status</div><h3>Lake Como</h3></div><p id="review-lakeComo-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01" rel="noopener" target="_blank">Open trailhead status</a><button data-mark-reviewed="lakeComo">Mark reviewed now</button></div></article>
-<article class="review-card" data-review-card="huerfano"><div><div class="kicker">Trailhead status</div><h3>Huerfano / Lily Lake</h3></div><p id="review-huerfano-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc02" rel="noopener" target="_blank">Open trailhead status</a><button data-mark-reviewed="huerfano">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="blanca"><div><div class="kicker">Peak conditions</div><h3>Blanca Peak</h3></div><p id="review-blanca-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004" rel="noopener" target="_blank">Open current reports</a><button type="button" data-mark-reviewed="blanca">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="ellingwood"><div><div class="kicker">Peak conditions</div><h3>Ellingwood Point</h3></div><p id="review-ellingwood-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10042" rel="noopener" target="_blank">Open current reports</a><button type="button" data-mark-reviewed="ellingwood">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="lindsey"><div><div class="kicker">Peak conditions + access</div><h3>Mount Lindsey</h3></div><p id="review-lindsey-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10043" rel="noopener" target="_blank">Open current reports</a><a href="https://www.mountlindseywaiver.com/" rel="noopener" target="_blank">Open required waiver</a><button type="button" data-mark-reviewed="lindsey">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="lakeComo"><div><div class="kicker">Trailhead status</div><h3>Lake Como</h3></div><p id="review-lakeComo-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01" rel="noopener" target="_blank">Open trailhead status</a><button type="button" data-mark-reviewed="lakeComo">Mark reviewed now</button></div></article>
+<article class="review-card" data-review-card="huerfano"><div><div class="kicker">Trailhead status</div><h3>Huerfano / Lily Lake</h3></div><p id="review-huerfano-status">Not reviewed on this device.</p><div class="review-actions"><a href="https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc02" rel="noopener" target="_blank">Open trailhead status</a><button type="button" data-mark-reviewed="huerfano">Mark reviewed now</button></div></article>
 </div>
-<div class="toolbar" style="margin-top:12px"><button id="clearReviewsBtn">Clear report-review timestamps</button></div>
+<div class="toolbar" style="margin-top:12px"><button type="button" id="clearReviewsBtn">Clear report-review timestamps</button></div>
 </div></details>
 <div class="grid g2 intel-checklists">
 <details open=""><summary>Night-Before Review</summary><div class="detail-body checks">
@@ -371,7 +371,7 @@
 <label><input data-intel-check="morning-turn" type="checkbox"/>State the group’s turnaround decision aloud</label>
 </div></details>
 </div>
-<div class="toolbar"><button id="resetIntelWorkflowBtn">Reset intelligence workflow</button><button data-export-device="1" type="button">Export this device’s data</button></div>
+<div class="toolbar"><button type="button" id="resetIntelWorkflowBtn">Reset intelligence workflow</button><button data-export-device="1" type="button">Export this device’s data</button></div>
 </section>
 <section class="photo-strip mountain-stories" id="stories">
 <div class="section-head">
@@ -581,9 +581,9 @@
 </section>
 <section id="routes"><div class="section-head"><div><div class="kicker">Terrain and judgment</div><h2>Route center</h2></div><p>Planning summaries do not replace downloaded 14ers.com route text, photographs, GPX files and current condition reports.</p></div>
 <div aria-label="Schematic route elevation profiles" class="route-profiles">
-<article class="route-profile"><div class="route-profile-head"><div><span>01</span><h3>Lake Como approach</h3></div><small>Planning profile · not GPS</small></div><svg aria-label="Schematic climb from parking to Lake Como" role="img" viewbox="0 0 520 150"><defs><lineargradient id="rp1" x1="0" x2="1" y1="0" y2="0"><stop stop-color="#6c8f82"></stop><stop offset="1" stop-color="#e8a64e"></stop></lineargradient></defs><path class="profile-fill" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22 V142 H10Z"></path><path class="profile-line" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22"></path><circle cx="10" cy="132" r="5"></circle><circle cx="510" cy="22" r="5"></circle><text x="10" y="148">8.0–8.8k parking</text><text x="390" y="17">11,750 ft camp</text></svg><p>Let road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.</p></article>
-<article class="route-profile featured"><div class="route-profile-head"><div><span>02</span><h3>Blanca + Ellingwood</h3></div><small>Schematic traverse</small></div><svg aria-label="Schematic profile from Lake Como to Blanca and Ellingwood" role="img" viewbox="0 0 520 150"><path class="profile-fill" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130 V142 H10Z"></path><path class="profile-line" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130"></path><circle cx="10" cy="130" r="5"></circle><circle cx="305" cy="18" r="5"></circle><circle cx="405" cy="36" r="5"></circle><text x="10" y="148">Lake Como</text><text x="260" y="13">Blanca 14,350</text><text x="370" y="31">Ellingwood 14,057</text></svg><p>The traverse remains optional. Weather, rock, time and every climber’s comfort decide the sequence.</p></article>
-<article class="route-profile"><div class="route-profile-head"><div><span>03</span><h3>Mount Lindsey</h3></div><small>Schematic out-and-back</small></div><svg aria-label="Schematic Mount Lindsey climb and return" role="img" viewbox="0 0 520 150"><path class="profile-fill" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132 V142 H10Z"></path><path class="profile-line" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132"></path><circle cx="10" cy="132" r="5"></circle><circle cx="365" cy="18" r="5"></circle><circle cx="510" cy="132" r="5"></circle><text x="10" y="148">Trailhead</text><text x="325" y="13">14,055 ft</text><text x="455" y="148">Return</text></svg><p>Access and the signed ranch waiver are part of the route, not administrative afterthoughts.</p></article>
+<article class="route-profile"><div class="route-profile-head"><div><span>01</span><h3>Lake Como approach</h3></div><small>Planning profile · not GPS</small></div><svg aria-label="Schematic climb from parking at 8,000 to 8,800 feet to Lake Como at 11,750 feet" role="img" viewbox="0 0 520 150"><defs><lineargradient id="rp1" x1="0" x2="1" y1="0" y2="0"><stop stop-color="#6c8f82"></stop><stop offset="1" stop-color="#e8a64e"></stop></lineargradient></defs><path class="profile-fill" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22 V142 H10Z"></path><path class="profile-line" d="M10 132 C95 130 140 116 200 105 S300 78 350 57 S430 31 510 22"></path><circle cx="10" cy="132" r="5"></circle><circle cx="510" cy="22" r="5"></circle><text x="10" y="148">Parking</text><text x="390" y="17">Lake Como</text></svg><div class="elevation-segments" aria-label="Lake Como approach elevation data"><div><b>Parking</b><span>8,000–8,800 ft</span></div><div class="segment-change gain"><b>Ascent segment</b><span>+2,950–3,750 ft</span><small>Depends on actual parking elevation</small></div><div><b>Lake Como camp</b><span>11,750 ft</span></div></div><p>Let road clearance determine the starting point; preserve enough margin to arrive, recover, filter water and sleep.</p></article>
+<article class="route-profile featured"><div class="route-profile-head"><div><span>02</span><h3>Blanca + Ellingwood</h3></div><small>Schematic traverse</small></div><svg aria-label="Schematic profile from Lake Como at 11,750 feet to Blanca Peak at 14,350 feet, Ellingwood Point at 14,057 feet, and return" role="img" viewbox="0 0 520 150"><path class="profile-fill" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130 V142 H10Z"></path><path class="profile-line" d="M10 130 C75 118 120 91 180 70 S250 30 305 18 S360 44 405 36 S465 82 510 130"></path><circle cx="10" cy="130" r="5"></circle><circle cx="305" cy="18" r="5"></circle><circle cx="405" cy="36" r="5"></circle><circle cx="510" cy="130" r="5"></circle><text x="10" y="148">Lake Como</text><text x="258" y="13">Blanca</text><text x="372" y="31">Ellingwood</text><text x="468" y="148">Return</text></svg><div class="elevation-segments" aria-label="Blanca and Ellingwood elevation data"><div><b>Lake Como camp</b><span>11,750 ft</span></div><div class="segment-change gain"><b>Lake Como → Blanca</b><span>+2,600 ft</span></div><div><b>Blanca Peak</b><span>14,350 ft</span></div><div class="segment-change loss"><b>Blanca → Ellingwood</b><span>−293 ft net</span><small>Endpoint difference; actual traverse includes additional loss and regain</small></div><div><b>Ellingwood Point</b><span>14,057 ft</span></div><div class="segment-change loss"><b>Ellingwood → Lake Como</b><span>−2,307 ft net</span><small>Endpoint difference; not total descent mileage or cumulative change</small></div><div><b>Return to Lake Como</b><span>11,750 ft</span></div></div><p>The traverse remains optional. Weather, rock, time and every climber’s comfort decide the sequence.</p></article>
+<article class="route-profile"><div class="route-profile-head"><div><span>03</span><h3>Mount Lindsey</h3></div><small>Schematic out-and-back</small></div><svg aria-label="Schematic Mount Lindsey climb from a trailhead elevation not stored in the app to the 14,055-foot summit and return" role="img" viewbox="0 0 520 150"><path class="profile-fill" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132 V142 H10Z"></path><path class="profile-line" d="M10 132 C80 125 130 105 190 87 S265 63 315 35 S385 18 425 56 S470 105 510 132"></path><circle cx="10" cy="132" r="5"></circle><circle cx="365" cy="18" r="5"></circle><circle cx="510" cy="132" r="5"></circle><text x="10" y="148">Trailhead</text><text x="325" y="13">Summit</text><text x="455" y="148">Return</text></svg><div class="elevation-segments" aria-label="Mount Lindsey elevation data"><div><b>Trailhead</b><span>Absolute elevation unavailable</span><small>Not stored in the authoritative route profile</small></div><div class="segment-change gain"><b>Ascent</b><span>+3,500 ft published total gain</span><small>Net waypoint change unavailable without a stored trailhead elevation</small></div><div><b>Mount Lindsey summit</b><span>14,055 ft</span></div><div class="segment-change unavailable"><b>Descent segment</b><span>Elevation change unavailable</span><small>No trailhead elevation is stored; no estimate has been inserted</small></div><div><b>Return trailhead</b><span>Absolute elevation unavailable</span></div></div><p>Access and the signed ranch waiver are part of the route, not administrative afterthoughts.</p></article>
 </div>
 <div class="grid g3 route-summary-grid">
 <div class="card soft"><h3>Lake Como approach</h3><p>Operate from an 8,000–8,800 ft parking assumption. Do not force the approach vehicle higher than clearance and conditions support.</p></div>
@@ -825,7 +825,7 @@
 <section class="command-center-section" id="command-center">
 <div class="section-head">
 <div>
-<div class="kicker">Version 12 · field companion</div>
+<div class="kicker">Field companion</div>
 <h2>Expedition Command Center</h2>
 </div>
 <p>A one-screen operational view for the active trip. It organizes your own timing, saved forecast, route preparation, communication, nutrition, notes, and decision questions. It does not track your location or decide whether to continue.</p>
@@ -921,7 +921,7 @@
 <article class="command-panel">
 <div class="kicker">Mountain notes</div>
 <h3>Your route-specific reminders</h3>
-<textarea id="commandMountainNotes" maxlength="2500" placeholder="Loose rock below saddle, missed cairn, water source, mosquitoes, helmet point, photography location…" rows="7"></textarea>
+<textarea aria-label="Mountain field notes" id="commandMountainNotes" maxlength="2500" placeholder="Loose rock below saddle, missed cairn, water source, mosquitoes, helmet point, photography location…" rows="7"></textarea>
 <button id="commandSaveMountainNotesBtn" type="button">Save notes to this trip</button>
 </article>
 <article class="command-panel command-journal-panel">
@@ -930,7 +930,7 @@
 <button id="commandCopyJournalBtn" type="button">Copy journal</button>
 </div>
 <div class="command-journal-entry">
-<textarea id="commandJournalInput" maxlength="1200" placeholder="Wind stronger than forecast, saw mountain goats, partner fatigue, great campsite…" rows="3"></textarea>
+<textarea aria-label="Command center journal entry" id="commandJournalInput" maxlength="1200" placeholder="Wind stronger than forecast, saw mountain goats, partner fatigue, great campsite…" rows="3"></textarea>
 <button class="intel-primary" id="commandAddJournalBtn" type="button">Add note</button>
 </div>
 <div class="command-journal-list" id="commandJournalList"></div>
@@ -939,7 +939,7 @@
 </section><section class="archive-section" id="expedition-archive">
 <div class="section-head">
 <div>
-<div class="kicker">Version 13 · climbing journal</div>
+<div class="kicker">Climbing journal</div>
 <h2>Expedition Archive</h2>
 </div>
 <p>Preserve completed trips as searchable expedition records with actual timing, partners, route, field journal, weather observations, gear and nutrition reflections, photographs, lessons learned, favorite memory, and Scripture or prayer.</p>
@@ -1074,7 +1074,7 @@
 </section><section class="intelligence-engine-section" id="intelligence-engine">
 <div class="section-head">
 <div>
-<div class="kicker">Version 14.1 · experience intelligence</div>
+<div class="kicker">Experience intelligence</div>
 <h2>Expedition Insights</h2>
 </div>
 <p>Connect archived expeditions, partner history, gear reflections, route observations, and mountain records into evidence-based patterns from your own data. No invented conclusions and no safety clearance.</p>
@@ -1161,15 +1161,15 @@
 </section><section class="mountain-intelligence-section" id="mountain-intelligence">
 <div class="section-head">
 <div>
-<div class="kicker">Version 11 · personal mountain database</div>
+<div class="kicker">Personal mountain database</div>
 <h2>Mountain Intelligence</h2>
 </div>
-<p>Search all 58 Colorado 14ers and open a mountain page built from the summit ledger, verified route profiles, weather points, climb history, and personal photographs already stored in this app.</p>
+<p>Search all 58 Colorado 14ers and open a mountain page built from the summit ledger, route profiles, weather points, climb history, archives, and personal photographs. Former names such as Mount Evans are searchable aliases.</p>
 </div>
 <div class="mountain-intel-toolbar">
 <label class="trip-field mountain-search-field">
 <span>Search mountains, ranges, routes, partners, or notes</span>
-<input id="mountainIntelSearch" placeholder="Example: Sneffels, Elk, David Harbin, Class 3" type="search"/>
+<input aria-label="Search Mountain Intelligence" autocapitalize="none" autocomplete="off" id="mountainIntelSearch" inputmode="search" placeholder="Example: Evans, Blue Sky, Sneffels, Elk, David Harbin, Class 3" spellcheck="false" type="search"/>
 </label>
 <label class="trip-field">
 <span>Status</span>
@@ -1215,8 +1215,8 @@
 <div class="card soft"><h3>Return</h3><p>The summit matters most when gratitude, restraint and patience come home.</p></div>
 </div></section>
 <section id="journal"><div class="section-head"><div><div class="kicker">Saved locally</div><h2>Field journal</h2></div><p>Notes remain only in this browser’s local storage. Export a backup after the trip.</p></div>
-<div class="card"><textarea id="journalText" placeholder="Weather, summit times, partners, gear observations, nutrition, lessons learned, gratitude, photos to add…"></textarea>
-<div class="toolbar" style="margin-top:10px"><button data-export-device="1" type="button">Export this device’s data</button><button id="clearJournalBtn">Clear journal</button></div></div>
+<div class="card"><textarea aria-label="Field journal" id="journalText" placeholder="Weather, summit times, partners, gear observations, nutrition, lessons learned, gratitude, photos to add…"></textarea>
+<div class="toolbar" style="margin-top:10px"><button data-export-device="1" type="button">Export this device’s data</button><button type="button" id="clearJournalBtn">Clear journal</button></div></div>
 </section>
 <section id="emergency"><div class="section-head"><div><div class="kicker">Redundancy</div><h2>Communication and emergency</h2></div><p>The app supports decisions; it does not replace the inReach, downloaded navigation, paper guide or group judgment.</p></div>
 <div class="grid g2">
@@ -1228,7 +1228,7 @@
 </div></section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer">Don Downs Mountain Guide · Version 15.0</div>
+<div class="footer">Don Downs Mountain Guide · Version 15.2</div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
 <div class="story-viewer-top">
@@ -1341,6 +1341,5 @@
 </a>
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
-<div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn">Update now</button></div>
-
+<div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button type="button" id="applyUpdateBtn">Update now</button></div>
 <script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script></body></html>

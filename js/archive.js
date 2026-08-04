@@ -285,6 +285,6 @@ function archiveSetup(){
  document.getElementById('deleteArchiveBtn')?.addEventListener('click',archiveDelete);
  document.getElementById('copyArchiveBtn')?.addEventListener('click',archiveCopy);
 }
-document.addEventListener('DOMContentLoaded',archiveSetup);
+
 
 

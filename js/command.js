@@ -79,11 +79,10 @@ function commandCommunicationDefinitions(){
 }
 function commandWeatherSummary(trip){
  const ids=[trip?.summitWeatherId,trip?.accessWeatherId].filter(Boolean);
- const saved=ids.map(id=>weatherData[id]||storageGet(`ddmg-weather-${id}`)).filter(Boolean);
  const lines=[];
  ids.forEach(id=>{
   const loc=locationById(id)||futurePointById(id);
-  const data=weatherData[id];
+  const data=weatherStore[id];
   if(data?.summary)lines.push(`${loc?.name||id}: ${data.summary}`);
   else if(loc)lines.push(`${loc.name}: saved/current forecast not loaded in this session`);
  });
@@ -299,6 +298,6 @@ function commandSetup(){
  document.getElementById('commandAddJournalBtn')?.addEventListener('click',()=>commandAddJournal());
  document.getElementById('commandCopyJournalBtn')?.addEventListener('click',commandCopyJournal);
 }
-document.addEventListener('DOMContentLoaded',commandSetup);
+
 
 

@@ -25,5 +25,19 @@ function tripSetup(){
   el.addEventListener(el.type==='checkbox'?'change':'input',()=>{tripRenderContext();tripRenderGeneratedPlan()});
  });
 }
-document.addEventListener('DOMContentLoaded',tripSetup);
-
+function appBootstrap(){
+ setupDataTransferPanel();
+ populateFutureWeatherOptions();
+ tripSetup();
+ setupTripConditionsAdvisor();
+ riSetupRouteIntelligence();
+ coreInitialSetup();
+ setupConvertedHandlers();
+ expeditionSetup();
+ mountainIntelSetup();
+ commandSetup();
+ archiveSetup();
+ engineSetup();
+ weatherReviewSetup();
+}
+document.addEventListener('DOMContentLoaded',appBootstrap);

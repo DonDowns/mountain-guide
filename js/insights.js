@@ -211,7 +211,7 @@ function engineSetup(){
  });
  engineRender();
 }
-document.addEventListener('DOMContentLoaded',engineSetup);
+
 
 /* Version 14.1 — Weather source review and objective agreement */
 const WEATHER_SOURCE_REVIEW_KEY='ddmg-v14-1-weather-source-reviews';
@@ -249,5 +249,5 @@ function weatherAgreementSave(){const scope=weatherReviewScope(),r=weatherReview
 function weatherReviewClear(){const scope=weatherReviewScope();if(!weatherSourceReviews[scope]){toast('No saved comparison exists');return}if(!confirm('Clear the weather-source review and agreement record for the active trip?'))return;const next={...weatherSourceReviews};delete next[scope];weatherSourceReviews=next;storageSet(WEATHER_SOURCE_REVIEW_KEY,JSON.stringify(weatherSourceReviews));weatherReviewRender();if(typeof commandRenderWeather==='function')commandRenderWeather()}
 function weatherReviewSummary(trip=tripActive()){const r=weatherSourceReviews[trip?.id||'general']||{sources:{},agreement:{}};const c=weatherAgreementConfidence(r);return `${WEATHER_SOURCES.filter(s=>r.sources?.[s.id]).length}/${WEATHER_SOURCES.length} sources reviewed · ${c.label}`}
 function weatherReviewSetup(){weatherReviewRender();document.getElementById('weatherSourceReviewList')?.addEventListener('click',e=>{const b=e.target.closest('[data-weather-reviewed]');if(b)weatherMarkReviewed(b.dataset.weatherReviewed)});document.getElementById('weatherAgreementSaveBtn')?.addEventListener('click',weatherAgreementSave);document.getElementById('weatherSourceReviewClearBtn')?.addEventListener('click',weatherReviewClear)}
-document.addEventListener('DOMContentLoaded',weatherReviewSetup);
+
 
