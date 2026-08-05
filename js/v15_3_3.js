@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 const V=window.DDMG_CONFIG?.version||window.DDMG_VERSION||'unknown';
+const ROAD50_BUTTONS={road50My50:'my50',road50Remaining:'remaining',road50All:'all'};
 let scope='my50';
 function ledger(){return Array.isArray(window.COLORADO_SUMMITS)?window.COLORADO_SUMMITS:[]}
 function goalNames(){return new Set(ledger().filter(p=>p.road50).map(p=>p.name))}
@@ -25,7 +26,33 @@ function updateScope(){
  const all=document.getElementById('road50All');if(all)all.textContent=`All ${allCount}`;
  ['road50My50','road50Remaining','road50All'].forEach(id=>{const b=document.getElementById(id);if(!b)return;const active=(id==='road50My50'&&scope==='my50')||(id==='road50Remaining'&&scope==='remaining')||(id==='road50All'&&scope==='all');b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
 }
-function setScope(next){scope=next;try{localStorage.setItem('ddmg-road50-scope',scope)}catch{}const search=document.getElementById('summitSearch');if(search)search.value='';updateScope()}
+function setScope(next){
+ if(!['my50','remaining','all'].includes(next))next='my50';
+ scope=next;
+ document.documentElement.dataset.road50Scope=scope;
+ try{localStorage.setItem('ddmg-road50-scope',scope)}catch{}
+ const search=document.getElementById('summitSearch');if(search)search.value='';
+ updateScope();
+ setTimeout(updateScope,40);
+ setTimeout(updateScope,180);
+}
+function bindRoad50Controls(){
+ const apply=event=>{
+  const button=event.target.closest?.('#road50My50,#road50Remaining,#road50All');
+  if(!button)return;
+  event.preventDefault();
+  event.stopPropagation();
+  setScope(ROAD50_BUTTONS[button.id]||'my50');
+ };
+ document.addEventListener('click',apply,true);
+ document.addEventListener('keydown',event=>{
+  if(event.key!=='Enter'&&event.key!==' ')return;
+  const button=event.target.closest?.('#road50My50,#road50Remaining,#road50All');
+  if(!button)return;
+  event.preventDefault();
+  setScope(ROAD50_BUTTONS[button.id]||'my50');
+ },true);
+}
 function robustRedDisplay(){
  const root=document.documentElement;root.classList.toggle('campfire-mode');const on=root.classList.contains('campfire-mode');
  try{localStorage.setItem('ddmg-v6-campfire',on?'1':'0')}catch{}
@@ -111,7 +138,7 @@ function bindEmergencySection(){
 }
 function init(){
  try{scope=localStorage.getItem('ddmg-road50-scope')||'my50'}catch{}
- bindPersistentDisclosures();bindDisplay();bindEmergencySection();
+ bindPersistentDisclosures();bindDisplay();bindEmergencySection();bindRoad50Controls();
  document.getElementById('road50My50')?.addEventListener('click',()=>setScope('my50'));
  document.getElementById('road50Remaining')?.addEventListener('click',()=>setScope('remaining'));
  document.getElementById('road50All')?.addEventListener('click',()=>setScope('all'));

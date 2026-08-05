@@ -1,12 +1,14 @@
-# Don Downs Mountain Guide — Version 15.3.2
+# Don Downs Mountain Guide — Version 15.3.3
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.2 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.3 is the current production release.
 
 ## Current release
 
-**Version 15.3.2 — Privacy-Safe Emergency Contacts and Field Integrity**
+**Version 15.3.3 — Road to 50 Filter Binding Fix**
 
 This release includes:
+
+- robust delegated binding for My 50 / Still to climb / All 58 filters so the controls remain functional after dynamic summit-ledger rendering;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -49,11 +51,11 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.2 clean production repository`
+`Deploy Mountain Guide v15.3.3 clean production repository`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.2**.
+1. Confirm the footer displays **Version 15.3.3**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
@@ -61,11 +63,11 @@ After deployment:
 
 ## Release history
 
-### Version 15.3.2
+### Version 15.3.3
 Privacy-safe device-local emergency contacts, verified county emergency references, field-page integrity corrections, and clean production packaging.
 
 ### Version 15.3.1
-Objective-driven Climb Mode, saved-forecast integrity, persistent field checks, corrected Ellingwood route reference, Road to 50 ledger integration, and trip-aware emergency contacts. Superseded by 15.3.2 because personal contact details were moved out of public source.
+Objective-driven Climb Mode, saved-forecast integrity, persistent field checks, corrected Ellingwood route reference, Road to 50 ledger integration, and trip-aware emergency contacts. Superseded by 15.3.3 because personal contact details were moved out of public source.
 
 ### Version 15.3
 Initial Road to 50 and Climb Mode release. Rejected and superseded after field-page audit findings.
