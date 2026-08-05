@@ -1,17 +1,18 @@
-# Don Downs Mountain Guide — Version 15.3.5
+# Don Downs Mountain Guide — Version 15.3.6
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.5 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.6 is the current production release.
 
 ## Current release
 
-**Version 15.3.5 — Visible Road to 50 Ledger Fix**
+**Version 15.3.6 — Road to 50 Return Control**
 
 This release includes:
 
 - renderer-level My 50 / Still to climb / All 58 filtering, with updated group and range-summary counts;
 - automatic expansion and scrolling to the filtered ledger after each selection;
 - visible Road to 50 status at both the controls and the displayed ledger;
-- a service-worker-safe shared version value and a fresh Version 15.3.5 cache;
+- a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
+- a service-worker-safe shared version value and a fresh Version 15.3.6 cache;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -54,17 +55,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.5 clean production repository`
+`Deploy Mountain Guide v15.3.6 clean production repository`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.5**.
+1. Confirm the footer displays **Version 15.3.6**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.6
+Adds a desktop- and mobile-friendly return control beside the filtered ledger status so users can move smoothly back to the Road to 50 filters without resetting the selected scope.
 
 ### Version 15.3.5
 Makes Road to 50 filtering unmistakable in the visible ledger: scope-aware range summaries, an adjacent rendered-count line, expanded result groups, and automatic movement to the filtered list.
