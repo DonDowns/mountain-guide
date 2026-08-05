@@ -1,1 +1,1 @@
-globalThis.DDMG_VERSION='15.3.6';
+globalThis.DDMG_VERSION='15.3.7';

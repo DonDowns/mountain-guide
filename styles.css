@@ -2751,7 +2751,7 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
 .road50-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.55rem}.road50-actions .active{outline:3px solid currentColor;outline-offset:2px}
 .road50-combos{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.5rem}.road50-combos span{padding:.38rem .58rem;border-radius:999px;background:rgba(255,255,255,.08)}
 .my50-badge{display:inline-flex;margin-left:.4rem;padding:.12rem .35rem;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.06em;background:#d9a441;color:#13242d;vertical-align:middle}
-.field-launch{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;border-radius:.65rem;text-decoration:none;font-weight:800;border:1px solid currentColor}
+.field-launch{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;border-radius:.65rem;text-decoration:none;font-weight:900;background:#ffd38e;color:#17242b;border:2px solid #ffd38e;box-shadow:0 5px 18px rgba(0,0,0,.22)}
 html.campfire-mode body{background:#120000!important;color:#ffb0a4!important}html.campfire-mode .card,html.campfire-mode section,html.campfire-mode header,html.campfire-mode .focus-sheet{background-color:#160000!important;color:#ffb0a4!important}html.campfire-mode button,html.campfire-mode a{color:#ffb0a4!important;border-color:#8a3129!important}html.campfire-mode img{filter:brightness(.22) sepia(1) saturate(2) hue-rotate(315deg)}
 @media(max-width:680px){.road50-card{grid-template-columns:1fr}.road50-progress{text-align:left}.road50-progress,.road50-actions,.road50-combos{grid-column:1}}
 
@@ -2793,3 +2793,8 @@ html.campfire-mode body{background:#120000!important;color:#ffb0a4!important}htm
 .contact-privacy,#emergencyContactStatus{color:var(--muted);font-size:12px;line-height:1.45}
 .campfire-mode .contact-setup{background:#1b0705;border-color:rgba(255,106,60,.28)}
 @media(max-width:650px){.contact-setup-grid{grid-template-columns:1fr}.contact-setup-actions button{flex-basis:100%}}
+
+/* Version 15.3.7 — reliable field controls and clear return navigation */
+.intel-return-control{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border:1px solid var(--navy);border-radius:999px;background:var(--navy);color:#fff;font-weight:900;text-decoration:none}
+html.campfire-mode .field-launch{background:#3a0d08!important;color:#ffd9cb!important;border-color:#ff8a65!important}
+html.campfire-mode .intel-return-control{background:#3a0d08!important;color:#ffd9cb!important;border-color:#ff8a65!important}
