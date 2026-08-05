@@ -21,6 +21,9 @@ This release includes:
 - visible Road to 50 status at both the controls and the displayed ledger;
 - a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
 - a service-worker-safe shared version value and a fresh Version 15.3.8 cache;
+- cache-upgrade hardening that forces fresh release assets and prevents mixed 15.3.7/15.3.8 modules;
+- explicit browser icons on both app pages, eliminating the otherwise implicit missing-favicon request;
+- stronger normal-mode muted-text contrast on cream and mist surfaces;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -76,7 +79,7 @@ After deployment:
 ## Release history
 
 ### Version 15.3.8
-Completes a full-app desktop and mobile control audit, fixes the shared dark-theme contrast failure behind unreadable Trip Builder accordions and fields, improves field-source link readability, and standardizes practical mobile control targets.
+Completes a full-app desktop and mobile control audit, fixes shared light/dark-theme contrast failures, improves field-source link readability, standardizes practical mobile control targets, and hardens service-worker upgrades against mixed-version assets.
 
 ### Version 15.3.7
 Restores the full-guide Red display toggle, improves Climb Mode link contrast, and adds a clear Trip Intelligence return control for desktop and mobile use.
