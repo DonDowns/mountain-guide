@@ -1,15 +1,7 @@
-/* Version 15.3.6 compatibility and emergency-section bindings. */
+/* Version 15.3.7 compatibility and emergency-section bindings. */
 (()=>{
 'use strict';
 const V=window.DDMG_CONFIG?.version||window.DDMG_VERSION||'unknown';
-function robustRedDisplay(){
- const root=document.documentElement;root.classList.toggle('campfire-mode');const on=root.classList.contains('campfire-mode');
- try{localStorage.setItem('ddmg-v6-campfire',on?'1':'0')}catch{}
- document.querySelectorAll('#campfireHero,#toggleCampfireSection,#focusCampfire').forEach(b=>{b.textContent=on?'Normal display':'Red display';b.setAttribute('aria-pressed',String(on))});
-}
-function bindDisplay(){
- ['campfireHero','toggleCampfireSection','focusCampfire'].forEach(id=>{const old=document.getElementById(id);if(!old)return;const fresh=old.cloneNode(true);old.replaceWith(fresh);fresh.addEventListener('click',robustRedDisplay)});
-}
 function bindPersistentDisclosures(){
  document.querySelectorAll('details.persistent-disclosure[id]').forEach(d=>{
   const key='ddmg-v15-3-disclosure-'+d.id;
@@ -86,7 +78,7 @@ function bindEmergencySection(){
  renderEmergencySection(selected);
 }
 function init(){
- bindPersistentDisclosures();bindDisplay();bindEmergencySection();
+ bindPersistentDisclosures();bindEmergencySection();
  window.DDMG_ROAD50?.refresh();document.documentElement.dataset.appVersion=V;
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

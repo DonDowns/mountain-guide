@@ -1,18 +1,22 @@
-# Don Downs Mountain Guide — Version 15.3.6
+# Don Downs Mountain Guide — Version 15.3.7
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.6 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.7 is the current production release.
 
 ## Current release
 
-**Version 15.3.6 — Road to 50 Return Control**
+**Version 15.3.7 — Field UI Controls and Navigation**
 
 This release includes:
+
+- a reliable full-guide Red display toggle with synchronized labels and pressed state;
+- higher-contrast access to the climb-only field page;
+- a clear return from Trip Intelligence to the Mountain Guide home;
 
 - renderer-level My 50 / Still to climb / All 58 filtering, with updated group and range-summary counts;
 - automatic expansion and scrolling to the filtered ledger after each selection;
 - visible Road to 50 status at both the controls and the displayed ledger;
 - a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
-- a service-worker-safe shared version value and a fresh Version 15.3.6 cache;
+- a service-worker-safe shared version value and a fresh Version 15.3.7 cache;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -55,17 +59,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.6 clean production repository`
+`Deploy Mountain Guide v15.3.7 field UI controls`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.6**.
+1. Confirm the footer displays **Version 15.3.7**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.7
+Restores the full-guide Red display toggle, improves Climb Mode link contrast, and adds a clear Trip Intelligence return control for desktop and mobile use.
 
 ### Version 15.3.6
 Adds a desktop- and mobile-friendly return control beside the filtered ledger status so users can move smoothly back to the Road to 50 filters without resetting the selected scope.
