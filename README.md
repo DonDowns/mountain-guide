@@ -1,13 +1,17 @@
-# Don Downs Mountain Guide — Version 15.3.7
+# Don Downs Mountain Guide — Version 15.3.8
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.7 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.8 is the current production release.
 
 ## Current release
 
-**Version 15.3.7 — Field UI Controls and Navigation**
+**Version 15.3.8 — Full UI Readability and Field Audit**
 
 This release includes:
 
+- corrected dark-theme surface variables so controls keep readable text/background contrast throughout the full app;
+- readable Open/Close Trip Builder accordion headers in both normal and dark appearance;
+- clearer official-source links in Climb Mode and audited 44px-or-larger button/select targets;
+- stronger bottom-navigation active-state contrast on mobile;
 - a reliable full-guide Red display toggle with synchronized labels and pressed state;
 - higher-contrast access to the climb-only field page;
 - a clear return from Trip Intelligence to the Mountain Guide home;
@@ -16,7 +20,7 @@ This release includes:
 - automatic expansion and scrolling to the filtered ledger after each selection;
 - visible Road to 50 status at both the controls and the displayed ledger;
 - a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
-- a service-worker-safe shared version value and a fresh Version 15.3.7 cache;
+- a service-worker-safe shared version value and a fresh Version 15.3.8 cache;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -59,17 +63,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.7 field UI controls`
+`Deploy Mountain Guide v15.3.8 full UI audit`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.7**.
+1. Confirm the footer displays **Version 15.3.8**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.8
+Completes a full-app desktop and mobile control audit, fixes the shared dark-theme contrast failure behind unreadable Trip Builder accordions and fields, improves field-source link readability, and standardizes practical mobile control targets.
 
 ### Version 15.3.7
 Restores the full-guide Red display toggle, improves Climb Mode link contrast, and adds a clear Trip Intelligence return control for desktop and mobile use.
