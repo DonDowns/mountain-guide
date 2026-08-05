@@ -1,58 +1,7 @@
+/* Version 15.3.4 compatibility and emergency-section bindings. */
 (()=>{
 'use strict';
 const V=window.DDMG_CONFIG?.version||window.DDMG_VERSION||'unknown';
-const ROAD50_BUTTONS={road50My50:'my50',road50Remaining:'remaining',road50All:'all'};
-let scope='my50';
-function ledger(){return Array.isArray(window.COLORADO_SUMMITS)?window.COLORADO_SUMMITS:[]}
-function goalNames(){return new Set(ledger().filter(p=>p.road50).map(p=>p.name))}
-function peakName(node){return (node?.dataset?.summitName||node?.querySelector?.('h3,b,strong')?.textContent||node?.textContent||'').trim()}
-function updateScope(){
- const data=ledger(),goals=goalNames(),completed=new Set(data.filter(p=>p.status==='completed').map(p=>p.name));
- document.querySelectorAll('[data-summit-name]').forEach(el=>{
-   const n=el.dataset.summitName||peakName(el),selected=goals.has(n),done=completed.has(n);
-   const show=scope==='all'||(scope==='remaining'?selected&&!done:(selected||done));
-   const card=el.closest('.summit-card,.summit-row,li,article')||el;card.hidden=!show;
-   if(selected&&!card.querySelector('.my50-badge')){const label=card.querySelector('h3,h4,b,strong')||card;label.insertAdjacentHTML('beforeend','<span class="my50-badge">MY 50</span>')}
- });
- const goalCount=goals.size,allCount=data.length||58,completedCount=completed.size,still=[...goals].filter(n=>!completed.has(n)).length;
- const my50Count=new Set([...completed,...goals]).size;
- const status=document.getElementById('summitGroupStatus');
- if(status)status.textContent=scope==='all'?`Showing all ${allCount} named summits.`:scope==='remaining'?`Showing ${still} Road to 50 summits still to climb.`:`Showing ${my50Count} summits in your Road to 50 plan.`;
- const summary=document.getElementById('road50Summary');if(summary)summary.textContent=`${completedCount} completed · ${still} still to climb · ${my50Count}-summit goal.`;
- const progress=document.getElementById('road50Progress');if(progress)progress.textContent=`${completedCount} / ${my50Count}`;
- const remainSummary=document.getElementById('road50RemainingSummary');if(remainSummary)remainSummary.textContent=`${still} selected summit${still===1?'':'s'} remaining`;
- const ledgerCopy=document.getElementById('road50LedgerCopy');if(ledgerCopy)ledgerCopy.textContent=`The complete ${allCount}-summit ledger remains available; this view highlights the mountains intentionally retained in your personal plan.`;
- const remaining=document.getElementById('road50Remaining');if(remaining)remaining.textContent='Still to climb';
- const all=document.getElementById('road50All');if(all)all.textContent=`All ${allCount}`;
- ['road50My50','road50Remaining','road50All'].forEach(id=>{const b=document.getElementById(id);if(!b)return;const active=(id==='road50My50'&&scope==='my50')||(id==='road50Remaining'&&scope==='remaining')||(id==='road50All'&&scope==='all');b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
-}
-function setScope(next){
- if(!['my50','remaining','all'].includes(next))next='my50';
- scope=next;
- document.documentElement.dataset.road50Scope=scope;
- try{localStorage.setItem('ddmg-road50-scope',scope)}catch{}
- const search=document.getElementById('summitSearch');if(search)search.value='';
- updateScope();
- setTimeout(updateScope,40);
- setTimeout(updateScope,180);
-}
-function bindRoad50Controls(){
- const apply=event=>{
-  const button=event.target.closest?.('#road50My50,#road50Remaining,#road50All');
-  if(!button)return;
-  event.preventDefault();
-  event.stopPropagation();
-  setScope(ROAD50_BUTTONS[button.id]||'my50');
- };
- document.addEventListener('click',apply,true);
- document.addEventListener('keydown',event=>{
-  if(event.key!=='Enter'&&event.key!==' ')return;
-  const button=event.target.closest?.('#road50My50,#road50Remaining,#road50All');
-  if(!button)return;
-  event.preventDefault();
-  setScope(ROAD50_BUTTONS[button.id]||'my50');
- },true);
-}
 function robustRedDisplay(){
  const root=document.documentElement;root.classList.toggle('campfire-mode');const on=root.classList.contains('campfire-mode');
  try{localStorage.setItem('ddmg-v6-campfire',on?'1':'0')}catch{}
@@ -137,15 +86,8 @@ function bindEmergencySection(){
  renderEmergencySection(selected);
 }
 function init(){
- try{scope=localStorage.getItem('ddmg-road50-scope')||'my50'}catch{}
- bindPersistentDisclosures();bindDisplay();bindEmergencySection();bindRoad50Controls();
- document.getElementById('road50My50')?.addEventListener('click',()=>setScope('my50'));
- document.getElementById('road50Remaining')?.addEventListener('click',()=>setScope('remaining'));
- document.getElementById('road50All')?.addEventListener('click',()=>setScope('all'));
- document.getElementById('summitSearch')?.addEventListener('input',()=>setTimeout(updateScope,80));
- document.getElementById('summitRangeFilter')?.addEventListener('change',()=>setTimeout(updateScope,30));
- const grid=document.getElementById('summitGrid');if(grid)new MutationObserver(()=>updateScope()).observe(grid,{childList:true,subtree:true});
- setTimeout(updateScope,250);document.documentElement.dataset.appVersion=V;
+ bindPersistentDisclosures();bindDisplay();bindEmergencySection();
+ window.DDMG_ROAD50?.refresh();document.documentElement.dataset.appVersion=V;
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

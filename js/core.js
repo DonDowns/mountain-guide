@@ -1501,6 +1501,7 @@ function currentSummitFilters(){
 }
 /* Version 8.1 — collapsible status groups */
 const SUMMIT_GROUP_KEY='ddmg-v8-1-summit-groups';
+const ROAD50_SCOPE_KEY='ddmg-road50-scope';
 const SUMMIT_GROUP_ORDER=[
  {id:'planned',title:'Planned',note:'Lake Como objectives'},
  {id:'completed',title:'Completed',note:'Recorded summits'},
@@ -1508,7 +1509,50 @@ const SUMMIT_GROUP_ORDER=[
 ];
 /* Default: Planned open, the two long lists collapsed so the ledger fits one phone screen. */
 let summitGroupsOpen=safeParse(storageGet(SUMMIT_GROUP_KEY),{planned:true,completed:false,remaining:false});
+let road50Scope=storageGet(ROAD50_SCOPE_KEY)||'my50';
+if(!['my50','remaining','all'].includes(road50Scope))road50Scope='my50';
 function saveSummitGroups(){storageSet(SUMMIT_GROUP_KEY,JSON.stringify(summitGroupsOpen))}
+
+function summitMatchesRoad50Scope(peak){
+ if(road50Scope==='all')return true;
+ if(road50Scope==='remaining')return !!peak.road50&&peak.status!=='completed';
+ return peak.status==='completed'||!!peak.road50;
+}
+function road50StatusText(){
+ return road50Scope==='all'?'Showing All 58':road50Scope==='remaining'?'Showing Still to climb':'Showing My 50';
+}
+function renderRoad50Controls(){
+ const completed=COLORADO_SUMMITS.filter(peak=>peak.status==='completed');
+ const selected=COLORADO_SUMMITS.filter(peak=>peak.road50);
+ const still=selected.filter(peak=>peak.status!=='completed').length;
+ const my50Count=new Set([...completed,...selected].map(peak=>peak.name)).size;
+ const setText=(id,value)=>{const element=document.getElementById(id);if(element)element.textContent=value};
+ setText('road50Summary',`${completed.length} completed · ${still} still to climb · ${my50Count}-summit goal.`);
+ setText('road50Progress',`${completed.length} / ${my50Count}`);
+ setText('road50RemainingSummary',`${still} selected summit${still===1?'':'s'} remaining`);
+ setText('road50LedgerCopy',`The complete ${COLORADO_SUMMITS.length}-summit ledger remains available; this view highlights the mountains intentionally retained in your personal plan.`);
+ const status=document.getElementById('road50Status');
+ if(status)status.textContent=road50StatusText();
+ const ids={road50My50:'my50',road50Remaining:'remaining',road50All:'all'};
+ Object.entries(ids).forEach(([id,value])=>{
+  const button=document.getElementById(id);if(!button)return;
+  const active=road50Scope===value;
+  button.classList.toggle('active',active);
+  button.setAttribute('aria-pressed',String(active));
+ });
+ document.documentElement.dataset.road50Scope=road50Scope;
+}
+function setRoad50Scope(next){
+ road50Scope=['my50','remaining','all'].includes(next)?next:'my50';
+ storageSet(ROAD50_SCOPE_KEY,road50Scope);
+ const search=document.getElementById('summitSearch');if(search)search.value='';
+ const range=document.getElementById('summitRangeFilter');if(range)range.value='all';
+ SUMMIT_GROUP_ORDER.forEach(group=>{summitGroupsOpen[group.id]=true});
+ saveSummitGroups();
+ renderSummitLedger();
+ renderRoad50Controls();
+}
+window.DDMG_ROAD50={setScope:setRoad50Scope,refresh:renderRoad50Controls};
 
 function summitCardHtml(peak){
  const first=firstAscentDate(peak),ascentCount=peak.ascents?.length||0;
@@ -1517,7 +1561,7 @@ function summitCardHtml(peak){
     <span class="summit-status">${SUMMIT_STATUS_LABELS[peak.status]}</span>
     <span class="summit-rank">${peak.ranked?'Ranked':'Named · unranked'}</span>
    </div>
-   <h3>${summitDisplayName(peak)}</h3>
+   <h3>${summitDisplayName(peak)}${peak.road50?'<span class="my50-badge">MY 50</span>':''}</h3>
    <p>${peak.range}${peak.difficulty?` · ${peak.difficulty}`:''}${peak.elevation?` · ${Number(peak.elevation).toLocaleString()}'`:''}</p>
    ${peak.status==='completed'
      ?`<div class="summit-card-facts"><b>${first?formatClimbDate(first):'Date not yet entered'}</b><span>${ascentCount?`${ascentCount} recorded ascent${ascentCount===1?'':'s'}`:'Completion confirmed'}</span></div>`
@@ -1534,7 +1578,7 @@ function renderSummitLedger(){
  const {query,range}=currentSummitFilters();
  const filtered=COLORADO_SUMMITS.filter(peak=>{
   const text=summitSearchText(peak);
-  return (!query||text.includes(query))&&(range==='all'||peak.range===range)
+  return summitMatchesRoad50Scope(peak)&&(!query||text.includes(query))&&(range==='all'||peak.range===range)
  });
  if(!filtered.length){
   grid.innerHTML='<div class="empty-state">No summits match these filters.</div>';
@@ -1556,6 +1600,7 @@ function renderSummitLedger(){
    </div>
   </section>`;
  }).join('');
+ renderRoad50Controls();
 }
 function announceSummitGroups(msg){
  const el=document.getElementById('summitGroupStatus');
@@ -1703,6 +1748,9 @@ function setupSummitLedger(){
  ['summitSearch','summitRangeFilter'].forEach(id=>{
   document.getElementById(id)?.addEventListener(id==='summitSearch'?'input':'change',renderSummitLedger)
  });
+ document.getElementById('road50My50')?.addEventListener('click',()=>setRoad50Scope('my50'));
+ document.getElementById('road50Remaining')?.addEventListener('click',()=>setRoad50Scope('remaining'));
+ document.getElementById('road50All')?.addEventListener('click',()=>setRoad50Scope('all'));
  document.getElementById('resetSummitFilters')?.addEventListener('click',()=>{
   const search=document.getElementById('summitSearch');if(search)search.value='';
   const range=document.getElementById('summitRangeFilter');if(range)range.value='all';
@@ -2254,5 +2302,3 @@ document.getElementById('routeIntelDisclosure')?.addEventListener('toggle',event
 document.getElementById('tripConditionsDisclosure')?.addEventListener('toggle',event=>{
  if(event.currentTarget.open)renderTripConditionsAdvisor();
 });
-
-
