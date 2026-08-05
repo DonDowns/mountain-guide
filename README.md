@@ -1,394 +1,84 @@
-# Don Downs Mountain Guide — Version 15.2
+# Don Downs Mountain Guide — Version 15.3.2
 
-Version 15.2 is a full-system audit and elevation-profile integrity release built directly on the authoritative Version 15.1 modular package.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.2 is the current production release.
 
-## Current architecture
+## Current release
 
-The application uses eight ordered deferred JavaScript modules:
+**Version 15.3.2 — Privacy-Safe Emergency Contacts and Field Integrity**
 
-1. `js/core.js`
-2. `js/trips.js`
-3. `js/expedition.js`
-4. `js/mountains.js`
-5. `js/command.js`
-6. `js/archive.js`
-7. `js/insights.js`
-8. `js/bootstrap.js`
+This release includes:
 
-`js/bootstrap.js` is the single dependency-aware startup coordinator. All eight modules and all runtime assets are precached by the service worker.
-
-## Version 15.2 release scope
-
-- Corrected a critical startup-order defect that could stop `core.js` before route and mountain data finished loading.
-- Stabilized Mountain Intelligence and Summit Ledger aliases for Mount Blue Sky / Mount Evans.
-- Corrected Route Intelligence rendering, weather-store references, and ledger summary fields.
-- Added explicit absolute elevations and gain/loss labels to every applicable elevation profile.
-- Filled all missing summit elevations from data already stored in the app; no summit totals changed.
-- Completed interface, accessibility, button, link, URL, service-worker, security, migration, data, and safety regression audits.
-- Normalized current titles, metadata, documentation, and deployment instructions.
-
-## Locked integrity requirements
-
-- One authoritative `COLORADO_SUMMITS` ledger
-- `PEAKS` derived from the ledger
-- Ledger totals: **58 total / 35 completed / 3 planned / 20 remaining**
-- No hardcoded summit totals
-- Hardened `ddmg-` export/import and migration behavior
-- No `Storage.prototype` modification
-- `escapeHtml` discipline and no inline `onclick`
-- No green or all-clear state
-- All five turnaround prompts remain question-framed
-- Protected Lake Como system trip
-- NWS remains the automated weather source
-- Weather cross-check links and agreement scoring retained
-- Offline/PWA behavior and service-worker cache updates retained
-
-## Deploy
-
-1. Extract the Version 15.2 ZIP.
-2. Upload every extracted file and folder to the root of `DonDowns/mountain-guide`.
-3. Preserve the repository's existing `CNAME` file.
-4. Commit directly to `main` with:
-
-   `Deploy Mountain Guide v15.2 Full-System Audit and Elevation Profile Integrity`
-
-5. Wait for GitHub Pages deployment to complete, then hard-refresh the browser.
-6. Open the installed iPhone app while online, fully close and reopen it, and use **Update now** if the service-worker banner appears.
-7. Confirm the footer reads **Version 15.2** before relying on the update.
-
-## Required device verification
-
-- Search `Evans`, `Mount Evans`, and `Mt Evans`; Mount Blue Sky must appear first.
-- Open Route Intelligence and confirm route detail renders without a blank panel.
-- Inspect all three elevation profiles and confirm every shown waypoint has an absolute elevation and every segment has gain/loss or an explicit unavailable label.
-- Create, save, duplicate, and reload a non-system trip.
-- Confirm the Lake Como system trip remains protected.
-- Refresh an NWS forecast while online, then relaunch in Airplane Mode after the cache has updated.
-- Export local data and confirm the downloaded file begins with `ddmg-`.
-
-## QA evidence
-
-See `QA_RESULTS_V15_2.md` and the four `QA_EVIDENCE_V15_2_*.json` files included with this release.
+- a dedicated climb-only field page (`climb.html`);
+- My Road to 50 filters and summit-ledger integration;
+- objective-driven start and turnaround times;
+- honest saved-forecast rendering with explicit unavailable and stale states;
+- persistent field checks and status notes by objective and date;
+- verified county sheriff/dispatch information for the current expedition and Road to 50 objectives;
+- device-local personal emergency-contact setup;
+- recipient-free SMS and email drafts when no personal contact is saved;
+- a single release-number source in `js/version.js`;
+- corrected offline/PWA behavior for both the full guide and Climb Mode.
 
 ## Privacy
 
-The public package excludes exact private addresses, reservation numbers, private phone numbers, and other sensitive information. Personal app data remains in local browser storage unless the user explicitly exports it.
+Personal emergency-contact phone numbers and email addresses are **not stored in this repository**. They are entered separately on each device and saved only in that browser's local storage.
 
-## Historical release record
+The public source contains official county sheriff and dispatch numbers used for trip-aware emergency reference. The app does not claim that a message was sent, that help was requested, or that rescue was activated.
 
-## Version 6.2
+## Production structure
 
-Version 6.2 adds matched morning and evening Scripture/reflection cards to every itinerary day and corrects the projected 38-of-50 progress bar to 76%.
+The live application uses:
 
-Commit message:
+- `index.html` — full Mountain Guide;
+- `climb.html` — field-focused Climb Mode;
+- `styles.css` — shared styling;
+- `manifest.webmanifest` and `sw.js` — installable/offline PWA support;
+- `js/` — all executable modules;
+- local icons, hero artwork, and Mountain Stories images.
 
-`Deploy Mountain Guide v6.2 Daily Formation Edition`
+Do not move files out of the `js` directory. Relative paths are required by the HTML and service worker.
 
+## Deployment
 
-## Version 6.3
+GitHub Pages should publish from:
 
-Version 6.3 adds a lower-right Ask AI companion. It prepares a privacy-conscious, context-aware prompt and opens ChatGPT without embedding an API key in the public site.
+- **Branch:** `main`
+- **Folder:** `/ (root)`
 
-GitHub commit message:
+Upload the contents of the clean release folder directly into the repository root while preserving the `js` directory.
 
-`Deploy Mountain Guide v6.3 AI Companion Edition`
+Recommended commit message:
 
+`Deploy Mountain Guide v15.3.2 clean production repository`
 
-## Version 6.5.1
+After deployment:
 
-Safety-language correction: the forecast comparison never presents a green/check-mark all-clear, and every turnaround countdown prompt ends with a question.
+1. Confirm the footer displays **Version 15.3.2**.
+2. Open Climb Mode and confirm the selected objective and forecast state are correct.
+3. Enter the personal emergency contact locally on the intended phone.
+4. Confirm SMS and email drafts open correctly.
+5. Relaunch both pages in Airplane Mode.
 
-GitHub commit message:
+## Release history
 
-`Deploy Mountain Guide v6.5.1 Safety Language Fix`
+### Version 15.3.2
+Privacy-safe device-local emergency contacts, verified county emergency references, field-page integrity corrections, and clean production packaging.
 
+### Version 15.3.1
+Objective-driven Climb Mode, saved-forecast integrity, persistent field checks, corrected Ellingwood route reference, Road to 50 ledger integration, and trip-aware emergency contacts. Superseded by 15.3.2 because personal contact details were moved out of public source.
 
-## Version 6.6
+### Version 15.3
+Initial Road to 50 and Climb Mode release. Rejected and superseded after field-page audit findings.
 
-Version 6.6 adds a reusable Personal Gear Locker, smart packing presets, custom gear, optional weight tracking, and gear-aware backup/import.
+### Version 15.2
+Full-system audit and elevation-profile integrity release.
 
-GitHub commit message:
+### Version 15.1
+Mountain Intelligence search stabilization and Mount Evans/Mount Blue Sky alias support.
 
-`Deploy Mountain Guide v6.6 Gear Locker and Pack Builder`
+### Version 15.0
+Modular architecture and mountain knowledge base.
 
+## Safety statement
 
-## Version 6.7
-
-Version 6.7 adds chronological personal Mountain Stories for Mount Massive, Mount of the Holy Cross, and Mount Princeton; removes the visible privacy callout; and fixes persistent dismissal of the iPhone installation banner.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v6.7 Mountain Stories`
-
-
-## Version 6.8
-
-Version 6.8 moves Great Sand Dunes and Zapata Falls to Friday with Marin, LinZhi, and Sam; creates an unhurried Thursday for Don and Vonda; records the executed Mount Lindsey waiver privately; and adds device charging/setup checks.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v6.8 Itinerary and Readiness Update`
-
-
-## Version 7.0
-
-Version 7.0 begins Phase 2 with an authoritative Colorado Fourteener Ledger based on Don’s August 1, 2026 14ers.com checklist: 35 of 58 named summits and 31 of 53 ranked peaks completed.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.0 Colorado Summit Ledger`
-
-
-## Version 7.1
-
-Version 7.1 adds Don’s completed-climb dates, partners, repeats, solo ascents, current 14ers.com standard-route references, and a detailed summit viewer.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.1 Completed Climb History`
-
-
-## Version 7.1.1
-
-Version 7.1.1 corrects the climb history to 35 unique summits and 35 ascent events, adds the Bierstadt–Sawtooth–Mount Evans Class 3 traverse, completes the North Eolus record, and displays mountain range and class on completed summit cards.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.1.1 Climb History Corrections`
-
-
-## Version 7.1.2
-
-Version 7.1.2 corrects the blank summit ledger on iPhone, rebuilds the six-item
-bottom navigation, aligns the Summits icon and label, and moves Ask clear of Gear.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.1.2 Mobile Navigation Fix`
-
-
-## Version 7.1.3
-
-Version 7.1.3 adds Don and David Harbin’s confirmed Fort Garland lodging to the Sunday/Monday itinerary and readiness checklist while keeping booking credentials out of the public app.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.1.3 Fort Garland Lodging`
-
-
-## Version 7.1.4
-
-Version 7.1.4 adds the exact Fort Garland motel address, tappable directions,
-a call button, and the 10:00 AM checkout while keeping the Expedia confirmation
-number and booking credentials private.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.1.4 Lodging Contact and Directions`
-
-
-## Version 7.2
-
-Version 7.2 integrates the reviewed photo-verified gear inventory into the Gear Locker, adds a one-time saved-locker refresh for existing gear IDs, corrects optional gear weight behavior, and updates summit partner records from Don’s latest corrections.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.2 Photo Gear Integration`
-
-
-## Version 7.3
-
-Version 7.3 incorporates Don’s transcript from his 14ers.com climb review, correcting first/second climb milestones, partners, combo climbs, summit memories, conditions, and gear-worn notes.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.3 Transcript Climb History`
-
-## Version 7.4.1
-
-Version 7.4.1 keeps the Version 7.4 single-source-of-truth and this-device readiness fixes, then re-applies the Mount Columbia and Belford/Oxford partner corrections.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.4.1 single source truth partner corrections`
-
-## Version 7.5
-
-Version 7.5 adds a visible Data Transfer panel and local data stamp. It does not attempt false cross-device sync detection. It is built from 7.4.1 and preserves all partner corrections.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.5 Data Transfer and Local Stamp`
-
-## Version 7.5.1
-
-Version 7.5.1 hardens the Data Transfer feature: confirmation before import, app-scoped ddmg-* backup keys, reload after import, and no global Storage.prototype monkey patch.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.5.1 Data Transfer hardening`
-
-## Version 7.5.2
-
-Version 7.5.2 makes the dashboard readiness card clickable and opens a Readiness Sources panel for active pack confirmations and communication checkmarks.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.5.2 clickable readiness checks`
-
-## Version 7.6
-
-Version 7.6 makes every dashboard metric a navigation shortcut while preserving 7.5.2 readiness navigation, 7.5.1 hardened Data Transfer, and 7.4 single-source ledger facts.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.6 tappable dashboard cards`
-
-## Version 7.7
-
-Version 7.7 adds a non-persistent Incomplete only toggle for readiness checks and larger 44px tap targets for gear and communication check rows.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.7 incomplete-only readiness checks`
-
-## Version 7.8
-
-Version 7.8 adds a plan-based Gear Advisor that recommends gear and margin based on the active climb plan, pack type, weather flags, and unchecked items.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.8 Gear Advisor`
-
-
-## Version 7.9
-
-Version 7.9 integrates the plan-based Gear Advisor, manual Trip Conditions Advisor, incomplete-only optional-item corrections, and 44px gear-row tap targets.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v7.9 integrated trip gear advisor`
-
-
-## Version 8.0
-
-Version 8.0 adds Route Intelligence: a curated 31-profile standard-route dataset sourced from 14ers.com covering all 23 remaining and planned peaks, a parking-elevation switch for the Lake Como road, auto-populated trip conditions with per-field source labels and overrides, and a per-location forecast horizon gate that reports when a forecast is not yet in range instead of inventing one.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v8.0 Route Intelligence`
-
-
-## Version 8.1
-
-Version 8.1 adds collapsible Planned/Completed/Remaining groups to the summit ledger with persistent state and search override, and locks the page to vertical scrolling by removing the iOS-hostile fixed background attachment, clamping horizontal overflow on html and body, and containing overscroll on the horizontal strips. It also closes the two v8.0 audit findings.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v8.1 collapsible summit groups and scroll fix`
-
-
-## Version 8.3
-
-Version 8.3 removes the self-contradicting Source discipline note, reunites the summit ledger with the Version 8.0 route dataset so all 23 unclimbed peaks show full route intelligence, retires the redundant Status dropdown and rewires its shortcuts to the collapsible groups, moves the ledger live region to a compact status line, consolidates two incompatible backup formats into one import that still reads legacy files, and eliminates version-stamp drift with a single APP_VERSION constant.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v8.3 ledger cleanup and route data reunification`
-
-
-## Version 8.4
-
-Version 8.4 is a deep-clean release: it completes the backup consolidation that v8.3 left partially done, replaces the stale 50-entry PEAKS array with a list derived from the 58-entry ledger, converts all twelve inline onclick handlers to listener bindings, removes dead code, and deduplicates double advisor renders. No new features.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v8.4 deep clean dead code and duplicate data`
-
-
-## Version 8.5
-
-Version 8.5 adds 34 stored weather points — summit and access coordinates for every remaining 14er — to the existing NWS engine, grouped in the forecast selector under Future Elk, San Juan, and Sangre de Cristo. Summit coordinates are published USGS values; access points are labeled approximate; future points carry no trip date and say so honestly instead of inventing a forecast window. Bulk trip refresh is unchanged.
-
-GitHub commit message:
-
-`Deploy Mountain Guide v8.5 future weather points`
-
-
-## Version 8.6.1
-
-`Deploy Mountain Guide v8.6.1 final stabilization`
-
-
-## Version 9.0
-
-Trip Builder Foundation with reusable local trip records.
-
-`Deploy Mountain Guide v9.0 Trip Builder Foundation`
-
-
-## Version 9.1
-
-Generated itinerary and trip-specific readiness.
-
-`Deploy Mountain Guide v9.1 generated itinerary and readiness`
-
-
-## Version 10.0
-
-Intelligent Expedition Builder.
-
-`Deploy Mountain Guide v10.0 Intelligent Expedition Builder`
-
-
-## Version 11.0
-
-Searchable Mountain Intelligence Database.
-
-`Deploy Mountain Guide v11.0 Mountain Intelligence Database`
-
-
-## Version 12.0
-
-Expedition Command Center field companion.
-
-`Deploy Mountain Guide v12.0 Expedition Command Center`
-
-
-## Version 13.0
-
-Climbing Journal and Expedition Archive.
-
-`Deploy Mountain Guide v13.0 Climbing Journal and Expedition Archive`
-
-
-## Version 14.0
-
-Mountain Intelligence Engine.
-
-`Deploy Mountain Guide v14.0 Mountain Intelligence Engine`
-
-
-## Version 14.1
-
-`Deploy Mountain Guide v14.1 Audit Fix Weather Cross-Checks and Agreement`
-
-
-## Version 15.0
-
-Modular Architecture and Mountain Knowledge Base.
-
-`Deploy Mountain Guide v15.0 Modular Architecture and Mountain Knowledge Base`
-
-
-## Version 15.1
-
-Mountain Intelligence search stabilization and Mount Evans alias support.
-
-`Deploy Mountain Guide v15.1 Mountain Intelligence Search Stabilization`
-
-## Version 15.2
-
-Full-System Audit and Elevation Profile Integrity.
-
-`Deploy Mountain Guide v15.2 Full-System Audit and Elevation Profile Integrity`
+This app is a planning and personal-reference tool. Weather, route data, saved checks, and emergency contacts are evidence and reference—not permission, rescue guidance, medical clearance, or a go/no-go determination. Actual conditions, terrain, access, group condition, and official emergency instructions govern decisions.

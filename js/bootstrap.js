@@ -12,7 +12,7 @@ function tripSetup(){
   if(tripBuilderApplying)return;
   tripPopulateRoutes(event.target.value,'');
   const route=tripRouteById(document.getElementById('tripRoute')?.value);
-  tripPopulateStarts(route,'');tripPopulateWeather(event.target.value,route,'','');tripRenderContext();
+  tripPopulateStarts(route,'');tripPopulateWeather(event.target.value,route,'','');tripPopulateEmergency(event.target.value,'');tripRenderContext();
  });
  document.getElementById('tripRoute')?.addEventListener('change',event=>{
   if(tripBuilderApplying)return;
