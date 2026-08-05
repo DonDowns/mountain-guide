@@ -1479,9 +1479,10 @@ function summitSearchRank(peak,q){
 function renderRangeSummary(){
  const holder=document.getElementById('rangeSummary');
  if(!holder)return;
- const ranges=[...new Set(COLORADO_SUMMITS.map(p=>p.range))];
+ const scoped=COLORADO_SUMMITS.filter(summitMatchesRoad50Scope);
+ const ranges=[...new Set(scoped.map(p=>p.range))];
  holder.innerHTML=ranges.map(range=>{
-  const all=COLORADO_SUMMITS.filter(p=>p.range===range);
+  const all=scoped.filter(p=>p.range===range);
   const done=all.filter(p=>p.status==='completed').length;
   const planned=all.filter(p=>p.status==='planned').length;
   const pct=Math.round(done/all.length*100);
@@ -1521,6 +1522,10 @@ function summitMatchesRoad50Scope(peak){
 function road50StatusText(){
  return road50Scope==='all'?'Showing All 58':road50Scope==='remaining'?'Showing Still to climb':'Showing My 50';
 }
+function road50LedgerStatusText(count){
+ const label=road50Scope==='all'?'All 58':road50Scope==='remaining'?'Still to climb':'My 50';
+ return `Showing ${count} summit${count===1?'':'s'} — ${label}`;
+}
 function renderRoad50Controls(){
  const completed=COLORADO_SUMMITS.filter(peak=>peak.status==='completed');
  const selected=COLORADO_SUMMITS.filter(peak=>peak.road50);
@@ -1533,6 +1538,9 @@ function renderRoad50Controls(){
  setText('road50LedgerCopy',`The complete ${COLORADO_SUMMITS.length}-summit ledger remains available; this view highlights the mountains intentionally retained in your personal plan.`);
  const status=document.getElementById('road50Status');
  if(status)status.textContent=road50StatusText();
+ const rendered=document.querySelectorAll('#summitGrid [data-summit-name]').length;
+ const ledgerStatus=document.getElementById('summitGroupStatus');
+ if(ledgerStatus)ledgerStatus.textContent=road50LedgerStatusText(rendered);
  const ids={road50My50:'my50',road50Remaining:'remaining',road50All:'all'};
  Object.entries(ids).forEach(([id,value])=>{
   const button=document.getElementById(id);if(!button)return;
@@ -1549,8 +1557,10 @@ function setRoad50Scope(next){
  const range=document.getElementById('summitRangeFilter');if(range)range.value='all';
  SUMMIT_GROUP_ORDER.forEach(group=>{summitGroupsOpen[group.id]=true});
  saveSummitGroups();
+ renderRangeSummary();
  renderSummitLedger();
  renderRoad50Controls();
+ requestAnimationFrame(()=>document.getElementById('summitGroupStatus')?.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 window.DDMG_ROAD50={setScope:setRoad50Scope,refresh:renderRoad50Controls};
 
@@ -1600,6 +1610,8 @@ function renderSummitLedger(){
    </div>
   </section>`;
  }).join('');
+ grid.dataset.road50Scope=road50Scope;
+ grid.dataset.renderedCount=String(filtered.length);
  renderRoad50Controls();
 }
 function announceSummitGroups(msg){
