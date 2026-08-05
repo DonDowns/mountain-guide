@@ -1,16 +1,17 @@
-# Don Downs Mountain Guide — Version 15.3.4
+# Don Downs Mountain Guide — Version 15.3.5
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.4 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.5 is the current production release.
 
 ## Current release
 
-**Version 15.3.4 — Road to 50 Render Fix**
+**Version 15.3.5 — Visible Road to 50 Ledger Fix**
 
 This release includes:
 
-- renderer-level My 50 / Still to climb / All 58 filtering, with updated group counts and expanded results after each selection;
-- a visible Road to 50 selection status line;
-- a service-worker-safe shared version value and a fresh Version 15.3.4 cache;
+- renderer-level My 50 / Still to climb / All 58 filtering, with updated group and range-summary counts;
+- automatic expansion and scrolling to the filtered ledger after each selection;
+- visible Road to 50 status at both the controls and the displayed ledger;
+- a service-worker-safe shared version value and a fresh Version 15.3.5 cache;
 
 - a dedicated climb-only field page (`climb.html`);
 - My Road to 50 filters and summit-ledger integration;
@@ -53,17 +54,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.4 clean production repository`
+`Deploy Mountain Guide v15.3.5 clean production repository`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.4**.
+1. Confirm the footer displays **Version 15.3.5**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.5
+Makes Road to 50 filtering unmistakable in the visible ledger: scope-aware range summaries, an adjacent rendered-count line, expanded result groups, and automatic movement to the filtered list.
 
 ### Version 15.3.4
 Road to 50 filtering now happens inside the summit renderer, so the rendered groups, counts, and visible cards change together. Adds an explicit scope status line and refreshes the offline cache.

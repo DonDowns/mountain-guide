@@ -2140,6 +2140,7 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
 
 /* ===== Version 8.3 ===== */
 .summit-group-status{margin:0 0 10px;min-height:1em;color:var(--muted);font-size:12px;font-weight:750}
+.ledger-result-status{scroll-margin-top:92px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--ice);color:var(--ink);font-size:15px;font-weight:850}
 .summit-detail-section .ri-risks{margin:10px 0}
 
 /* ===== Version 8.4 ===== */
