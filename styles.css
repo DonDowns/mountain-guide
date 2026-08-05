@@ -2140,7 +2140,10 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
 
 /* ===== Version 8.3 ===== */
 .summit-group-status{margin:0 0 10px;min-height:1em;color:var(--muted);font-size:12px;font-weight:750}
-.ledger-result-status{scroll-margin-top:92px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--ice);color:var(--ink);font-size:15px;font-weight:850}
+.ledger-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;scroll-margin-top:92px;margin:0 0 10px}
+.ledger-result-status{flex:1 1 auto;margin:0;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--ice);color:var(--ink);font-size:15px;font-weight:850}
+.ledger-return-control{flex:0 0 auto;min-height:44px}
+@media(max-width:520px){.ledger-result-head{align-items:stretch;flex-direction:column}.ledger-return-control{width:100%}}
 .summit-detail-section .ri-risks{margin:10px 0}
 
 /* ===== Version 8.4 ===== */
@@ -2742,7 +2745,7 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
 @media(max-width:520px){.elevation-segments>div{grid-template-columns:1fr}.elevation-segments span{text-align:left}}
 
 /* Version 15.3 — Road to 50 and reliable field controls */
-.road50-card{display:grid;grid-template-columns:minmax(0,1.5fr) auto;gap:1rem;align-items:center;margin:1rem 0 1.25rem;padding:1.15rem}
+.road50-card{display:grid;grid-template-columns:minmax(0,1.5fr) auto;gap:1rem;align-items:center;margin:1rem 0 1.25rem;padding:1.15rem;scroll-margin-top:92px}
 .road50-copy h3{margin:.18rem 0 .35rem}.road50-copy p{margin:0;max-width:68ch}
 .road50-progress{text-align:right}.road50-progress strong{display:block;font-size:clamp(1.8rem,5vw,3rem);line-height:1}.road50-progress span{display:block;margin-top:.35rem}
 .road50-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.55rem}.road50-actions .active{outline:3px solid currentColor;outline-offset:2px}

@@ -1560,7 +1560,7 @@ function setRoad50Scope(next){
  renderRangeSummary();
  renderSummitLedger();
  renderRoad50Controls();
- requestAnimationFrame(()=>document.getElementById('summitGroupStatus')?.scrollIntoView({behavior:'smooth',block:'start'}));
+ requestAnimationFrame(()=>document.querySelector('.ledger-result-head')?.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 window.DDMG_ROAD50={setScope:setRoad50Scope,refresh:renderRoad50Controls};
 
@@ -1763,6 +1763,9 @@ function setupSummitLedger(){
  document.getElementById('road50My50')?.addEventListener('click',()=>setRoad50Scope('my50'));
  document.getElementById('road50Remaining')?.addEventListener('click',()=>setRoad50Scope('remaining'));
  document.getElementById('road50All')?.addEventListener('click',()=>setRoad50Scope('all'));
+ document.getElementById('road50BackToFilters')?.addEventListener('click',()=>{
+  document.getElementById('roadTo50')?.scrollIntoView({behavior:'smooth',block:'start'});
+ });
  document.getElementById('resetSummitFilters')?.addEventListener('click',()=>{
   const search=document.getElementById('summitSearch');if(search)search.value='';
   const range=document.getElementById('summitRangeFilter');if(range)range.value='all';
