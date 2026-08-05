@@ -5,7 +5,7 @@
    ============================================================ */
 const TRIP_LIBRARY_KEY='ddmg-v9-trip-library';
 const ACTIVE_TRIP_KEY='ddmg-v9-active-trip';
-const TRIP_SCHEMA_VERSION=1;
+const TRIP_SCHEMA_VERSION=2;
 let tripLibrary=[];
 let activeTripId='';
 let tripBuilderApplying=false;
@@ -32,6 +32,7 @@ function tripSeedLakeComo(){
   lodging:'Lake Como camp; Fort Garland lodging before Mount Lindsey',
   summitWeatherId:'blanca',
   accessWeatherId:'lake',
+  emergencyAreaId:'alamosa',
   notes:'Blanca + Ellingwood primary summit day; Mount Lindsey separate Monday objective; Great Sand Dunes and Zapata Falls family day Friday.',
   prep:{gpx:false,map:false,photos:false,screens:false},generatedChecks:{},
   systemTrip:true,
@@ -46,15 +47,26 @@ function tripBlank(){
   name:first?`${first.name} trip`:'New mountain trip',
   peak:first?.name||'',routeId:'',startPointId:'',
   climbDate:'',startDate:'',endDate:'',plannedStart:'04:30',turnaround:'11:30',
-  partners:'',vehicle:'Audi Q5',lodging:'',summitWeatherId:'',accessWeatherId:'',notes:'',
+  partners:'',vehicle:'Audi Q5',lodging:'',summitWeatherId:'',accessWeatherId:'',emergencyAreaId:window.DDMG_CONFIG?.peakEmergencyAreas?.[first?.name]||'',notes:'',
   prep:{gpx:false,map:false,photos:false,screens:false},generatedChecks:{},
   systemTrip:false,createdAt:tripIsoNow(),updatedAt:tripIsoNow()
  };
+}
+function tripMigrateRecord(record){
+ const trip=record&&typeof record==='object'?{...record}:tripBlank();
+ const configured=window.DDMG_CONFIG?.emergencyAreas||{};
+ const existing=configured[trip.emergencyAreaId]?trip.emergencyAreaId:'';
+ trip.emergencyAreaId=existing||tripSuggestedEmergencyArea(trip.peak)||'';
+ trip.schemaVersion=TRIP_SCHEMA_VERSION;
+ trip.prep={gpx:false,map:false,photos:false,screens:false,...(trip.prep||{})};
+ trip.generatedChecks=trip.generatedChecks&&typeof trip.generatedChecks==='object'?trip.generatedChecks:{};
+ return trip;
 }
 function tripLoadLibrary(){
  const raw=storageGet(TRIP_LIBRARY_KEY);
  try{tripLibrary=raw?JSON.parse(raw):[]}catch(e){tripLibrary=[]}
  if(!Array.isArray(tripLibrary))tripLibrary=[];
+ tripLibrary=tripLibrary.map(tripMigrateRecord);
  if(!tripLibrary.some(t=>t.id==='lake-como-2026'))tripLibrary.unshift(tripSeedLakeComo());
  activeTripId=storageGet(ACTIVE_TRIP_KEY)||'lake-como-2026';
  if(!tripLibrary.some(t=>t.id===activeTripId))activeTripId=tripLibrary[0]?.id||'';
@@ -125,6 +137,15 @@ function tripPopulateWeather(peak,route,summitSelected='',accessSelected=''){
  summit.value=[...summit.options].some(o=>o.value===summitSelected)?summitSelected:(summit.options[1]?.value||'');
  access.value=[...access.options].some(o=>o.value===accessSelected)?accessSelected:(access.options[1]?.value||'');
 }
+function tripSuggestedEmergencyArea(peak){return window.DDMG_CONFIG?.peakEmergencyAreas?.[peak]||''}
+function tripPopulateEmergency(peak,selected=''){
+ const el=document.getElementById('tripEmergencyArea');if(!el)return;
+ const areas=window.DDMG_CONFIG?.emergencyAreas||{};el.innerHTML='';
+ tripOption(el,'','Not yet verified — confirm before departure');
+ Object.values(areas).sort((a,b)=>a.county.localeCompare(b.county)).forEach(area=>tripOption(el,area.id,`${area.county} · ${area.dispatchDisplay}`));
+ const suggested=tripSuggestedEmergencyArea(peak);el.value=selected&&[...el.options].some(o=>o.value===selected)?selected:(suggested||'');
+}
+function tripEmergencyArea(id){return window.DDMG_CONFIG?.emergencyAreas?.[id]||null}
 function tripReadForm(){
  const val=id=>document.getElementById(id)?.value?.trim()||'';
  const checked=id=>!!document.getElementById(id)?.checked;
@@ -136,7 +157,7 @@ function tripReadForm(){
   plannedStart:val('tripPlannedStart'),turnaround:val('tripTurnaround'),
   partners:val('tripPartners'),vehicle:val('tripVehicle'),lodging:val('tripLodging'),
   summitWeatherId:val('tripSummitWeather'),accessWeatherId:val('tripAccessWeather'),
-  notes:val('tripNotes'),
+  emergencyAreaId:val('tripEmergencyArea'),notes:val('tripNotes'),
   prep:{gpx:checked('tripGpxReady'),map:checked('tripMapReady'),photos:checked('tripPhotosReady'),screens:checked('tripScreensReady')},
   updatedAt:tripIsoNow()
  };
@@ -148,6 +169,7 @@ function tripApplyForm(trip){
  const route=tripRouteById(document.getElementById('tripRoute')?.value);
  tripPopulateStarts(route,trip.startPointId);
  tripPopulateWeather(trip.peak,route,trip.summitWeatherId,trip.accessWeatherId);
+ tripPopulateEmergency(trip.peak,trip.emergencyAreaId);
  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||''};
  set('tripName',trip.name);set('tripClimbDate',trip.climbDate);set('tripStartDate',trip.startDate);set('tripEndDate',trip.endDate);
  set('tripPlannedStart',trip.plannedStart);set('tripTurnaround',trip.turnaround);set('tripPartners',trip.partners);
@@ -180,6 +202,7 @@ function tripRenderContext(){
  const routeBox=document.getElementById('tripRouteContext');
  const timing=document.getElementById('tripTimingContext');
  const offline=document.getElementById('tripOfflineContext');
+ const emergency=document.getElementById('tripEmergencyContext');
  if(routeBox)routeBox.innerHTML=route?`
   <h3>${escapeHtml(route.label)}</h3>
   <div class="trip-fact-grid">
@@ -202,6 +225,14 @@ function tripRenderContext(){
   <h3>${ready} of 4 offline-preparation checks confirmed</h3>
   <p>${data.prep?.gpx?'✓':'○'} Route file · ${data.prep?.map?'✓':'○'} Offline map · ${data.prep?.photos?'✓':'○'} Route photos · ${data.prep?.screens?'✓':'○'} Screenshots</p>
   <p>This confirms only what was checked on this device; it does not certify route readiness.</p>`;
+ const emergencyArea=tripEmergencyArea(data.emergencyAreaId);
+ if(emergency)emergency.innerHTML=emergencyArea?`
+  <h3>${escapeHtml(emergencyArea.county)}</h3>
+  <p><b>Emergency:</b> 911<br><b>${escapeHtml(emergencyArea.dispatchLabel||'County dispatch')}:</b> ${escapeHtml(emergencyArea.dispatchDisplay)}${emergencyArea.officeDisplay?`<br><b>${escapeHtml(emergencyArea.officeLabel||'Sheriff’s office')}:</b> ${escapeHtml(emergencyArea.officeDisplay)}`:''}</p>
+  <p>${escapeHtml(emergencyArea.activation)}</p>
+  <p><small>Verified ${escapeHtml(window.DDMG_EMERGENCY?.dateLabel(emergencyArea.verifiedOn)||emergencyArea.verifiedOn)}. Confirm that this county matches the actual route and trailhead.</small></p>`:`
+  <h3>Jurisdiction not verified</h3>
+  <p>Confirm the county sheriff for the actual route and trailhead before leaving service. The app does not guess or substitute a nearby county.</p>`;
  const routeLink=document.getElementById('tripOpenRoute');
  if(routeLink){
   routeLink.href=route?.url||'#';
@@ -253,7 +284,8 @@ function tripBuilderAiContext(){
  const t=tripActive();
  if(!t)return 'Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026';
  const route=tripRouteById(t.routeId);
- return `${t.name}; primary peak ${t.peak||'not set'}; route ${route?.label||'not set'}; climb date ${t.climbDate||'not set'}; trail start ${t.plannedStart||'not set'}; turnaround ${t.turnaround||'not set'}; partners ${t.partners||'not set'}; transportation ${t.vehicle||'not set'}; lodging/camp ${t.lodging||'not set'}`;
+ const area=tripEmergencyArea(t.emergencyAreaId);
+ return `${t.name}; primary peak ${t.peak||'not set'}; route ${route?.label||'not set'}; climb date ${t.climbDate||'not set'}; trail start ${t.plannedStart||'not set'}; turnaround ${t.turnaround||'not set'}; partners ${t.partners||'not set'}; transportation ${t.vehicle||'not set'}; lodging/camp ${t.lodging||'not set'}; emergency jurisdiction ${area?.county||'not verified'}`;
 }
 
 /* ============================================================
@@ -312,6 +344,7 @@ function tripGeneratedChecklist(trip){
   ['turnaround-reviewed','Confirm start time, turnaround target, and descent margin','timing'],
   ['offline-nav','Confirm GPX/KML, offline map, route photos, and screenshots','navigation'],
   ['communication-plan','Confirm inReach setup, contacts, check-in plan, and charger','communication'],
+  ['emergency-jurisdiction','Confirm the county sheriff/dispatch for the actual route and trailhead','communication'],
   ['water-plan','Set water carry and refill plan','water'],
   ['fuel-plan','Set calorie plan for the expected duration','food']
  ];
