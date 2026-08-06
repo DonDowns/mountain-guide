@@ -67,6 +67,29 @@ The live application uses:
 
 Do not move files out of the `js` directory. Relative paths are required by the HTML and service worker.
 
+## Static release-safety checks
+
+The repository includes dependency-free Node checks for release consistency, offline-cache completeness, local references, privacy, safety-language review, and repository cleanliness. No `npm install` is required.
+
+Run the complete gate:
+
+```sh
+npm run check
+```
+
+Run an individual check when investigating a failure:
+
+```sh
+npm run check:version
+npm run check:sw
+npm run check:refs
+npm run check:privacy
+npm run check:safety
+npm run check:clean
+```
+
+The safety-language check reports listed phrases for human review without inferring whether their context is acceptable. The privacy check reports every detected phone number or email and permits only its labeled public agency/business allowlist.
+
 ## Deployment
 
 GitHub Pages should publish from:
