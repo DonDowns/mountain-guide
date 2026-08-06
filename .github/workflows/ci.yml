@@ -1,0 +1,57 @@
+name: Permanent release safety CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  release-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run static release-safety checks
+        run: npm run check
+
+      - name: Install Chromium and WebKit
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Run Chromium desktop and mobile tests
+        run: npm run test:chromium
+
+      - name: Run WebKit desktop and mobile tests
+        run: npm run test:webkit
+
+      - name: Run offline tests
+        run: npm run test:offline
+
+      - name: Run service-worker upgrade test
+        run: npm run test:sw-upgrade
+
+      - name: Run safety-invariant tests
+        run: npm run test:safety
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7

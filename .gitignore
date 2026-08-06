@@ -2,10 +2,13 @@
 node_modules/
 test-results/
 playwright-report/
+blob-report/
 coverage/
 browser-profile/
 browser-profiles/
 .browser-profile/
+.playwright/
+.test-server/
 screenshots/
 videos/
 traces/
