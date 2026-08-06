@@ -909,11 +909,12 @@ async function fetchWeatherPoint(spec){
  const work=(async()=>{
   const point=await fetchJson(`https://api.weather.gov/points/${spec.lat},${spec.lon}`);
   const hourlyUrl=point.properties?.forecastHourly;if(!hourlyUrl)throw new Error('No hourly forecast endpoint was returned');
-  const [hourly,alertsRaw]=await Promise.all([fetchJson(hourlyUrl),fetchJson(`https://api.weather.gov/alerts/active?point=${spec.lat},${spec.lon}`).catch(()=>({features:[]}))]);
+  const alertRequest=fetchJson(`https://api.weather.gov/alerts/active?point=${spec.lat},${spec.lon}`).catch(error=>{throw new Error(`Weather alert details unavailable: ${error?.message||error}`)});
+  const [hourly,alertsRaw]=await Promise.all([fetchJson(hourlyUrl),alertRequest]);
   const periods=(hourly?.properties?.periods||[]).map(normalizePeriod);
   const now=Date.now(),currentIndex=Math.max(0,periods.findIndex(p=>new Date(p.endTime).getTime()>now));
   const current=periods[currentIndex]||periods[0]||null,upcoming=periods.slice(currentIndex,currentIndex+8);
-  const alerts=(alertsRaw.features||[]).map(x=>({event:x.properties?.event||'Weather alert',severity:x.properties?.severity||'',headline:x.properties?.headline||'',ends:x.properties?.ends||null}));
+  const alerts=(alertsRaw.features||[]).map(x=>({event:x.properties?.event||'Weather alert',severity:x.properties?.severity||'',headline:x.properties?.headline||'',area:x.properties?.areaDesc||'',ends:x.properties?.ends||x.properties?.expires||null}));
   const gridElevationFt=feet(hourly?.properties?.elevation?.value);
   const sourceUpdatedAt=hourly?.properties?.updateTime||hourly?.properties?.generatedAt||null;
   return {fetchedAt:new Date().toISOString(),sourceUpdatedAt,gridElevationFt,current,upcoming,alerts,trip:buildTripSummary(spec,periods,alerts,sourceUpdatedAt)}
@@ -947,12 +948,57 @@ function weatherIcon(kind){
  if(kind==='moon')return `<svg ${common}><path d="M43 45A21 21 0 0 1 28 9a22 22 0 1 0 15 36Z"/><path d="m47 12 2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4Z"/></svg>`;
  return `<svg ${common}><circle cx="32" cy="31" r="12"/><path d="M32 5v9m0 34v10M6 31h10m32 0h10M13 12l7 7m24 24 7 7m0-38-7 7M20 43l-7 7"/></svg>`
 }
+function weatherAlertCount(item){
+ const alerts=Array.isArray(item?.alerts)?item.alerts:[];
+ if(alerts.length)return alerts.length;
+ return Array.isArray(item?.trip?.alerts)?item.trip.alerts.length:0
+}
+function weatherAlertDetails(item){
+ return (Array.isArray(item?.alerts)?item.alerts:[]).filter(alert=>alert&&typeof alert==='object'&&!Array.isArray(alert)&&(alert.event||alert.headline))
+}
+function weatherAlertHasDetails(item){const count=weatherAlertCount(item);return count>0&&weatherAlertDetails(item).length===count}
+function weatherAlertFallbackText(item){
+ const count=weatherAlertCount(item),offline=!navigator.onLine;
+ return `${count} alert${count===1?' was':'s were'} active at the last refresh. Details unavailable${offline?' offline':''}.`
+}
+function weatherAlertFlagMarkup(item,locationId){
+ const count=weatherAlertCount(item);if(!count)return '';
+ if(weatherAlertHasDetails(item))return `<button aria-haspopup="dialog" class="weather-flag alert weather-alert-trigger" data-weather-alert-location="${escapeHtml(locationId)}" type="button">${count} alert${count===1?'':'s'} at last refresh · details</button>`;
+ return `<span class="weather-alert-fallback"><span class="weather-flag alert">${escapeHtml(weatherAlertFallbackText(item))}</span><small>Last successful refresh ${escapeHtml(formatStamp(item?.fetchedAt,false))}</small></span>`
+}
+function weatherAlertMetricMarkup(item,locationId){
+ const count=weatherAlertCount(item);
+ if(!count)return '<div><b>0</b><small>alerts at last refresh</small></div>';
+ if(weatherAlertHasDetails(item))return `<button aria-haspopup="dialog" class="trip-alert-trigger" data-weather-alert-location="${escapeHtml(locationId)}" type="button"><b>${count}</b><small>alert${count===1?'':'s'} at last refresh · view details</small></button>`;
+ return `<div class="trip-alert-fallback"><b>${count}</b><small>${escapeHtml(weatherAlertFallbackText(item))}</small><small>Last successful refresh ${escapeHtml(formatStamp(item?.fetchedAt,false))}</small></div>`
+}
+function weatherAlertLineMarkup(item,locationId){
+ const count=weatherAlertCount(item);
+ if(!count)return '<div class="alert-line">No active point alerts returned at the last refresh.</div>';
+ if(weatherAlertHasDetails(item))return `<button aria-haspopup="dialog" class="alert-line alert weather-alert-line-trigger" data-weather-alert-location="${escapeHtml(locationId)}" type="button">${count} alert${count===1?'':'s'} at last refresh · View details</button>`;
+ return `<div class="alert-line alert weather-alert-line-fallback">${escapeHtml(weatherAlertFallbackText(item))}<small>Last successful refresh ${escapeHtml(formatStamp(item?.fetchedAt,false))}</small></div>`
+}
+let weatherAlertLastTrigger=null;
+function closeWeatherAlertDetails(){
+ const overlay=document.getElementById('weatherAlertOverlay');if(!overlay||overlay.hidden)return;
+ overlay.hidden=true;if(document.getElementById('focusOverlay')?.hidden!==false)document.body.style.overflow='';weatherAlertLastTrigger?.focus();weatherAlertLastTrigger=null
+}
+function openWeatherAlertDetails(locationId,trigger){
+ const item=weatherStore[locationId],details=weatherAlertDetails(item);if(!weatherAlertHasDetails(item))return;
+ const spec=locationById(locationId),overlay=document.getElementById('weatherAlertOverlay'),notice=document.getElementById('weatherAlertNotice'),list=document.getElementById('weatherAlertList');
+ weatherAlertLastTrigger=trigger||null;document.getElementById('weatherAlertTitle').textContent=`${spec.name} · saved alert details`;
+ if(!navigator.onLine)notice.textContent='Saved/cached alert details. This device is offline; these alerts may be stale and are not confirmed current.';
+ else if(item.lastError)notice.textContent=`The latest online refresh failed. Showing saved/cached alert details that may be stale. ${item.lastError}`;
+ else notice.textContent='Saved alert details from the last successful refresh. Alert status can change; refresh Trip Intelligence to verify.';
+ document.getElementById('weatherAlertRefresh').textContent=`Last successful refresh: ${formatStamp(item.fetchedAt)}`;
+ list.innerHTML=details.map(alert=>{const title=alert.event||alert.headline||'Weather alert',headline=alert.headline&&alert.headline!==title?`<p>${escapeHtml(alert.headline)}</p>`:'';return `<article><h3>${escapeHtml(title)}</h3>${headline}<dl>${alert.severity?`<div><dt>Severity</dt><dd>${escapeHtml(alert.severity)}</dd></div>`:''}${alert.area?`<div><dt>Affected area</dt><dd>${escapeHtml(alert.area)}</dd></div>`:''}${alert.ends?`<div><dt>Expiration</dt><dd>${escapeHtml(formatStamp(alert.ends))}</dd></div>`:''}</dl></article>`}).join('');
+ overlay.hidden=false;document.body.style.overflow='hidden';document.getElementById('closeWeatherAlerts').focus()
+}
 function planningFlags(item){
  const periods=(item?.upcoming||[]).slice(0,6),flags=[];
  const winds=periods.map(p=>p.windMph).filter(Number.isFinite),pops=periods.map(p=>p.pop).filter(Number.isFinite),temps=periods.map(p=>p.temp).filter(Number.isFinite);
  const maxWind=winds.length?Math.max(...winds):0,maxPop=pops.length?Math.max(...pops):null,minTemp=temps.length?Math.min(...temps):null;
  const text=periods.map(p=>p.condition).join(' ').toLowerCase();
- if(item?.alerts?.length)flags.push({label:`${item.alerts.length} active alert${item.alerts.length>1?'s':''}`,type:'alert'});
  if(/thunder|storm|lightning/.test(text))flags.push({label:'Thunderstorm wording',type:'alert'});
  if(maxWind>=25)flags.push({label:`Wind to ${maxWind} mph`,type:'warn'});
  if(Number.isFinite(maxPop)&&maxPop>=30)flags.push({label:`Precipitation to ${maxPop}%`,type:'warn'});
@@ -967,8 +1013,9 @@ function renderHeroWeather(){
  link.href=`https://forecast.weather.gov/MapClick.php?lat=${spec.lat}&lon=${spec.lon}`;
  document.querySelectorAll('[data-weather-mode]').forEach(b=>{const on=b.dataset.weatherMode===weatherMode;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});
  if(!item?.fetchedAt){
-  body.innerHTML=`<div class="weather-loading"><span class="weather-pulse"></span><div><b>Forecast not loaded</b><small>${navigator.onLine?'Refreshing automatically…':'Connect once to save an offline forecast.'}</small></div></div>`;
-  age.textContent='Not loaded on this device';return
+  const failed=item?.lastError;
+  body.innerHTML=`<div class="weather-loading"><span class="weather-pulse"></span><div><b>${failed?'Forecast unavailable':'Forecast not loaded'}</b><small>${failed?escapeHtml(failed):(navigator.onLine?'Refreshing automatically…':'Connect once to save an offline forecast.')}</small></div></div>`;
+  age.textContent=failed?`Last refresh failed ${formatStamp(item.failedAt||new Date().toISOString(),false)}`:'Not loaded on this device';return
  }
  const sourceStamp=item.sourceUpdatedAt?` · NWS issued ${formatStamp(item.sourceUpdatedAt,false)}`:'';
  age.textContent=`Fetched ${formatStamp(item.fetchedAt,false)}${sourceStamp}${navigator.onLine?'':' · saved offline'}`;
@@ -983,7 +1030,7 @@ function renderHeroWeather(){
    body.innerHTML=`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${d>7?'Trip forecast not open yet':'Target hours not available yet'}</strong><p>${d>7?`The NWS hourly horizon currently ends ${escapeHtml(h||'before the trip')}. Current weather remains available under “Now + 6 hours.”`:'Refresh again later; the target window has not populated.'}</p></div>`;
    return
   }
-  body.innerHTML=`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${t.minTemp}–${t.maxTemp}°F · ${escapeHtml(t.conditions.join(' · '))}</strong><div class="trip-window-metrics"><div><b>${t.maxWind} mph</b><small>highest listed wind</small></div><div><b>${Number.isFinite(t.maxPop)?t.maxPop:'—'}%</b><small>highest precipitation</small></div><div><b>${t.alerts.length}</b><small>active point alerts</small></div></div><div class="hero-hours">${t.samples.map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${p.windMph||0} mph</small></div>`).join('')}</div></div>`;
+  body.innerHTML=`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${t.minTemp}–${t.maxTemp}°F · ${escapeHtml(t.conditions.join(' · '))}</strong><div class="trip-window-metrics"><div><b>${t.maxWind} mph</b><small>highest listed wind</small></div><div><b>${Number.isFinite(t.maxPop)?t.maxPop:'—'}%</b><small>highest precipitation</small></div>${weatherAlertMetricMarkup(item,spec.id)}</div><div class="hero-hours">${t.samples.map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${p.windMph||0} mph</small></div>`).join('')}</div></div>`;
   return
  }
  const c=item.current;
@@ -994,7 +1041,7 @@ function renderHeroWeather(){
  const flags=planningFlags(item);
  body.innerHTML=`<div class="hero-weather-main"><div class="weather-art">${weatherIcon(forecastKind(c.condition,c.isDaytime))}</div><div><div class="hero-temp">${c.temp}°</div><div class="hero-condition">${escapeHtml(c.condition)}</div></div></div>
  <div class="weather-stats"><div class="weather-mini"><b>${escapeHtml(c.windDirection)} ${c.windMph||0} mph</b><small>listed wind</small></div><div class="weather-mini"><b>${Number.isFinite(c.pop)?c.pop:'—'}%</b><small>precipitation</small></div><div class="weather-mini"><b>${grid}</b><small>${spec.elevationFt.toLocaleString()} ft location</small></div></div>
- <div class="weather-flags">${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div>
+ <div class="weather-flags">${weatherAlertFlagMarkup(item,spec.id)}${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div>
  <div class="hero-hours">${(item.upcoming||[]).slice(0,6).map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${Number.isFinite(p.pop)?p.pop:'—'}% · ${p.windMph||0}</small></div>`).join('')}</div>`
 }
 async function maybeAutoRefreshSelected(immediate=false){
@@ -1014,9 +1061,9 @@ function renderWeatherCard(spec){
  if(!s){msg.textContent=`Refresh failed. ${item.lastError||''}`;strip.innerHTML='';return}
  if(!s.available){
   const d=daysTo(spec.targetDate);msg.innerHTML=d>7?`Trip date is outside the NWS seven-day hourly horizon. Current horizon ends <b>${escapeHtml(s.horizonEnd||'unknown')}</b>.`:`No hourly periods are available for the target window yet.`;
-  strip.innerHTML=item.alerts?.length?`<div class="alert-line alert">Active alert: ${escapeHtml(item.alerts.map(a=>a.event).join(', '))}</div>`:`<div class="alert-line">No active point alerts returned.</div>`;return
+  strip.innerHTML=weatherAlertLineMarkup(item,spec.id);return
  }
- msg.innerHTML=`<div class="wx-summary"><div class="wx-stat"><b>${s.minTemp}–${s.maxTemp}°F</b><small>temperature</small></div><div class="wx-stat"><b>${s.maxWind} mph</b><small>peak listed wind</small></div><div class="wx-stat"><b>${Number.isFinite(s.maxPop)?s.maxPop:'—'}%</b><small>max precip.</small></div></div><div>${escapeHtml(s.conditions.join(' · '))}</div><div class="alert-line ${s.alerts.length?'alert':''}">${s.alerts.length?`Active alert: ${escapeHtml(s.alerts.join(', '))}`:'No active point alerts returned.'}</div>`;
+ msg.innerHTML=`<div class="wx-summary"><div class="wx-stat"><b>${s.minTemp}–${s.maxTemp}°F</b><small>temperature</small></div><div class="wx-stat"><b>${s.maxWind} mph</b><small>peak listed wind</small></div><div class="wx-stat"><b>${Number.isFinite(s.maxPop)?s.maxPop:'—'}%</b><small>max precip.</small></div></div><div>${escapeHtml(s.conditions.join(' · '))}</div>${weatherAlertLineMarkup(item,spec.id)}`;
  strip.innerHTML=s.samples.map(x=>`<div class="hour"><b>${hourLabel(x.startTime)}</b><span>${x.temp}°</span><small>${escapeHtml(x.windText||'')}</small><small>${x.pop??0}%</small></div>`).join('')
 }
 function renderWeatherFreshness(){
@@ -1100,6 +1147,10 @@ function setupWeatherWidget(){
  if(!navigator.onLine){renderHeroWeather();toast('Offline — showing the last saved forecast');return}
  try{await refreshLocation(selectedWeatherId,{force:true});toast('Selected forecast refreshed')}catch{}
 });
+ document.addEventListener('click',event=>{const trigger=event.target.closest('[data-weather-alert-location]');if(trigger)openWeatherAlertDetails(trigger.dataset.weatherAlertLocation,trigger)});
+ document.getElementById('closeWeatherAlerts').addEventListener('click',closeWeatherAlertDetails);
+ document.getElementById('weatherAlertOverlay').addEventListener('click',event=>{if(event.target.id==='weatherAlertOverlay')closeWeatherAlertDetails()});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!document.getElementById('weatherAlertOverlay').hidden)closeWeatherAlertDetails()});
  renderHeroWeather();setTimeout(()=>maybeAutoRefreshSelected(false),700);
  setInterval(()=>maybeAutoRefreshSelected(false),AUTO_WEATHER_MS);
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')maybeAutoRefreshSelected(false)})
@@ -1190,7 +1241,7 @@ function turnaroundCheck(obj,item){
  if(diff>=0)return {level:'warn',text:`Forecast risk (${risk.reason}) appears ${clock}, right at your ${obj.turn} turnaround. Little or no margin — plan to be descending before this.`};
  return {level:'danger',text:`Forecast risk (${risk.reason}) appears ${clock}, BEFORE your ${obj.turn} turnaround. The listed weather turns before your planned turnaround — reconsider the start time or the objective.`};
 }
-function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; in the basin, plan on headlamps well past sunrise — direct light over the east ridge comes considerably later.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;const tc=turnaroundCheck(obj,item),tcEl=document.getElementById('focusTurnCheck');if(tcEl){tcEl.dataset.level=tc.level;tcEl.textContent=tc.text}document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
+function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; in the basin, plan on headlamps well past sunrise — direct light over the east ridge comes considerably later.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;const tc=turnaroundCheck(obj,item),tcEl=document.getElementById('focusTurnCheck');if(tcEl){tcEl.dataset.level=tc.level;tcEl.textContent=tc.text}document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${weatherAlertFlagMarkup(item,obj.weatherId)}${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
 function openFocus(id){if(id&&FOCUS_OBJECTIVES[id])focusObjectiveId=id;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderFocus();startFocusCountdown();const overlay=document.getElementById('focusOverlay');overlay.hidden=false;document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('focusObjective').focus(),0)}
 function closeFocus(){document.getElementById('focusOverlay').hidden=true;document.body.style.overflow='';stopFocusCountdown()}
 

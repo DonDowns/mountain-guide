@@ -1,12 +1,18 @@
-# Don Downs Mountain Guide — Version 15.3.8
+# Don Downs Mountain Guide — Version 15.3.9
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.8 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.9 is the current production release.
 
 ## Current release
 
-**Version 15.3.8 — Full UI Readability and Field Audit**
+**Version 15.3.9 — Physical-iPhone Field Findings Hotfix**
 
 This release includes:
+
+- a reliable Summit Focus card Red-display control on narrow iPhone screens, with all three Red/Normal controls synchronized;
+- unambiguous “Designed for pre-dawn starts” wording while retaining the saved 4:15 AM trip start;
+- readable saved NWS alert details with severity, affected area, expiration, and last-refresh context when available;
+- explicit saved/stale offline alert wording and a non-actionable fallback when only an alert count is available;
+- an explicit refresh failure when NWS alert details cannot be retrieved, preserving the last successful cached forecast;
 
 - corrected dark-theme surface variables so controls keep readable text/background contrast throughout the full app;
 - readable Open/Close Trip Builder accordion headers in both normal and dark appearance;
@@ -20,7 +26,7 @@ This release includes:
 - automatic expansion and scrolling to the filtered ledger after each selection;
 - visible Road to 50 status at both the controls and the displayed ledger;
 - a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
-- a service-worker-safe shared version value and a fresh Version 15.3.8 cache;
+- a service-worker-safe shared version value and a fresh Version 15.3.9 cache;
 - cache-upgrade hardening that forces fresh release assets and prevents mixed 15.3.7/15.3.8 modules;
 - explicit browser icons on both app pages, eliminating the otherwise implicit missing-favicon request;
 - stronger normal-mode muted-text contrast on cream and mist surfaces;
@@ -66,17 +72,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.8 full UI audit`
+`Deploy Mountain Guide v15.3.9 physical-iPhone field findings hotfix`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.8**.
+1. Confirm the footer displays **Version 15.3.9**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.9
+Fixes the Summit Focus card Red-display control on physical-size iPhone layouts, clarifies pre-dawn wording without changing the trip start, and makes saved NWS alert counts disclose readable cached details or an explicit unavailable state online and offline.
 
 ### Version 15.3.8
 Completes a full-app desktop and mobile control audit, fixes shared light/dark-theme contrast failures, improves field-source link readability, standardizes practical mobile control targets, and hardens service-worker upgrades against mixed-version assets.
