@@ -202,9 +202,9 @@
 <select id="tripAccessWeather"></select>
 </label>
 <label class="trip-field">
-<span>Emergency jurisdiction</span>
+<span>Emergency contact reference</span>
 <select id="tripEmergencyArea"></select>
-<small>Confirm the county for the actual route and trailhead before departure.</small>
+<small>This saved county is a planning reference, not a definitive jurisdiction. Call 911 and give the exact incident location.</small>
 </label>
 <label class="trip-field trip-field-wide">
 <span>Additional objectives or notes</span>
@@ -230,7 +230,7 @@
 <div id="tripOfflineContext"></div>
 </article>
 <article class="trip-generated-card">
-<div class="kicker">Emergency jurisdiction</div>
+<div class="kicker">Location-aware emergency contacts</div>
 <div id="tripEmergencyContext"></div>
 </article>
 </div><div class="trip-offline-prep">
@@ -1246,18 +1246,18 @@
 <div class="callout"><b>Before departure:</b> share MapShare with Vonda and define an overdue time.</div></div>
 </div>
 <div class="card emergency-local-card" id="emergencyLocalCard">
-  <div class="section-head emergency-local-head"><div><div class="kicker">Objective-specific contacts</div><h3>Local sheriff and SAR activation</h3></div><label class="trip-field emergency-objective-field"><span>Objective</span><select id="emergencyObjectiveSelect"></select></label></div>
+  <div class="section-head emergency-local-head"><div><div class="kicker">Objective-specific contacts</div><h3>Location-aware sheriff and SAR contacts</h3></div><label class="trip-field emergency-objective-field"><span>Objective</span><select id="emergencyObjectiveSelect"></select></label></div>
   <div id="emergencyLocalDetails"><p>Loading verified local contacts…</p></div>
   <div class="toolbar emergency-contact-actions">
+    <a class="button-link emergency-primary" href="tel:911">Emergency call · 911</a>
     <a class="button-link" id="emergencyCallDispatch" href="#">Call county dispatch</a>
     <a class="button-link" id="emergencyCallSheriff" href="#">Call sheriff’s office</a>
-    <a class="button-link" href="tel:911">Emergency call · 911</a>
   </div>
   <small id="emergencyLocalVerified"></small>
 </div>
 <div class="card emergency-vonda-card">
   <div class="kicker">Personal communication</div><h3>Send trip update to Vonda</h3>
-  <p>The app creates a draft containing the selected objective, date, start, turnaround, local dispatch number, and saved forecast timestamp. Review the draft before sending.</p>
+  <p>The app creates a draft containing the selected objective, date, start, turnaround, location-aware public emergency contacts, and saved forecast timestamp. Review the draft before sending.</p>
   <details class="contact-setup" id="emergencyContactSetup">
     <summary>Vonda contact setup · stored only on this device</summary>
     <div class="contact-setup-body">
@@ -1403,4 +1403,4 @@
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
 <div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn" type="button">Update now</button></div>
-<script defer="" src="js/version.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_9.js"></script></body></html>
+<script defer="" src="js/version.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_10.js"></script></body></html>

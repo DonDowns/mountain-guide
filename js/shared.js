@@ -21,7 +21,7 @@
         officePhone:'+17195896608',officeDisplay:'719-589-6608',officeLabel:'Sheriff’s office',
         sarTeam:'Alamosa Volunteer Search and Rescue',
         activation:'Call 911 for an emergency. Alamosa County Dispatch activates the county SAR response.',
-        verifiedOn:'2026-08-04',sourceUrl:'https://www.alamosacounty.org/185/Sheriff',sarSourceUrl:'https://www.avsar.us/'
+        verifiedOn:'2026-08-05',sourceUrl:'https://www.alamosacounty.org/185/Sheriff',sarSourceUrl:'https://www.avsar.us/'
       },
       huerfano:{
         id:'huerfano',county:'Huerfano County',sheriff:'Huerfano County Sheriff’s Office',
@@ -29,7 +29,7 @@
         officePhone:'+17197381600',officeDisplay:'719-738-1600',officeLabel:'Sheriff’s office',
         sarTeam:'Huerfano County backcountry search and rescue response',
         activation:'Call 911 for an emergency. Huerfano County Dispatch coordinates the county response.',
-        verifiedOn:'2026-08-04',sourceUrl:'https://huerfano.us/sheriff/',sarSourceUrl:'https://coloradosar.org/sar-county-map/'
+        verifiedOn:'2026-08-05',sourceUrl:'https://huerfano.us/sheriff/',sarSourceUrl:'https://coloradosar.org/sar-county-map/'
       },
       pitkin:{
         id:'pitkin',county:'Pitkin County',sheriff:'Pitkin County Sheriff’s Office',
@@ -93,7 +93,7 @@
         officePhone:'+17196720673',officeDisplay:'719-672-0673',officeLabel:'Sheriff’s office',
         sarTeam:'Costilla County backcountry search and rescue response',
         activation:'Call 911 for an emergency. Costilla County Dispatch coordinates the county response.',
-        verifiedOn:'2026-08-04',sourceUrl:'https://www.costillacounty.gov/sheriff',sarSourceUrl:'https://coloradosar.org/sar-county-map/'
+        verifiedOn:'2026-08-05',sourceUrl:'https://www.costillacounty.gov/sheriff',sarSourceUrl:'https://coloradosar.org/sar-county-map/'
       }
     },
     peakEmergencyAreas:{
@@ -117,6 +117,8 @@
         detail:'Primary peak: Blanca Peak. Lake Como camp. Use the saved route plan and downloaded navigation; do not depend on cell service.',
         dayId:'sun',
         emergencyAreaId:'alamosa',
+        emergencyAreaIds:['alamosa','costilla'],
+        emergencyGuidance:'Lake Como and the Alamosa-side approach may involve Alamosa County; summit-area incidents may involve Costilla County.',
         links:[
           ['Combination route','https://www.14ers.com/route.php?route=elli3'],
           ['Peak conditions','https://www.14ers.com/php14ers/peakstatus_peak.php?peakparm=10004']
@@ -140,6 +142,8 @@
         detail:'Use the saved access plan and downloaded navigation. Vehicle clearance, road condition, weather, and driver judgment determine the actual starting point.',
         dayId:'sat',
         emergencyAreaId:'alamosa',
+        emergencyAreaIds:['alamosa','costilla'],
+        emergencyGuidance:'Lake Como and the Alamosa-side approach may involve Alamosa County; summit-area incidents on Blanca or Ellingwood may involve Costilla County.',
         links:[
           ['Trailhead status','https://www.14ers.com/php14ers/trailheadsview.php?thparm=sc01'],
           ['NWS point forecast','https://forecast.weather.gov/MapClick.php?lat=37.56960&lon=-105.51406']
@@ -162,6 +166,8 @@
         detail:'Use the saved route plan and downloaded navigation. Confirm current access requirements before leaving service.',
         dayId:'mon',
         emergencyAreaId:'huerfano',
+        emergencyAreaIds:['huerfano','costilla'],
+        emergencyGuidance:'Lily Lake and trailhead-side incidents may involve Huerfano County; summit-area incidents may involve Costilla County.',
         links:[
           ['Standard route','https://www.14ers.com/route.php?route=lind1'],
           ['Required waiver','https://www.mountlindseywaiver.com/']
@@ -203,6 +209,17 @@
     const areaId=objective?.emergencyAreaId||config.peakEmergencyAreas[objective?.peak||objective?.fieldTitle||value];
     return config.emergencyAreas[areaId]||null;
   };
+  const emergencyAreasFor=(value)=>{
+    const objective=typeof value==='string'?config.focusObjectives[value]:value;
+    const areaIds=Array.isArray(objective?.emergencyAreaIds)&&objective.emergencyAreaIds.length
+      ? objective.emergencyAreaIds
+      : [objective?.emergencyAreaId||config.peakEmergencyAreas[objective?.peak||objective?.fieldTitle||value]].filter(Boolean);
+    return [...new Set(areaIds)].map(id=>config.emergencyAreas[id]).filter(Boolean);
+  };
+  const emergencyGuidanceFor=(value)=>{
+    const objective=typeof value==='string'?config.focusObjectives[value]:value;
+    return objective?.emergencyGuidance||'Call 911 first and provide the exact incident location. Dispatchers determine the responding jurisdiction.';
+  };
   const dateLabel=(value)=>{
     if(!value)return 'Not set';
     const d=new Date(`${value}T12:00:00`);
@@ -213,8 +230,9 @@
     const d=new Date(value);
     return Number.isNaN(d.getTime())?'Saved forecast timestamp unavailable':new Intl.DateTimeFormat('en-US',{timeZone:'America/Denver',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(d);
   };
-  const buildUpdate=({objective,area,forecast,trip,note=''})=>{
+  const buildUpdate=({objective,forecast,trip,note=''})=>{
     const obj=objective||{};
+    const areas=emergencyAreasFor(obj);
     const lines=[
       `Mountain Guide update — ${obj.label||obj.fieldTitle||trip?.peak||'mountain trip'}`,
       `Date: ${dateLabel(obj.date||trip?.climbDate)}`,
@@ -224,10 +242,13 @@
     if(trip?.name)lines.push(`Trip: ${trip.name}`);
     if(trip?.partners||obj.partners)lines.push(`Partners: ${trip?.partners||obj.partners}`);
     if(obj.detail||obj.route)lines.push(`Objective: ${obj.detail||obj.route}`);
-    if(area){
-      lines.push(`Emergency jurisdiction: ${area.county}`);
-      lines.push('Emergency: 911');
-      lines.push(`${area.dispatchLabel||'County dispatch'}: ${area.dispatchDisplay}`);
+    if(areas.length){
+      lines.push('Emergency: Call 911 first. Provide the exact location, mountain, route, elevation, and coordinates if available. Dispatchers determine the responding jurisdiction; you do not need to choose a county before calling.');
+      lines.push(`Location context: ${emergencyGuidanceFor(obj)}`);
+      areas.forEach(area=>{
+        lines.push(`${area.county.replace(/ County$/,'')} ${area.dispatchLabel||'dispatch'}: ${area.dispatchDisplay}`);
+        if(area.officeDisplay)lines.push(`${area.county} ${area.officeLabel||'sheriff’s office'}: ${area.officeDisplay}`);
+      });
     }
     lines.push(`Forecast at last refresh: ${stampLabel(forecast?.fetchedAt)}`);
     if(note.trim())lines.push(`Status / location note: ${note.trim()}`);
@@ -240,7 +261,7 @@
     return `sms:${phone||''}${separator}body=${encodeURIComponent(body)}`;
   };
   const emailHref=(email,subject,body)=>`mailto:${email||''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.DDMG_EMERGENCY=Object.freeze({emergencyAreaFor,buildUpdate,smsHref,emailHref,dateLabel,stampLabel,readLocalContact,saveLocalContact,clearLocalContact});
+  window.DDMG_EMERGENCY=Object.freeze({emergencyAreaFor,emergencyAreasFor,emergencyGuidanceFor,buildUpdate,smsHref,emailHref,dateLabel,stampLabel,readLocalContact,saveLocalContact,clearLocalContact});
   const applyVersion=()=>document.querySelectorAll('[data-app-version]').forEach(el=>{el.textContent=config.version});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyVersion,{once:true});else applyVersion();
 })();

@@ -1,12 +1,18 @@
-# Don Downs Mountain Guide — Version 15.3.9
+# Don Downs Mountain Guide — Version 15.3.10
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.9 is the current production release.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.10 is the current field-readiness hotfix candidate.
 
 ## Current release
 
-**Version 15.3.9 — Physical-iPhone Field Findings Hotfix**
+**Version 15.3.10 — Lake Como Field-Readiness Hotfix**
 
 This release includes:
+
+- cautious, location-aware emergency wording for Lake Como / Blanca / Ellingwood and Mount Lindsey, with Alamosa, Costilla, and Huerfano public contacts retained;
+- draft-message wording that tells the user to call 911 and provide an exact location without asserting a single definitive county;
+- prominent failed-refresh and saved/offline weather notices that override Fresh/Current presentation and retain last-successful data;
+- Climb Mode alert wording that reports alerts “at last refresh” and directs users to the full guide for saved details;
+- a restored 390px Summit Focus in-sheet Red-display control, with the full-guide and Climb Mode Red state synchronized across navigation;
 
 - a reliable Summit Focus card Red-display control on narrow iPhone screens, with all three Red/Normal controls synchronized;
 - unambiguous “Designed for pre-dawn starts” wording while retaining the saved 4:15 AM trip start;
@@ -26,7 +32,7 @@ This release includes:
 - automatic expansion and scrolling to the filtered ledger after each selection;
 - visible Road to 50 status at both the controls and the displayed ledger;
 - a return control beside the displayed ledger count that scrolls back to the Road to 50 filters without changing scope;
-- a service-worker-safe shared version value and a fresh Version 15.3.9 cache;
+- a service-worker-safe shared version value and a fresh Version 15.3.10 cache;
 - cache-upgrade hardening that forces fresh release assets and prevents mixed 15.3.7/15.3.8 modules;
 - explicit browser icons on both app pages, eliminating the otherwise implicit missing-favicon request;
 - stronger normal-mode muted-text contrast on cream and mist surfaces;
@@ -72,17 +78,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.9 physical-iPhone field findings hotfix`
+`Deploy Mountain Guide v15.3.10 field-readiness hotfix`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.9**.
+1. Confirm the footer displays **Version 15.3.10**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.10
+Makes current-expedition emergency guidance location-aware, prevents failed or offline weather from appearing current, clarifies cached alert counts in Climb Mode, and restores the in-sheet Summit Focus Red-display control on 390px mobile layouts.
 
 ### Version 15.3.9
 Fixes the Summit Focus card Red-display control on physical-size iPhone layouts, clarifies pre-dawn wording without changing the trip start, and makes saved NWS alert counts disclose readable cached details or an explicit unavailable state online and offline.

@@ -5,6 +5,7 @@
   const keys=cfg.storageKeys;
   const objectives=cfg.focusObjectives;
   const body=document.body;
+  const sharedRedKey='ddmg-v6-campfire';
 
   function read(key,fallback=null){
     try{const raw=localStorage.getItem(key);return raw===null?fallback:raw}catch{return fallback}
@@ -61,7 +62,8 @@
     const pops=periods.map(p=>Number(p.pop)).filter(Number.isFinite);
     const temps=periods.map(p=>Number(p.temp)).filter(Number.isFinite);
     const text=periods.map(p=>p.condition||'').join(' ').toLowerCase();
-    if(item?.alerts?.length)flags.push(`${item.alerts.length} active alert${item.alerts.length===1?'':'s'}`);
+    const alertCount=Array.isArray(item?.alerts)&&item.alerts.length?item.alerts.length:Array.isArray(item?.trip?.alerts)?item.trip.alerts.length:0;
+    if(alertCount)flags.push(`${alertCount} alert${alertCount===1?'':'s'} at last refresh`);
     if(/thunder|storm|lightning/.test(text))flags.push('Thunderstorm wording in next 6 hours');
     if(winds.length&&Math.max(...winds)>=25)flags.push(`Wind listed to ${Math.max(...winds)} mph`);
     if(pops.length&&Math.max(...pops)>=30)flags.push(`Precipitation listed to ${Math.max(...pops)}%`);
@@ -75,15 +77,21 @@
       card.innerHTML='<b>Forecast at last refresh</b><p class="forecast-unavailable">No saved forecast is available for this objective on this device.</p><small>Open the full guide while online, refresh the selected objective, and verify the timestamp before relying on the saved display.</small>';
       return;
     }
-    const c=item.current,ageH=(Date.now()-new Date(item.fetchedAt).getTime())/36e5;
-    card.dataset.state=ageH>6?'stale':ageH>2?'aging':'current';
+    const c=item.current,ageH=(Date.now()-new Date(item.fetchedAt).getTime())/36e5,failed=Boolean(item.lastError),offline=!navigator.onLine;
+    card.dataset.state=failed||offline||ageH>6?'stale':ageH>2?'aging':'current';
     const pop=Number.isFinite(Number(c.pop))?`${Number(c.pop)}% precipitation probability`:'precipitation probability unavailable';
     const wind=[c.windDirection,Number.isFinite(Number(c.windMph))?`${Number(c.windMph)} mph`:null].filter(Boolean).join(' ');
-    const flags=planningFlags(item);
+    const flags=planningFlags(item),alertCount=Array.isArray(item?.alerts)&&item.alerts.length?item.alerts.length:Array.isArray(item?.trip?.alerts)?item.trip.alerts.length:0;
+    const failureNotice=failed
+      ? `<p class="forecast-failure" role="status"><strong>Latest refresh failed ${escapeHtml(formatStamp(item.failedAt))}.</strong><br>Showing saved/cached forecast from the last successful refresh ${escapeHtml(formatStamp(item.fetchedAt))}. Current conditions are not confirmed.</p>`
+      : offline?`<p class="forecast-failure" role="status"><strong>Saved/cached forecast.</strong><br>This device is offline. Saved forecast information may be stale and is not confirmed current.</p>`:'';
+    const alertNote=alertCount?`<p class="forecast-alert-note">${failed||offline?'Saved alert information may be stale and is not confirmed current. ':''}Alert details are intentionally kept in the full guide; use “Back to full guide” above to read the saved details.</p>`:'';
     card.innerHTML=`<b>Forecast at last refresh</b>
+      ${failureNotice}
       <p class="forecast-reading"><strong>${escapeHtml(obj.label)}</strong> · ${escapeHtml(c.temp)}°F · ${escapeHtml(c.condition||'condition unavailable')} · ${escapeHtml(wind||'wind unavailable')} · ${escapeHtml(pop)}</p>
       <p class="forecast-age"><strong>Saved ${escapeHtml(formatStamp(item.fetchedAt))}</strong> · ${escapeHtml(ageLabel(item.fetchedAt))}</p>
       ${flags.length?`<ul class="forecast-flags">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>`:'<p class="forecast-flags-none">No listed threshold flags were found in the next six saved hours. This is not an all-clear.</p>'}
+      ${alertNote}
       <small>Forecast age matters. Compare this saved information with the actual sky, wind, terrain, access, pace, and condition of the group.</small>`;
   }
   function renderLinks(obj){
@@ -95,7 +103,7 @@
     return store?.[obj.weatherId]||null;
   }
   function renderEmergency(obj){
-    const area=window.DDMG_EMERGENCY?.emergencyAreaFor(obj);
+    const helper=window.DDMG_EMERGENCY,areas=helper?.emergencyAreasFor(obj)||[],area=areas[0]||null;
     const details=document.getElementById('localEmergencyDetails');
     const dispatch=document.getElementById('callLocalDispatch');
     const office=document.getElementById('callSheriffOffice');
@@ -109,11 +117,12 @@
       return null;
     }
     card.dataset.state='current';
-    const officeLine=area.officePhone&&area.officeDisplay?`<br><b>${escapeHtml(area.officeLabel||'Sheriff’s office')}:</b> ${escapeHtml(area.officeDisplay)}`:'';
-    details.innerHTML=`<p><strong>${escapeHtml(area.county)}</strong> · ${escapeHtml(area.sarTeam)}</p><p>${escapeHtml(area.activation)}</p><p><b>${escapeHtml(area.dispatchLabel||'County dispatch')}:</b> ${escapeHtml(area.dispatchDisplay)}${officeLine}</p><p><a target="_blank" rel="noopener" href="${escapeHtml(area.sourceUrl)}">Official county source</a> · <a target="_blank" rel="noopener" href="${escapeHtml(area.sarSourceUrl)}">SAR source</a></p>`;
-    dispatch.href=`tel:${area.dispatchPhone}`;dispatch.removeAttribute('aria-disabled');dispatch.textContent=`Call ${area.county} contact`;
-    if(area.officePhone){office.href=`tel:${area.officePhone}`;office.removeAttribute('aria-disabled');office.hidden=false;office.textContent='Call sheriff’s office'}else{office.removeAttribute('href');office.setAttribute('aria-disabled','true');office.hidden=true}
-    verified.textContent=`Contact information verified ${window.DDMG_EMERGENCY.dateLabel(area.verifiedOn)}. Recheck before departure because numbers and jurisdiction can change.`;
+    const guidance=helper.emergencyGuidanceFor(obj);
+    const areaMarkup=areas.map(entry=>`<section class="emergency-area-detail"><h3>${escapeHtml(entry.county)} public contacts</h3><p><b>${escapeHtml(entry.dispatchLabel||'County dispatch')}:</b> <a href="tel:${escapeHtml(entry.dispatchPhone)}">${escapeHtml(entry.dispatchDisplay)}</a>${entry.officePhone&&entry.officeDisplay?`<br><b>${escapeHtml(entry.officeLabel||'Sheriff’s office')}:</b> <a href="tel:${escapeHtml(entry.officePhone)}">${escapeHtml(entry.officeDisplay)}</a>`:''}</p><p><a target="_blank" rel="noopener" href="${escapeHtml(entry.sourceUrl)}">Official county source</a> · <a target="_blank" rel="noopener" href="${escapeHtml(entry.sarSourceUrl)}">SAR source</a></p></section>`).join('');
+    details.innerHTML=`<p class="emergency-call-first"><strong>Call 911 first.</strong> Give the exact location, mountain, route, elevation, and coordinates if available. Dispatchers determine the responding jurisdiction; you do not need to choose a county before calling.</p><p>${escapeHtml(guidance)}</p>${areaMarkup}`;
+    dispatch.href=`tel:${area.dispatchPhone}`;dispatch.removeAttribute('aria-disabled');dispatch.textContent=`Call ${area.county.replace(' County','')} dispatch`;
+    if(area.officePhone){office.href=`tel:${area.officePhone}`;office.removeAttribute('aria-disabled');office.hidden=false;office.textContent=`Call ${area.county.replace(' County','')} sheriff`}else{office.removeAttribute('href');office.setAttribute('aria-disabled','true');office.hidden=true}
+    verified.textContent=`Public contacts verified ${[...new Set(areas.map(entry=>window.DDMG_EMERGENCY.dateLabel(entry.verifiedOn)))].join(' / ')}. Recheck before departure because numbers and responding jurisdiction can change.`;
     return area;
   }
   function updateNoteScope(obj){return `${obj.id}:${obj.date}`}
@@ -182,7 +191,8 @@
   }
   function applyDisplayState(){
     const state=readJson(keys.fieldDisplay,{});
-    body.classList.toggle('night',Boolean(state.red));body.classList.toggle('large',Boolean(state.large));
+    const sharedRed=read(sharedRedKey,null),red=sharedRed===null?Boolean(state.red):sharedRed==='1';
+    body.classList.toggle('night',red);body.classList.toggle('large',Boolean(state.large));
     const nightButton=document.getElementById('night'),fontButton=document.getElementById('font');
     const nightActive=body.classList.contains('night'),largeActive=body.classList.contains('large');
     nightButton.textContent=nightActive?'Normal display':'Red display';
@@ -190,7 +200,7 @@
     fontButton.textContent=largeActive?'Standard text':'Bigger text';
     fontButton.setAttribute('aria-pressed',String(largeActive));
   }
-  function saveDisplayState(){write(keys.fieldDisplay,JSON.stringify({red:body.classList.contains('night'),large:body.classList.contains('large')}))}
+  function saveDisplayState(){const red=body.classList.contains('night');write(sharedRedKey,red?'1':'0');write(keys.fieldDisplay,JSON.stringify({red,large:body.classList.contains('large')}))}
   function render(id){
     const obj=objectiveData(id);write(keys.focusObjective,obj.id);
     document.getElementById('objectiveSelect').value=obj.id;
