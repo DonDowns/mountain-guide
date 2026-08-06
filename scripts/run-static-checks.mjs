@@ -4,12 +4,14 @@ import {fileURLToPath} from 'node:url';
 
 const directory=path.dirname(fileURLToPath(import.meta.url));
 const checks=[
+  'check-syntax.mjs',
   'check-version.mjs',
   'check-sw-cache.mjs',
   'check-references.mjs',
   'check-privacy.mjs',
   'check-safety-language.mjs',
-  'check-cleanliness.mjs'
+  'check-cleanliness.mjs',
+  'check-git-diff.mjs'
 ];
 
 for(const check of checks){

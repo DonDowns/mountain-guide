@@ -4,11 +4,24 @@
   "type": "module",
   "scripts": {
     "check": "node scripts/run-static-checks.mjs",
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check:diff": "node scripts/check-git-diff.mjs",
     "check:version": "node scripts/check-version.mjs",
     "check:sw": "node scripts/check-sw-cache.mjs",
     "check:refs": "node scripts/check-references.mjs",
     "check:privacy": "node scripts/check-privacy.mjs",
     "check:safety": "node scripts/check-safety-language.mjs",
-    "check:clean": "node scripts/check-cleanliness.mjs"
+    "check:clean": "node scripts/check-cleanliness.mjs",
+    "check:live": "node scripts/check-live-deploy.mjs",
+    "test:ui": "playwright test tests/full-guide.spec.js tests/climb-mode.spec.js tests/control-inventory.spec.js --project=chromium-desktop --project=chromium-mobile",
+    "test:chromium": "playwright test tests/full-guide.spec.js tests/climb-mode.spec.js tests/control-inventory.spec.js --project=chromium-desktop --project=chromium-mobile",
+    "test:webkit": "playwright test tests/full-guide.spec.js tests/climb-mode.spec.js --project=webkit-desktop --project=webkit-mobile",
+    "test:offline": "playwright test tests/offline.spec.js --project=chromium-desktop --project=webkit-desktop",
+    "test:sw-upgrade": "playwright test tests/sw-upgrade.spec.js --project=chromium-desktop",
+    "test:safety": "playwright test tests/safety-invariants.spec.js --project=chromium-desktop",
+    "test:all": "npm run check && npm run test:chromium && npm run test:webkit && npm run test:offline && npm run test:sw-upgrade && npm run test:safety"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
   }
 }

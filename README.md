@@ -90,6 +90,50 @@ npm run check:clean
 
 The safety-language check reports listed phrases for human review without inferring whether their context is acceptable. The privacy check reports every detected phone number or email and permits only its labeled public agency/business allowlist.
 
+## Browser automation and CI
+
+Install the locked development dependencies and Playwright browsers:
+
+```sh
+npm ci
+npx playwright install chromium webkit
+```
+
+Run the primary suites:
+
+```sh
+npm run test:ui
+npm run test:chromium
+npm run test:webkit
+npm run test:offline
+npm run test:sw-upgrade
+npm run test:safety
+npm run test:all
+```
+
+`npm run test:all` is the complete local release gate: existing static checks, JavaScript syntax, Git whitespace checks, Chromium desktop/mobile, WebKit desktop/mobile, offline reload, service-worker upgrade, and executable safety invariants. Test expectations such as Road to 50 counts are derived from current app data rather than frozen historical totals.
+
+GitHub Actions runs the same safety layers for pull requests targeting `main` and pushes to `main`. CI never merges automatically. Failure in version consistency, privacy, references, precache integrity, safety invariants, browser behavior, offline behavior, or unexpected console errors blocks the workflow.
+
+After a deployment, verify the public endpoints against the local release source:
+
+```sh
+npm run check:live
+# Override when checking another Pages URL:
+LIVE_URL=https://example.github.io/mountain-guide/ npm run check:live
+```
+
+### Release checklist
+
+1. Work on a feature, fix, hotfix, or docs branch—never directly on `main`.
+2. Run `npm ci`, `npm run test:all`, and `git diff --check`.
+3. Confirm served-file changes have synchronized version, release-module, README, and service-worker cache updates.
+4. Review the pull request and all required checks before requesting merge approval.
+5. After deployment, run `npm run check:live` and verify the installed PWA on a physical iPhone.
+6. For PWA-sensitive releases, repeat online launch, update acceptance, Airplane Mode reload, safe-area, touch-target, and mixed-version checks on the actual phone.
+
+Browser simulation is not a substitute for physical-iPhone verification. Automation does not authorize a climb or replace field judgment: weather is evidence, not permission, and actual sky, wind, terrain, access, pace, and group condition govern decisions.
+
 ## Deployment
 
 GitHub Pages should publish from:
