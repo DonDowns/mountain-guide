@@ -1,4 +1,4 @@
-/* Version 15.3.9 compatibility and emergency-section bindings. */
+/* Version 15.3.10 field-readiness compatibility and emergency-section bindings. */
 (()=>{
 'use strict';
 const V=window.DDMG_CONFIG?.version||window.DDMG_VERSION||'unknown';
@@ -32,16 +32,17 @@ function emergencyCopy(text){
  return new Promise((resolve,reject)=>{try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();document.execCommand('copy');ta.remove();resolve()}catch(err){reject(err)}});
 }
 function renderEmergencySection(id){
- const cfg=window.DDMG_CONFIG,helper=window.DDMG_EMERGENCY,obj=emergencyObjectiveData(id),area=helper.emergencyAreaFor(obj);
+ const cfg=window.DDMG_CONFIG,helper=window.DDMG_EMERGENCY,obj=emergencyObjectiveData(id),areas=helper.emergencyAreasFor(obj),area=areas[0]||null;
  const details=document.getElementById('emergencyLocalDetails'),dispatch=document.getElementById('emergencyCallDispatch'),sheriff=document.getElementById('emergencyCallSheriff'),verified=document.getElementById('emergencyLocalVerified');
  emergencyWrite(cfg.storageKeys.focusObjective,obj.id);
  const focus=document.getElementById('focusObjective');if(focus&&focus.value!==obj.id)focus.value=obj.id;
  if(area){
-  const officeLine=area.officePhone&&area.officeDisplay?` · <b>${emergencyEscape(area.officeLabel||'Sheriff’s office')}:</b> ${emergencyEscape(area.officeDisplay)}`:'';
-  details.innerHTML=`<p><strong>${emergencyEscape(area.county)}</strong> · ${emergencyEscape(area.sarTeam)}</p><p>${emergencyEscape(area.activation)}</p><p><b>${emergencyEscape(area.dispatchLabel||'County dispatch')}:</b> ${emergencyEscape(area.dispatchDisplay)}${officeLine}</p><p><a target="_blank" rel="noopener" href="${emergencyEscape(area.sourceUrl)}">Official county source</a> · <a target="_blank" rel="noopener" href="${emergencyEscape(area.sarSourceUrl)}">SAR source</a></p>`;
-  dispatch.href=`tel:${area.dispatchPhone}`;dispatch.textContent=`Call ${area.county} contact`;dispatch.removeAttribute('aria-disabled');
-  if(area.officePhone){sheriff.href=`tel:${area.officePhone}`;sheriff.textContent='Call sheriff’s office';sheriff.removeAttribute('aria-disabled');sheriff.hidden=false}else{sheriff.removeAttribute('href');sheriff.setAttribute('aria-disabled','true');sheriff.hidden=true}
-  verified.textContent=`Verified ${helper.dateLabel(area.verifiedOn)}. Recheck before departure because jurisdiction and numbers can change.`;
+  const guidance=helper.emergencyGuidanceFor(obj);
+  const areaMarkup=areas.map(entry=>`<section class="emergency-area-detail"><h4>${emergencyEscape(entry.county)} public contacts</h4><p><b>${emergencyEscape(entry.dispatchLabel||'County dispatch')}:</b> <a href="tel:${emergencyEscape(entry.dispatchPhone)}">${emergencyEscape(entry.dispatchDisplay)}</a>${entry.officePhone&&entry.officeDisplay?` · <b>${emergencyEscape(entry.officeLabel||'Sheriff’s office')}:</b> <a href="tel:${emergencyEscape(entry.officePhone)}">${emergencyEscape(entry.officeDisplay)}</a>`:''}</p><p><a target="_blank" rel="noopener" href="${emergencyEscape(entry.sourceUrl)}">Official county source</a> · <a target="_blank" rel="noopener" href="${emergencyEscape(entry.sarSourceUrl)}">SAR source</a></p></section>`).join('');
+  details.innerHTML=`<p class="emergency-call-first"><strong>Call 911 first.</strong> Give the exact location, mountain, route, elevation, and coordinates if available. Dispatchers determine the responding jurisdiction; you do not need to choose a county before calling.</p><p>${emergencyEscape(guidance)}</p>${areaMarkup}`;
+  dispatch.href=`tel:${area.dispatchPhone}`;dispatch.textContent=`Call ${area.county.replace(' County','')} dispatch`;dispatch.removeAttribute('aria-disabled');
+  if(area.officePhone){sheriff.href=`tel:${area.officePhone}`;sheriff.textContent=`Call ${area.county.replace(' County','')} sheriff`;sheriff.removeAttribute('aria-disabled');sheriff.hidden=false}else{sheriff.removeAttribute('href');sheriff.setAttribute('aria-disabled','true');sheriff.hidden=true}
+  verified.textContent=`Public contacts verified ${[...new Set(areas.map(entry=>helper.dateLabel(entry.verifiedOn)))].join(' / ')}. Recheck before departure because numbers and responding jurisdiction can change.`;
  }else{
   details.innerHTML='<p><strong>Jurisdiction not verified.</strong></p><p>Use 911 for an emergency. Confirm the county sheriff for this route before leaving service; the app will not guess.</p>';
   dispatch.removeAttribute('href');sheriff.removeAttribute('href');dispatch.setAttribute('aria-disabled','true');sheriff.setAttribute('aria-disabled','true');verified.textContent='No local number is displayed rather than presenting an unverified contact.';

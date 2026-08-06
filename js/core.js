@@ -932,7 +932,7 @@ async function refreshLocation(id,{force=false,quiet=false}={}){
   renderHeroWeather();if(TRIP_WEATHER_IDS.includes(id))renderWeatherCard(spec);renderWeatherFreshness();updateIntelOverall();if(document.getElementById('focusOverlay'))renderFocus();return result
  }catch(e){
   weatherStore[id]={...(stored||{}),lastError:String(e),failedAt:new Date().toISOString()};storageSet(WEATHER_KEY,JSON.stringify(weatherStore));
-  renderHeroWeather();if(!quiet)toast('Forecast refresh failed; saved data retained');throw e
+  renderHeroWeather();if(TRIP_WEATHER_IDS.includes(id))renderWeatherCard(spec);renderWeatherFreshness();updateIntelOverall();if(document.getElementById('focusOverlay'))renderFocus();if(!quiet)toast('Forecast refresh failed; saved data retained');throw e
  }finally{if(id===selectedWeatherId)refreshBtn?.classList.remove('loading')}
 }
 function forecastKind(condition='',isDaytime=true){
@@ -958,8 +958,14 @@ function weatherAlertDetails(item){
 }
 function weatherAlertHasDetails(item){const count=weatherAlertCount(item);return count>0&&weatherAlertDetails(item).length===count}
 function weatherAlertFallbackText(item){
- const count=weatherAlertCount(item),offline=!navigator.onLine;
- return `${count} alert${count===1?' was':'s were'} active at the last refresh. Details unavailable${offline?' offline':''}.`
+ const count=weatherAlertCount(item),uncertain=!navigator.onLine||Boolean(item?.lastError);
+ return `${count} alert${count===1?' was':'s were'} active at the last refresh. Details unavailable${!navigator.onLine?' offline':''}.${uncertain?' Saved alert information may be stale and is not confirmed current.':''}`
+}
+function weatherStateMarkup(item){
+ if(!item?.fetchedAt)return '';
+ if(item.lastError)return `<div class="weather-refresh-failure" role="status"><strong>Latest refresh failed ${escapeHtml(formatStamp(item.failedAt||new Date().toISOString(),false))}.</strong><span>Showing saved/cached weather from the last successful refresh ${escapeHtml(formatStamp(item.fetchedAt,false))}. Current conditions are not confirmed.</span><small>${escapeHtml(item.lastError)}</small></div>`;
+ if(!navigator.onLine)return `<div class="weather-refresh-failure" role="status"><strong>Saved/cached weather.</strong><span>This device is offline. Saved information may be stale and is not confirmed current.</span><small>Last successful refresh ${escapeHtml(formatStamp(item.fetchedAt,false))}.</small></div>`;
+ return ''
 }
 function weatherAlertFlagMarkup(item,locationId){
  const count=weatherAlertCount(item);if(!count)return '';
@@ -990,7 +996,7 @@ function openWeatherAlertDetails(locationId,trigger){
  if(!navigator.onLine)notice.textContent='Saved/cached alert details. This device is offline; these alerts may be stale and are not confirmed current.';
  else if(item.lastError)notice.textContent=`The latest online refresh failed. Showing saved/cached alert details that may be stale. ${item.lastError}`;
  else notice.textContent='Saved alert details from the last successful refresh. Alert status can change; refresh Trip Intelligence to verify.';
- document.getElementById('weatherAlertRefresh').textContent=`Last successful refresh: ${formatStamp(item.fetchedAt)}`;
+ document.getElementById('weatherAlertRefresh').textContent=`Last successful refresh: ${formatStamp(item.fetchedAt)}${item.lastError?` · Latest refresh failed: ${formatStamp(item.failedAt)}`:''}`;
  list.innerHTML=details.map(alert=>{const title=alert.event||alert.headline||'Weather alert',headline=alert.headline&&alert.headline!==title?`<p>${escapeHtml(alert.headline)}</p>`:'';return `<article><h3>${escapeHtml(title)}</h3>${headline}<dl>${alert.severity?`<div><dt>Severity</dt><dd>${escapeHtml(alert.severity)}</dd></div>`:''}${alert.area?`<div><dt>Affected area</dt><dd>${escapeHtml(alert.area)}</dd></div>`:''}${alert.ends?`<div><dt>Expiration</dt><dd>${escapeHtml(formatStamp(alert.ends))}</dd></div>`:''}</dl></article>`}).join('');
  overlay.hidden=false;document.body.style.overflow='hidden';document.getElementById('closeWeatherAlerts').focus()
 }
@@ -1018,31 +1024,34 @@ function renderHeroWeather(){
   age.textContent=failed?`Last refresh failed ${formatStamp(item.failedAt||new Date().toISOString(),false)}`:'Not loaded on this device';return
  }
  const sourceStamp=item.sourceUpdatedAt?` · NWS issued ${formatStamp(item.sourceUpdatedAt,false)}`:'';
- age.textContent=`Fetched ${formatStamp(item.fetchedAt,false)}${sourceStamp}${navigator.onLine?'':' · saved offline'}`;
+ const setBody=html=>{body.innerHTML=`${weatherStateMarkup(item)}${html}`};
+ if(item.lastError)age.textContent=`Latest refresh failed ${formatStamp(item.failedAt||new Date().toISOString(),false)} · cached from last successful refresh ${formatStamp(item.fetchedAt,false)} · current conditions not confirmed`;
+ else if(!navigator.onLine)age.textContent=`Saved offline · last successful refresh ${formatStamp(item.fetchedAt,false)}${sourceStamp} · not confirmed current`;
+ else age.textContent=`Fetched ${formatStamp(item.fetchedAt,false)}${sourceStamp}`;
  if(weatherMode==='trip'){
   const t=item.trip;
   if(!spec.targetDate){
-   body.innerHTML=`<div class="trip-window-message"><div class="widget-label">Future objective</div><strong>No trip date set for this point</strong><p>Current conditions remain available under “Now + 6 hours.” When this climb is planned, move the point into the trip list with a real date so the forecast-window gate applies.</p></div>`;
+   setBody(`<div class="trip-window-message"><div class="widget-label">Future objective</div><strong>No trip date set for this point</strong><p>Current conditions remain available under “Now + 6 hours.” When this climb is planned, move the point into the trip list with a real date so the forecast-window gate applies.</p></div>`);
    return
   }
   if(!t?.available){
    const d=daysTo(spec.targetDate),h=t?.horizonEnd;
-   body.innerHTML=`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${d>7?'Trip forecast not open yet':'Target hours not available yet'}</strong><p>${d>7?`The NWS hourly horizon currently ends ${escapeHtml(h||'before the trip')}. Current weather remains available under “Now + 6 hours.”`:'Refresh again later; the target window has not populated.'}</p></div>`;
+   setBody(`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${d>7?'Trip forecast not open yet':'Target hours not available yet'}</strong><p>${d>7?`The NWS hourly horizon currently ends ${escapeHtml(h||'before the trip')}. Current weather remains available under “Now + 6 hours.”`:'Refresh again later; the target window has not populated.'}</p></div>`);
    return
   }
-  body.innerHTML=`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${t.minTemp}–${t.maxTemp}°F · ${escapeHtml(t.conditions.join(' · '))}</strong><div class="trip-window-metrics"><div><b>${t.maxWind} mph</b><small>highest listed wind</small></div><div><b>${Number.isFinite(t.maxPop)?t.maxPop:'—'}%</b><small>highest precipitation</small></div>${weatherAlertMetricMarkup(item,spec.id)}</div><div class="hero-hours">${t.samples.map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${p.windMph||0} mph</small></div>`).join('')}</div></div>`;
+  setBody(`<div class="trip-window-message"><div class="widget-label">${escapeHtml(spec.tripLabel)}</div><strong>${t.minTemp}–${t.maxTemp}°F · ${escapeHtml(t.conditions.join(' · '))}</strong><div class="trip-window-metrics"><div><b>${t.maxWind} mph</b><small>highest listed wind</small></div><div><b>${Number.isFinite(t.maxPop)?t.maxPop:'—'}%</b><small>highest precipitation</small></div>${weatherAlertMetricMarkup(item,spec.id)}</div><div class="hero-hours">${t.samples.map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${p.windMph||0} mph</small></div>`).join('')}</div></div>`);
   return
  }
  const c=item.current;
  if(!c){
-  body.innerHTML=`<div class="trip-window-message"><strong>Saved forecast unavailable</strong><p>Refresh when online. ${escapeHtml(item.lastError||'')}</p></div>`;return
+  setBody(`<div class="trip-window-message"><strong>Saved forecast unavailable</strong><p>Refresh when online. ${escapeHtml(item.lastError||'')}</p></div>`);return
  }
  const grid=item.gridElevationFt?`${item.gridElevationFt.toLocaleString()} ft grid`:'NWS forecast grid';
  const flags=planningFlags(item);
- body.innerHTML=`<div class="hero-weather-main"><div class="weather-art">${weatherIcon(forecastKind(c.condition,c.isDaytime))}</div><div><div class="hero-temp">${c.temp}°</div><div class="hero-condition">${escapeHtml(c.condition)}</div></div></div>
+ setBody(`<div class="hero-weather-main"><div class="weather-art">${weatherIcon(forecastKind(c.condition,c.isDaytime))}</div><div><div class="hero-temp">${c.temp}°</div><div class="hero-condition">${escapeHtml(c.condition)}</div></div></div>
  <div class="weather-stats"><div class="weather-mini"><b>${escapeHtml(c.windDirection)} ${c.windMph||0} mph</b><small>listed wind</small></div><div class="weather-mini"><b>${Number.isFinite(c.pop)?c.pop:'—'}%</b><small>precipitation</small></div><div class="weather-mini"><b>${grid}</b><small>${spec.elevationFt.toLocaleString()} ft location</small></div></div>
  <div class="weather-flags">${weatherAlertFlagMarkup(item,spec.id)}${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div>
- <div class="hero-hours">${(item.upcoming||[]).slice(0,6).map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${Number.isFinite(p.pop)?p.pop:'—'}% · ${p.windMph||0}</small></div>`).join('')}</div>`
+ <div class="hero-hours">${(item.upcoming||[]).slice(0,6).map(p=>`<div class="hero-hour"><b>${hourLabel(p.startTime)}</b><span>${p.temp}°</span><small>${Number.isFinite(p.pop)?p.pop:'—'}% · ${p.windMph||0}</small></div>`).join('')}</div>`)
 }
 async function maybeAutoRefreshSelected(immediate=false){
  const item=weatherStore[selectedWeatherId];
@@ -1055,21 +1064,24 @@ async function maybeAutoRefreshSelected(immediate=false){
 function renderWeatherCard(spec){
  const el=document.getElementById(`wx-${spec.id}`);if(!el)return;
  const item=weatherStore[spec.id],badge=el.querySelector('.freshness'),msg=el.querySelector('.weather-message'),strip=el.querySelector('.hour-strip');
- if(!item?.fetchedAt){badge.className='freshness neutral';badge.textContent='Not loaded';msg.textContent='Tap Refresh Trip Intelligence.';strip.innerHTML='';return}
- const age=ageHours(item.fetchedAt),state=age<=6?'current':age<=12?'warning':'danger';badge.className=`freshness ${state}`;badge.textContent=age<=1?'Fresh':`${Math.round(age)}h old`;
+ if(!item?.fetchedAt){const failed=Boolean(item?.lastError);badge.className=`freshness ${failed?'danger':'neutral'}`;badge.textContent=failed?'Refresh failed':'Not loaded';msg.innerHTML=failed?`<div class="weather-refresh-failure" role="status"><strong>Latest refresh failed ${escapeHtml(formatStamp(item.failedAt||new Date().toISOString(),false))}.</strong><span>No saved forecast is available. Current conditions are not confirmed.</span><small>${escapeHtml(item.lastError)}</small></div>`:'Tap Refresh Trip Intelligence.';strip.innerHTML='';return}
+ const age=ageHours(item.fetchedAt),failed=Boolean(item.lastError),offline=!navigator.onLine,state=failed?'danger':offline?'warning':age<=6?'current':age<=12?'warning':'danger';badge.className=`freshness ${state}`;badge.textContent=failed?'Refresh failed':offline?'Saved offline':age<=1?'Fresh':`${Math.round(age)}h old`;
+ const setMessage=html=>{msg.innerHTML=`${weatherStateMarkup(item)}${html}`};
  const s=item.trip;
- if(!s){msg.textContent=`Refresh failed. ${item.lastError||''}`;strip.innerHTML='';return}
+ if(!s){setMessage(`<p>Saved trip-window summary unavailable. ${escapeHtml(item.lastError||'Refresh when online.')}</p>`);strip.innerHTML='';return}
  if(!s.available){
-  const d=daysTo(spec.targetDate);msg.innerHTML=d>7?`Trip date is outside the NWS seven-day hourly horizon. Current horizon ends <b>${escapeHtml(s.horizonEnd||'unknown')}</b>.`:`No hourly periods are available for the target window yet.`;
+  const d=daysTo(spec.targetDate);setMessage(d>7?`Trip date is outside the NWS seven-day hourly horizon. Current horizon ends <b>${escapeHtml(s.horizonEnd||'unknown')}</b>.`:`No hourly periods are available for the target window yet.`);
   strip.innerHTML=weatherAlertLineMarkup(item,spec.id);return
  }
- msg.innerHTML=`<div class="wx-summary"><div class="wx-stat"><b>${s.minTemp}–${s.maxTemp}°F</b><small>temperature</small></div><div class="wx-stat"><b>${s.maxWind} mph</b><small>peak listed wind</small></div><div class="wx-stat"><b>${Number.isFinite(s.maxPop)?s.maxPop:'—'}%</b><small>max precip.</small></div></div><div>${escapeHtml(s.conditions.join(' · '))}</div>${weatherAlertLineMarkup(item,spec.id)}`;
+ setMessage(`<div class="wx-summary"><div class="wx-stat"><b>${s.minTemp}–${s.maxTemp}°F</b><small>temperature</small></div><div class="wx-stat"><b>${s.maxWind} mph</b><small>peak listed wind</small></div><div class="wx-stat"><b>${Number.isFinite(s.maxPop)?s.maxPop:'—'}%</b><small>max precip.</small></div></div><div>${escapeHtml(s.conditions.join(' · '))}</div>${weatherAlertLineMarkup(item,spec.id)}`);
  strip.innerHTML=s.samples.map(x=>`<div class="hour"><b>${hourLabel(x.startTime)}</b><span>${x.temp}°</span><small>${escapeHtml(x.windText||'')}</small><small>${x.pop??0}%</small></div>`).join('')
 }
 function renderWeatherFreshness(){
- const loaded=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x?.fetchedAt);
- if(!loaded.length){document.getElementById('weatherFreshness').textContent='Not loaded';document.getElementById('weatherFreshnessNote').textContent='NWS data will be saved for offline use.';return}
+ const all=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(Boolean),loaded=all.filter(x=>x?.fetchedAt),failed=all.filter(x=>x?.lastError).sort((a,b)=>new Date(b.failedAt||0)-new Date(a.failedAt||0))[0];
+ if(!loaded.length){document.getElementById('weatherFreshness').textContent=failed?'Refresh failed':'Not loaded';document.getElementById('weatherFreshnessNote').textContent=failed?`Latest refresh failed ${formatStamp(failed.failedAt)}. No current conditions are confirmed.`:'NWS data will be saved for offline use.';return}
  const newest=loaded.sort((a,b)=>new Date(b.fetchedAt)-new Date(a.fetchedAt))[0],age=ageHours(newest.fetchedAt);
+ if(failed){document.getElementById('weatherFreshness').textContent='Refresh failed';document.getElementById('weatherFreshnessNote').textContent=`Latest failed attempt: ${formatStamp(failed.failedAt)} · Cached data last successfully refreshed: ${formatStamp(failed.fetchedAt||newest.fetchedAt)} · current conditions not confirmed.`;return}
+ if(!navigator.onLine){document.getElementById('weatherFreshness').textContent='Saved offline';document.getElementById('weatherFreshnessNote').textContent=`Last successful data: ${formatStamp(newest.fetchedAt)} · saved information may be stale and is not confirmed current.`;return}
  document.getElementById('weatherFreshness').textContent=age<=1?'Current':`${Math.round(age)}h old`;document.getElementById('weatherFreshnessNote').textContent=`Last successful data: ${formatStamp(newest.fetchedAt)}`
 }
 function renderAllWeather(){TRIP_WEATHER_IDS.forEach(id=>renderWeatherCard(locationById(id)));renderWeatherFreshness();renderHeroWeather();renderGearAdvisor();renderTripConditionsAdvisor();if(typeof riRenderPanel==='function')riRenderPanel()}
@@ -1103,7 +1115,7 @@ function resetIntelWorkflow(){if(confirm('Clear night-before and morning-of inte
 function currentReviewCount(){return Object.entries(REVIEW_CONFIG).filter(([id,c])=>reviewStore[id]&&ageHours(reviewStore[id])<=c.maxHours).length}
 function updateIntelOverall(){
  const banner=document.getElementById('intelBanner'),headline=document.getElementById('intelHeadline'),summary=document.getElementById('intelSummary');
- const tripDays=daysTo('2026-08-22'),freshWeather=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x?.fetchedAt&&ageHours(x.fetchedAt)<=6).length,currentReviews=currentReviewCount(),checks=intelBoxes.filter(b=>b.checked).length;
+ const tripDays=daysTo('2026-08-22'),freshWeather=navigator.onLine?TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x?.fetchedAt&&!x.lastError&&ageHours(x.fetchedAt)<=6).length:0,currentReviews=currentReviewCount(),checks=intelBoxes.filter(b=>b.checked).length;
  if(tripDays>7){banner.dataset.state='neutral';headline.textContent='Planning phase';summary.textContent='The trip is outside the NWS hourly forecast horizon. Route links and review workflow are ready.'}
  else if(freshWeather===4&&currentReviews===5&&checks>=7){banner.dataset.state='current';headline.textContent='Trip intelligence current';summary.textContent='Weather is fresh, all condition pages were recently reviewed and the review workflow is substantially complete.'}
  else if(freshWeather>=2||currentReviews>=3){banner.dataset.state='warning';headline.textContent='Review incomplete';summary.textContent=`Fresh weather: ${freshWeather}/4 · current 14ers.com reviews: ${currentReviews}/5 · workflow tasks: ${checks}/${intelBoxes.length}.`}
@@ -1127,7 +1139,8 @@ function runNextAction(){
 }
 function statusText(){
  const loaded=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x?.fetchedAt).sort((a,b)=>new Date(b.fetchedAt)-new Date(a.fetchedAt));
- const latest=loaded[0]?.fetchedAt,weather=latest?`Weather last refreshed ${formatStamp(latest)}`:'Weather not yet refreshed';
+ const failed=TRIP_WEATHER_IDS.map(id=>weatherStore[id]).filter(x=>x?.lastError).sort((a,b)=>new Date(b.failedAt||0)-new Date(a.failedAt||0))[0];
+ const latest=loaded[0]?.fetchedAt,weather=failed?`Latest weather refresh failed ${formatStamp(failed.failedAt)}; cached data last succeeded ${formatStamp(failed.fetchedAt||latest)} and is not confirmed current`:latest?`Weather last refreshed ${formatStamp(latest)}`:'Weather not yet refreshed';
  return `Lake Como expedition status — ${weather}; ${currentReviewCount()}/5 current 14ers.com condition/trailhead reviews; gear and communication readiness ${readiness()}%. Planning aid only—not a safety clearance.`
 }
 async function shareStatus(){
@@ -1241,7 +1254,7 @@ function turnaroundCheck(obj,item){
  if(diff>=0)return {level:'warn',text:`Forecast risk (${risk.reason}) appears ${clock}, right at your ${obj.turn} turnaround. Little or no margin — plan to be descending before this.`};
  return {level:'danger',text:`Forecast risk (${risk.reason}) appears ${clock}, BEFORE your ${obj.turn} turnaround. The listed weather turns before your planned turnaround — reconsider the start time or the objective.`};
 }
-function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; in the basin, plan on headlamps well past sunrise — direct light over the east ridge comes considerably later.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;const tc=turnaroundCheck(obj,item),tcEl=document.getElementById('focusTurnCheck');if(tcEl){tcEl.dataset.level=tc.level;tcEl.textContent=tc.text}document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${weatherAlertFlagMarkup(item,obj.weatherId)}${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML='<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>'}
+function renderFocus(){const obj=focusSpec(),x=lightData(),item=weatherStore[obj.weatherId],weather=document.getElementById('focusWeather');document.getElementById('focusObjective').value=obj.id;document.getElementById('focusStart').textContent=obj.start;document.getElementById('focusTurn').textContent=obj.turn;document.getElementById('focusLight').textContent=mtTime(x.dawn);document.getElementById('focusLightNote').textContent=`Astronomical flat-horizon time for ${x.loc.name}; in the basin, plan on headlamps well past sunrise — direct light over the east ridge comes considerably later.`;document.getElementById('focusIntent').textContent=obj.intent;document.getElementById('focusRouteText').textContent=obj.route;const tc=turnaroundCheck(obj,item),tcEl=document.getElementById('focusTurnCheck');if(tcEl){tcEl.dataset.level=tc.level;tcEl.textContent=tc.text}document.getElementById('focusLinks').innerHTML=obj.links.map(([label,url])=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`).join('');if(item?.current){const c=item.current,flags=planningFlags(item).slice(0,2);weather.innerHTML=`${weatherStateMarkup(item)}<div class="focus-weather-grid"><div class="focus-weather-temp">${c.temp}°</div><div><b>${escapeHtml(c.condition)}</b><small>${escapeHtml(c.windDirection)} ${c.windMph||0} mph · ${Number.isFinite(c.pop)?c.pop+'% precip.':'precip. unknown'} · saved ${formatStamp(item.fetchedAt,false)}</small><div class="weather-flags">${weatherAlertFlagMarkup(item,obj.weatherId)}${flags.map(f=>`<span class="weather-flag ${f.type}">${escapeHtml(f.label)}</span>`).join('')}</div></div></div>`}else weather.innerHTML=`${weatherStateMarkup(item)}<span class="weather-pulse"></span><div><b>No saved forecast yet</b><small>Refresh while online to carry it offline.</small></div>`}
 function openFocus(id){if(id&&FOCUS_OBJECTIVES[id])focusObjectiveId=id;storageSet(FOCUS_OBJECTIVE_KEY,focusObjectiveId);renderFocus();startFocusCountdown();const overlay=document.getElementById('focusOverlay');overlay.hidden=false;document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('focusObjective').focus(),0)}
 function closeFocus(){document.getElementById('focusOverlay').hidden=true;document.body.style.overflow='';stopFocusCountdown()}
 
@@ -1293,13 +1306,13 @@ function aiSelectedObjective(){
 function aiWeatherSummary(){
  const spec=locationById(selectedWeatherId),item=weatherStore[selectedWeatherId];
  if(!item?.current)return `${spec.name}: no saved forecast is available on this device.`;
- const c=item.current,flags=planningFlags(item).map(x=>x.label).join('; ');
+ const c=item.current,flags=planningFlags(item).map(x=>x.label).join('; '),state=item.lastError?`LATEST REFRESH FAILED ${formatStamp(item.failedAt,true)}; showing cached data last successfully refreshed ${formatStamp(item.fetchedAt,true)}; current conditions not confirmed`:!navigator.onLine?'saved offline; may be stale and not confirmed current':'online saved forecast';
  return [
   `${spec.name} (${spec.elevationFt.toLocaleString()} ft)`,
   `${c.temp}°F, ${c.condition}`,
   `wind ${c.windDirection||'—'} ${c.windMph||0} mph`,
   `${Number.isFinite(c.pop)?c.pop+'% precipitation probability':'precipitation probability unknown'}`,
-  `forecast fetched ${formatStamp(item.fetchedAt,true)}`,
+  `forecast fetched ${formatStamp(item.fetchedAt,true)}; status ${state}`,
   `planning flags: ${flags}`
  ].join(' · ');
 }

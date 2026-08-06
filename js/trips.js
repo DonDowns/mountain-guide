@@ -146,6 +146,12 @@ function tripPopulateEmergency(peak,selected=''){
  const suggested=tripSuggestedEmergencyArea(peak);el.value=selected&&[...el.options].some(o=>o.value===selected)?selected:(suggested||'');
 }
 function tripEmergencyArea(id){return window.DDMG_CONFIG?.emergencyAreas?.[id]||null}
+function tripEmergencyObjective(data){
+ const objectives=window.DDMG_CONFIG?.focusObjectives||{};
+ if(data?.peak==='Mount Lindsey')return objectives.lindsey||null;
+ if(data?.peak==='Blanca Peak'||data?.peak==='Ellingwood Point')return objectives.blanca||null;
+ return null
+}
 function tripReadForm(){
  const val=id=>document.getElementById(id)?.value?.trim()||'';
  const checked=id=>!!document.getElementById(id)?.checked;
@@ -225,12 +231,13 @@ function tripRenderContext(){
   <h3>${ready} of 4 offline-preparation checks confirmed</h3>
   <p>${data.prep?.gpx?'✓':'○'} Route file · ${data.prep?.map?'✓':'○'} Offline map · ${data.prep?.photos?'✓':'○'} Route photos · ${data.prep?.screens?'✓':'○'} Screenshots</p>
   <p>This confirms only what was checked on this device; it does not certify route readiness.</p>`;
- const emergencyArea=tripEmergencyArea(data.emergencyAreaId);
- if(emergency)emergency.innerHTML=emergencyArea?`
-  <h3>${escapeHtml(emergencyArea.county)}</h3>
-  <p><b>Emergency:</b> 911<br><b>${escapeHtml(emergencyArea.dispatchLabel||'County dispatch')}:</b> ${escapeHtml(emergencyArea.dispatchDisplay)}${emergencyArea.officeDisplay?`<br><b>${escapeHtml(emergencyArea.officeLabel||'Sheriff’s office')}:</b> ${escapeHtml(emergencyArea.officeDisplay)}`:''}</p>
-  <p>${escapeHtml(emergencyArea.activation)}</p>
-  <p><small>Verified ${escapeHtml(window.DDMG_EMERGENCY?.dateLabel(emergencyArea.verifiedOn)||emergencyArea.verifiedOn)}. Confirm that this county matches the actual route and trailhead.</small></p>`:`
+ const emergencyArea=tripEmergencyArea(data.emergencyAreaId),emergencyObjective=tripEmergencyObjective(data),emergencyAreas=emergencyObjective?window.DDMG_EMERGENCY.emergencyAreasFor(emergencyObjective):[emergencyArea].filter(Boolean);
+ if(emergency)emergency.innerHTML=emergencyAreas.length?`
+  <h3>Call 911 first · exact location governs the response</h3>
+  <p>Give the mountain, route, elevation, and coordinates if available. Dispatchers determine the responding jurisdiction; you do not need to choose a county before calling.</p>
+  ${emergencyObjective?`<p>${escapeHtml(window.DDMG_EMERGENCY.emergencyGuidanceFor(emergencyObjective))}</p>`:''}
+  ${emergencyAreas.map(area=>`<p><b>${escapeHtml(area.county)} ${escapeHtml(area.dispatchLabel||'dispatch')}:</b> ${escapeHtml(area.dispatchDisplay)}${area.officeDisplay?`<br><b>${escapeHtml(area.county)} ${escapeHtml(area.officeLabel||'sheriff’s office')}:</b> ${escapeHtml(area.officeDisplay)}`:''}</p>`).join('')}
+  <p><small>Public contacts verified ${escapeHtml([...new Set(emergencyAreas.map(area=>window.DDMG_EMERGENCY?.dateLabel(area.verifiedOn)||area.verifiedOn))].join(' / '))}. Recheck before departure because responding jurisdiction and numbers can change.</small></p>`:`
   <h3>Jurisdiction not verified</h3>
   <p>Confirm the county sheriff for the actual route and trailhead before leaving service. The app does not guess or substitute a nearby county.</p>`;
  const routeLink=document.getElementById('tripOpenRoute');
@@ -284,8 +291,8 @@ function tripBuilderAiContext(){
  const t=tripActive();
  if(!t)return 'Lake Como / Blanca / Ellingwood / Mount Lindsey, August 19–25, 2026';
  const route=tripRouteById(t.routeId);
- const area=tripEmergencyArea(t.emergencyAreaId);
- return `${t.name}; primary peak ${t.peak||'not set'}; route ${route?.label||'not set'}; climb date ${t.climbDate||'not set'}; trail start ${t.plannedStart||'not set'}; turnaround ${t.turnaround||'not set'}; partners ${t.partners||'not set'}; transportation ${t.vehicle||'not set'}; lodging/camp ${t.lodging||'not set'}; emergency jurisdiction ${area?.county||'not verified'}`;
+ const area=tripEmergencyArea(t.emergencyAreaId),objective=tripEmergencyObjective(t),areas=objective?window.DDMG_EMERGENCY.emergencyAreasFor(objective):[area].filter(Boolean);
+ return `${t.name}; primary peak ${t.peak||'not set'}; route ${route?.label||'not set'}; climb date ${t.climbDate||'not set'}; trail start ${t.plannedStart||'not set'}; turnaround ${t.turnaround||'not set'}; partners ${t.partners||'not set'}; transportation ${t.vehicle||'not set'}; lodging/camp ${t.lodging||'not set'}; public emergency contact references ${areas.map(item=>item.county).join(' and ')||'not verified'}; exact incident location determines the response`;
 }
 
 /* ============================================================
@@ -461,5 +468,4 @@ function tripRenderGeneratedPlan(){
   input.addEventListener('change',()=>tripSetGeneratedCheck(input.dataset.generatedCheck,input.checked));
  });
 }
-
 
