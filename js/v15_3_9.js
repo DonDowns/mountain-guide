@@ -1,4 +1,4 @@
-/* Version 15.3.8 compatibility and emergency-section bindings. */
+/* Version 15.3.9 compatibility and emergency-section bindings. */
 (()=>{
 'use strict';
 const V=window.DDMG_CONFIG?.version||window.DDMG_VERSION||'unknown';

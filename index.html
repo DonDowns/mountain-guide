@@ -316,7 +316,7 @@
 <div class="focus-showcase">
 <div class="focus-showcase-copy">
 <span aria-hidden="true" class="focus-orbit"></span>
-<div class="kicker">Designed for 3:30 AM</div><h3>Everything critical. Nothing noisy.</h3>
+<div class="kicker">Designed for pre-dawn starts</div><h3>Everything critical. Nothing noisy.</h3>
 <p>Choose the Lake Como approach, Blanca–Ellingwood or Mount Lindsey. The field sheet combines the saved forecast, first light, key timeline and authoritative route links.</p>
 <div class="focus-actions"><button class="intel-primary" id="openFocusSection" type="button">Open Summit Focus</button><button id="toggleCampfireSection" type="button">Use red display</button><a class="field-launch" href="climb.html">Open climb-only field mode</a></div>
 </div>
@@ -1336,6 +1336,14 @@
 <div class="focus-bottom"><button class="intel-primary" id="focusRefresh" type="button">Refresh selected weather</button><button id="focusToday" type="button">Open full day</button></div>
 </section>
 </div>
+<div class="weather-alert-overlay" hidden="" id="weatherAlertOverlay">
+<section aria-labelledby="weatherAlertTitle" aria-modal="true" class="weather-alert-sheet" role="dialog">
+<div class="weather-alert-sheet-top"><div><div class="kicker">NWS point alerts</div><h2 id="weatherAlertTitle">Saved weather alerts</h2></div><button aria-label="Close weather alert details" class="close-weather-alerts" id="closeWeatherAlerts" type="button">×</button></div>
+<p aria-live="polite" class="weather-alert-notice" id="weatherAlertNotice"></p>
+<p class="weather-alert-refresh" id="weatherAlertRefresh"></p>
+<div class="weather-alert-list" id="weatherAlertList"></div>
+</section>
+</div>
 <div class="ai-overlay" hidden="" id="aiOverlay">
 <section aria-labelledby="aiTitle" aria-modal="true" class="ai-sheet" role="dialog">
 <div class="ai-sheet-top">
@@ -1395,4 +1403,4 @@
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
 <div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn" type="button">Update now</button></div>
-<script defer="" src="js/version.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_8.js"></script></body></html>
+<script defer="" src="js/version.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_9.js"></script></body></html>
