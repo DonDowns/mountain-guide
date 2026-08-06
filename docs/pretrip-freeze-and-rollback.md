@@ -8,18 +8,22 @@ If a change affects only documentation, no app version bump is required. If any 
 
 ## 1. Field candidate
 
-- **Field candidate:** Version 15.3.9, unless superseded by a safety-critical hotfix.
-- **Release tag placeholder:** `v15.3.9`. Confirm or create this tag before the feature freeze; this placeholder does not assert that the tag already exists.
-- **Merge commit:** `151263e78e42f43ac4b3266a6f8d711b27d1fcbe`.
+- **Field candidate:** Version 15.3.10.
+- **Live custom domain:** https://mountainguide.vondadowns.com/
+- **Default GitHub Pages fallback:** https://dondowns.github.io/mountain-guide/
+- **Physical iPhone verification:** Passed.
+- **Permanent CI and browser automation:** Active. Automation supplements but does not replace physical iPhone verification.
+- **Field-candidate application-release commit:** `fb711292b2642c2296eb76c0cfe2531606029609`.
+- **Rollback tag:** `v15.3.9`, pointing to merge commit `151263e78e42f43ac4b3266a6f8d711b27d1fcbe`. Version 15.3.10 is the current field candidate; `v15.3.9` remains the known rollback tag unless a deliberate new rollback strategy is approved.
 
 ## 2. Calendar
 
 | Milestone | Date |
 | --- | --- |
-| Current date | August 5, 2026 |
+| Field-release record updated | August 6, 2026 |
 | Feature freeze | August 13, 2026 |
 | Night-before verification | August 18, 2026 |
-| Trip start | August 19, 2026 |
+| Trip | August 19–25, 2026 |
 | Freeze lifts | August 26, 2026 |
 
 ## 3. Allowed changes after freeze
@@ -70,7 +74,7 @@ During the final week before the trip:
 
 - [ ] Open the full guide online.
 - [ ] Open Climb Mode online.
-- [ ] Confirm both display Version 15.3.9, or the explicitly approved safety-hotfix version.
+- [ ] Confirm both display Version 15.3.10, or an explicitly approved later safety-hotfix version.
 - [ ] Turn on Airplane Mode.
 - [ ] Force-quit the installed app.
 - [ ] Relaunch and verify the full guide offline.
@@ -96,8 +100,8 @@ If any required item fails, restore connectivity, capture the exact failure, and
 ### Identify the last known-good release
 
 1. Open the repository on GitHub and go to **Releases** or **Tags**.
-2. Identify the most recent release that completed the full local, live-site, offline, and physical-iPhone checks. The expected field-candidate tag is `v15.3.9` once that placeholder has been confirmed or created.
-3. Open the tag and verify that it points to the intended release commit or its merge commit. For Version 15.3.9, the expected merge commit is `151263e78e42f43ac4b3266a6f8d711b27d1fcbe`.
+2. Identify the approved rollback tag. For the Version 15.3.10 field candidate, the known rollback tag remains `v15.3.9` unless a deliberate new rollback strategy is approved.
+3. Open `v15.3.9` and verify that it points to merge commit `151263e78e42f43ac4b3266a6f8d711b27d1fcbe`.
 4. Record the known-good tag and commit in the rollback pull request. Do not rely on a version label alone.
 
 ### Revert a bad merge from a phone browser
