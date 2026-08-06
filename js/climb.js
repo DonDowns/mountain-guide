@@ -183,8 +183,12 @@
   function applyDisplayState(){
     const state=readJson(keys.fieldDisplay,{});
     body.classList.toggle('night',Boolean(state.red));body.classList.toggle('large',Boolean(state.large));
-    document.getElementById('night').textContent=body.classList.contains('night')?'Normal display':'Red display';
-    document.getElementById('font').textContent=body.classList.contains('large')?'Standard text':'Bigger text';
+    const nightButton=document.getElementById('night'),fontButton=document.getElementById('font');
+    const nightActive=body.classList.contains('night'),largeActive=body.classList.contains('large');
+    nightButton.textContent=nightActive?'Normal display':'Red display';
+    nightButton.setAttribute('aria-pressed',String(nightActive));
+    fontButton.textContent=largeActive?'Standard text':'Bigger text';
+    fontButton.setAttribute('aria-pressed',String(largeActive));
   }
   function saveDisplayState(){write(keys.fieldDisplay,JSON.stringify({red:body.classList.contains('night'),large:body.classList.contains('large')}))}
   function render(id){
