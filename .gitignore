@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+test-results/
+playwright-report/
+coverage/
+browser-profile/
+browser-profiles/
+.browser-profile/
+screenshots/
+videos/
+traces/
+*.log
+*.tmp
+*.bak
+*.old

@@ -1,0 +1,14 @@
+{
+  "name": "mountain-guide-release-safety",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/run-static-checks.mjs",
+    "check:version": "node scripts/check-version.mjs",
+    "check:sw": "node scripts/check-sw-cache.mjs",
+    "check:refs": "node scripts/check-references.mjs",
+    "check:privacy": "node scripts/check-privacy.mjs",
+    "check:safety": "node scripts/check-safety-language.mjs",
+    "check:clean": "node scripts/check-cleanliness.mjs"
+  }
+}
