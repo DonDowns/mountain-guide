@@ -45,7 +45,7 @@
 </div>
 </aside>
 </div></header>
-<nav class="nav"><div class="navin"><a href="#home">Home</a><a href="#trip-builder">Trips</a><a href="#mountain-intelligence">Mountains</a><a href="#command-center">Field</a><a href="#expedition-archive">Archive</a><a href="#intelligence-engine">Insights</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
+<nav class="nav"><div class="navin"><a href="#home">Home</a><a href="#crew">Crew</a><a href="#trip-builder">Trips</a><a href="#mountain-intelligence">Mountains</a><a href="#command-center">Field</a><a href="#expedition-archive">Archive</a><a href="#intelligence-engine">Insights</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
 <div class="install-nudge" hidden="" id="installNudge">
 <div><b>Add Mountain Guide to your iPhone</b><span>Open in Safari, tap Share, then Add to Home Screen.</span></div>
 <div class="install-nudge-actions"><a href="#install">Show steps</a><button aria-label="Dismiss installation message" id="dismissInstall" type="button">×</button></div>
@@ -64,6 +64,80 @@
 <div class="next-action-copy"><div class="kicker">Next best action</div><strong id="nextActionTitle">Build expedition readiness</strong><p id="nextActionText">Complete the approach and summit checklists while the trip remains outside the live forecast horizon.</p></div>
 <div class="next-action-buttons"><button class="intel-primary" id="nextActionPrimary" type="button">Open gear checklist</button><button id="shareStatusBtn" type="button">Share status</button></div>
 </div>
+</section><section aria-labelledby="crewTitle" class="crew-section" id="crew">
+<div class="section-head">
+<div><div class="kicker">Public companion setup</div><h2 id="crewTitle">Crew</h2></div>
+<p>Use the Companion to give another climber the shared expedition plan, decision prompts, emergency information, communication milestones, and offline field guide without sharing the owner's private Mountain Guide data.</p>
+</div>
+<article class="crew-setup-card">
+<div class="crew-setup-head">
+<div><div class="kicker">Primary action</div><h3>Set Up a Friend</h3><p>Open, scan, or send the public Companion. Then help the friend install and test it on that phone.</p></div>
+<span class="crew-release-status" id="companionReleaseStatus" role="status">Checking Companion status…</span>
+</div>
+<div class="crew-primary-grid">
+<div class="crew-qr-card" id="companionQrPanel" tabindex="-1">
+<div class="kicker">Scan from another phone</div>
+<img alt="QR code for the public Mountain Guide Companion at companion.vondadowns.com" height="512" id="companionQr" src="companion-qr.png" width="512"/>
+<p class="crew-url"><a href="#" id="companionUrlText" rel="noopener noreferrer" target="_blank">Public Companion link</a></p>
+<p class="crew-qr-note">This local QR contains only the public Companion URL.</p>
+</div>
+<div class="crew-action-card">
+<div><div class="kicker">Open or send</div><h4>Companion access</h4></div>
+<div class="crew-actions">
+<a class="crew-button crew-primary" href="#" id="openCompanion" rel="noopener noreferrer" target="_blank">Open Companion</a>
+<button class="crew-button" id="showCompanionQr" type="button">Show QR Code</button>
+<button class="crew-button" id="shareCompanion" type="button">Share Companion</button>
+<button class="crew-button" id="copyCompanionLink" type="button">Copy Link</button>
+</div>
+<p class="crew-fallback" hidden="" id="crewShareFallback">Native sharing is unavailable here. Use Copy Link.</p>
+<p aria-atomic="true" aria-live="polite" class="crew-action-status" id="crewActionStatus" role="status"></p>
+<p class="crew-privacy-note"><b>Public link only.</b> These actions do not include Mountain Guide trips, contacts, actual-start values, milestones, notes, gear, location, or other device-local state.</p>
+</div>
+</div>
+</article>
+<div class="crew-instruction-grid">
+<article class="card crew-instruction-card">
+<div class="kicker">Install instructions</div><h3>Add to an iPhone</h3>
+<ol>
+<li>Open Companion in Safari.</li>
+<li>Tap Share.</li>
+<li>Tap Add to Home Screen.</li>
+<li>Open Companion once while online.</li>
+<li>Run Offline Check.</li>
+<li>Perform the physical Airplane Mode test.</li>
+</ol>
+<p class="crew-each-phone"><b>EACH PHONE</b> must complete its own installation and Offline Check.</p>
+</article>
+<article class="card crew-instruction-card">
+<div class="kicker">Before the trip</div><h3>Offline Check on each phone</h3>
+<ul class="crew-checklist">
+<li>Open Companion online and run Offline Check.</li>
+<li>Turn on Airplane Mode, then turn Wi-Fi off.</li>
+<li>Force quit Companion and reopen it from the Home Screen.</li>
+<li>Verify Timeline, Route, and Emergency.</li>
+<li>Open both PDFs.</li>
+<li>Confirm saved operational state persists where applicable.</li>
+</ul>
+<p>Mountain Guide cannot remotely verify another phone's installation or offline resources.</p>
+</article>
+</div>
+<article class="card crew-flow-card">
+<div class="crew-flow-head"><div><div class="kicker">Set Up a Friend</div><h3>Do this together once</h3></div><span>7 steps</span></div>
+<ol class="crew-flow">
+<li><b>Open or scan Companion.</b></li>
+<li><b>Add Companion to the friend's iPhone Home Screen.</b></li>
+<li><b>Open it once while online.</b></li>
+<li><b>Run Offline Check.</b></li>
+<li><b>Perform the physical Airplane Mode test.</b></li>
+<li><b>Show the friend</b> Timeline, Route, Emergency, communication milestones, Field Guide, and Pocket Card.</li>
+<li><b>Have the friend reopen it without coaching.</b></li>
+</ol>
+</article>
+<div class="crew-artifact-grid">
+<a class="card crew-artifact" href="#" id="crewFieldGuide" rel="noopener noreferrer" target="_blank"><span class="kicker">Printable reference</span><strong>3-Page Field Guide</strong><small>Open or download the public PDF</small></a>
+<a class="card crew-artifact crew-pocket-card" href="#" id="crewPocketCard" rel="noopener noreferrer" target="_blank"><span class="kicker">Compact backup</span><strong>Emergency Pocket Card</strong><small>Open or download the public PDF</small></a>
+</div>
+<p class="crew-boundary"><b>Resource check only.</b> Installation and Offline Check confirm device resource availability. Physical conditions, group judgment, and the standing Mountain Guide doctrine still govern decisions.</p>
 </section><section class="trip-builder-section" id="trip-builder">
 <div class="section-head">
 <div>
@@ -1381,6 +1455,10 @@
 <svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 20 6-11 3 5 3-7 6 13H3Z"></path></svg>
 <span>Plan</span>
 </a>
+<a data-nav="crew" href="#crew">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8.5 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 20v-2a4.5 4.5 0 0 1 9 0v2m1-6.5a4 4 0 0 1 8 0V20h-6"></path></svg>
+<span>Crew</span>
+</a>
 <a data-nav="intelligence" href="#intelligence">
 <svg aria-hidden="true" viewbox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.2 8.7 4.7 4.7 0 0 0 7 18Z"></path></svg>
 <span>Weather</span>
@@ -1403,4 +1481,4 @@
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
 <div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn" type="button">Update now</button></div>
-<script defer="" src="js/version.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_10.js"></script></body></html>
+<script defer="" src="js/version.js"></script><script defer="" src="js/companion-contract.js"></script><script defer="" src="js/crew.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_11.js"></script></body></html>

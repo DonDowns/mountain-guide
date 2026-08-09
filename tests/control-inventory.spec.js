@@ -54,7 +54,7 @@ test('dynamic control inventory has labels, usable critical targets, repeat resp
   const unlabeled=controls.filter(item=>!item.label);
   expect(unlabeled,'all reachable controls need a visible or accessible label').toEqual([]);
 
-  const criticalIds=['campfireHero','road50My50','road50Remaining','road50All','road50BackToFilters','openFocusHero','focusCampfire','closeFocus','heroWeatherRefresh','closeWeatherAlerts'];
+  const criticalIds=['campfireHero','road50My50','road50Remaining','road50All','road50BackToFilters','openFocusHero','focusCampfire','closeFocus','heroWeatherRefresh','closeWeatherAlerts','openCompanion','showCompanionQr','copyCompanionLink','crewFieldGuide','crewPocketCard'];
   for(const id of criticalIds){
     const item=controls.find(control=>control.id===id);
     expect(item,`critical control #${id} is inventoried`).toBeTruthy();

@@ -40,8 +40,20 @@ export function weatherStore({details=true,failed=false,count=2}={}){
 }
 
 export async function seedApp(page,options={}){
-  const payload={weather:weatherStore(options),red:Boolean(options.red)};
+  const payload={weather:weatherStore(options),red:Boolean(options.red),companionStatus:options.companionStatus||'success',companionVersion:options.companionVersion||'0.6.0-candidate.5'};
   await page.addInitScript(data=>{
+    const metadataUrl='https://companion.vondadowns.com/release.json';
+    const nativeFetch=window.fetch.bind(window);
+    globalThis.__companionMetadataRequests=[];
+    window.fetch=(input,init)=>{
+      const href=typeof input==='string'?new URL(input,location.href).href:input?.url;
+      if(href===metadataUrl){
+        globalThis.__companionMetadataRequests.push(href);
+        if(data.companionStatus==='failure')return Promise.reject(new TypeError('Companion metadata unavailable'));
+        return Promise.resolve(new Response(JSON.stringify({companion_version:data.companionVersion}),{status:200,headers:{'content-type':'application/json'}}));
+      }
+      return nativeFetch(input,init);
+    };
     if(sessionStorage.getItem('__mountainGuideE2ESeeded'))return;
     localStorage.clear();
     localStorage.setItem('ddmg-v4-weather',JSON.stringify(data.weather));

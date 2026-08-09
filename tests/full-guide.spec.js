@@ -11,7 +11,7 @@ test('full guide loads, matches the release, and primary navigation reaches unob
   await openFullGuide(page);
   await expect(page.locator(`script[src="${RELEASE_MODULE}"]`)).toHaveCount(1);
 
-  const destinations={Home:{id:'home',nav:'home'},Plan:{id:'expedition',nav:'expedition'},Weather:{id:'intelligence',nav:'intelligence'},Summits:{id:'summits',nav:'summits'},Gear:{id:'gear',nav:'gear'},Emergency:{id:'emergency',nav:'emergency'}};
+  const destinations={Home:{id:'home',nav:'home'},Plan:{id:'expedition',nav:'expedition'},Crew:{id:'crew',nav:'crew'},Weather:{id:'intelligence',nav:'intelligence'},Summits:{id:'summits',nav:'summits'},Gear:{id:'gear',nav:'gear'},Emergency:{id:'emergency',nav:'emergency'}};
   for(const [label,{id,nav}] of Object.entries(destinations)){
     const link=page.locator(`.bottom-nav a[data-nav="${nav}"]`);
     await expect(link).toHaveAttribute('href',`#${id}`);
@@ -92,6 +92,8 @@ test('Road to 50 derives all scope counts from app data and returns to its filte
     remaining:window.COLORADO_SUMMITS.filter(peak=>peak.road50&&peak.status!=='completed').length,
     all:window.COLORADO_SUMMITS.length
   }));
+  const protectedLedger=await page.evaluate(()=>ledgerFacts());
+  expect({total:protectedLedger.total,completed:protectedLedger.completed,remaining:protectedLedger.remaining,planned:protectedLedger.planned}).toEqual({total:58,completed:35,remaining:20,planned:3});
   const cases=[
     {id:'road50My50',scope:'my50',count:expected.my50,label:'My 50'},
     {id:'road50Remaining',scope:'remaining',count:expected.remaining,label:'Still to climb'},
@@ -125,11 +127,13 @@ test('Mountain Intelligence search, emergency drafts, weather alerts, and failed
   await openFullGuide(page);
 
   const search=page.locator('#mountainIntelSearch');
-  await search.fill('Mount Blue Sky');
-  const blueSkyResult=page.locator('#mountainIntelList [data-mountain-name]').filter({hasText:'Mount Blue Sky'});
-  await expect(blueSkyResult).toHaveCount(1);
-  await blueSkyResult.click();
-  await expect(page.locator('#mountainIntelProfile h3')).toHaveText('Mount Blue Sky');
+  for(const alias of ['Mount Blue Sky','Evans','Mt Evans','Mount Evans']){
+    await search.fill(alias);
+    const blueSkyResult=page.locator('#mountainIntelList [data-mountain-name]').filter({hasText:'Mount Blue Sky'});
+    await expect(blueSkyResult,`${alias} resolves to the current mountain name`).toHaveCount(1);
+    await blueSkyResult.click();
+    await expect(page.locator('#mountainIntelProfile h3')).toHaveText('Mount Blue Sky');
+  }
   await search.fill('');
   await expect(page.locator('#mountainIntelList [data-mountain-name]').first()).toBeVisible();
 
@@ -174,6 +178,19 @@ test('Mountain Intelligence search, emergency drafts, weather alerts, and failed
   await expect(page.locator('#focusWeather')).toContainText('Latest refresh failed');
   await expect(page.locator('#focusWeather')).toContainText('Current conditions are not confirmed');
   await page.locator('#closeFocus').click();
+  assertNoErrors();
+});
+
+test('Lake Como protected objective data and turnaround targets remain unchanged',async({page})=>{
+  await seedApp(page);
+  const assertNoErrors=captureBrowserErrors(page);
+  await openFullGuide(page);
+  const protectedObjectives=await page.evaluate(()=>Object.fromEntries(Object.entries(DDMG_CONFIG.focusObjectives).map(([id,item])=>[id,{date:item.date,start:item.start,turn:item.turn,weatherId:item.weatherId,emergencyAreaIds:item.emergencyAreaIds}])));
+  expect(protectedObjectives).toEqual({
+    blanca:{date:'2026-08-23',start:'4:15 AM',turn:'11:30 AM',weatherId:'blanca',emergencyAreaIds:['alamosa','costilla']},
+    lake:{date:'2026-08-22',start:'10:00 AM',turn:'3:30 PM',weatherId:'lake',emergencyAreaIds:['alamosa','costilla']},
+    lindsey:{date:'2026-08-24',start:'5:15 AM',turn:'12:00 PM',weatherId:'lindsey',emergencyAreaIds:['huerfano','costilla']}
+  });
   assertNoErrors();
 });
 
