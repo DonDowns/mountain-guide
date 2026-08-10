@@ -34,6 +34,11 @@ test('installed full guide and Climb Mode reload offline without mixed-version s
     await expect(page.locator('#crewFieldGuide')).toHaveAttribute('href','https://companion.vondadowns.com/generated/field-guide.pdf');
     await expect(page.locator('#crewPocketCard')).toHaveAttribute('href','https://companion.vondadowns.com/generated/pocket-card.pdf');
     await expect(page.locator('#companionReleaseStatus')).toHaveText('Companion status unavailable while offline.');
+    const findButton=page.locator('.nav-find:visible,#openGlobalFind:visible').first();
+    await findButton.click();
+    await page.locator('#globalFindInput').fill('backup');
+    await expect(page.locator('#findResults .find-result').filter({hasText:'Data Transfer'}).first()).toBeVisible();
+    await page.locator('#closeFind').click();
     const cachedRequests=await page.evaluate(async()=>{const entries=[];for(const name of await caches.keys()){const cache=await caches.open(name);entries.push(...(await cache.keys()).map(request=>request.url))}return entries});
     expect(cachedRequests.some(url=>url.includes('companion.vondadowns.com'))).toBe(false);
     expect(cachedRequests.some(url=>url.endsWith('/companion-qr.png'))).toBe(true);
@@ -43,7 +48,7 @@ test('installed full guide and Climb Mode reload offline without mixed-version s
     await expect(page.locator('#objectiveTitle')).toContainText('Blanca Peak');
     await expect(page.locator('#startTime')).toHaveText('4:15 AM');
     await expect(page.locator('#turnTime')).toHaveText('11:30 AM');
-    await expect(page.locator('#forecastCard')).toContainText('Saved/cached forecast');
+    await expect(page.locator('#forecastCard')).toContainText(/saved\/cached forecast/i);
     await expect(page.locator('#forecastCard')).toContainText('not confirmed current');
     await expect(page.locator('#forecastCard')).toContainText('alerts at last refresh');
     await expect(page.locator('#localEmergencyDetails')).toContainText('Call 911 first');
