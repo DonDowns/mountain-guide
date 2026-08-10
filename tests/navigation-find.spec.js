@@ -7,7 +7,7 @@ test.beforeEach(async({page,request})=>{
 });
 
 function openFindButton(page){
-  return page.locator('.nav-find:visible,#openGlobalFind:visible').first();
+  return page.locator('#openGlobalFind:visible');
 }
 
 async function searchFor(page,query){
@@ -47,6 +47,29 @@ test('global Find supports practical synonyms and reaches real controls without 
   assertNoErrors();
 });
 
+test('Find is one navigation concept with a restrained, accessible initial view',async({page})=>{
+  await openFullGuide(page);
+  await expect(page.locator('[data-open-find]')).toHaveCount(1);
+  await expect(page.locator('body')).not.toContainText('Find a destination');
+  await openFindButton(page).click();
+  const dialog=page.getByRole('dialog',{name:'FIND MOUNTAIN GUIDE'});
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute('aria-modal','true');
+  await expect(page.locator('#findDescription')).toHaveText('Search screens, settings, mountains, and actions.');
+  const suggestions=page.locator('#findResults .find-result');
+  await expect(suggestions).toHaveCount(6);
+  await expect(suggestions).toContainText(['Data Transfer','Crew','Emergency','Readiness','Mountain Intelligence','Version / About']);
+  await expect(page.locator('#globalFindInput')).toBeFocused();
+  await suggestions.last().focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#closeFind')).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(suggestions.last()).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(openFindButton(page)).toBeFocused();
+});
+
 test('Evans aliases hand off to existing Mountain Intelligence behavior',async({page})=>{
   const assertNoErrors=captureBrowserErrors(page);
   await openFullGuide(page);
@@ -60,24 +83,20 @@ test('Evans aliases hand off to existing Mountain Intelligence behavior',async({
   assertNoErrors();
 });
 
-test('Top, Bottom, Home, and global Find fit the 390x844 mobile viewport with accessible labels',async({page})=>{
+test('Top, Bottom, and the single global Find fit the 390x844 mobile viewport with accessible labels',async({page})=>{
   test.skip(!test.info().project.name.includes('mobile'),'mobile layout coverage');
   const assertNoErrors=captureBrowserErrors(page);
   await openFullGuide(page);
   const find=page.locator('#openGlobalFind');
   await expect(find).toBeVisible();
-  await expect(find).toHaveAccessibleName('Find a Mountain Guide screen or action');
+  await expect(find).toHaveAccessibleName('Find');
   const findBox=await find.boundingBox();
   expect(findBox.height).toBeGreaterThanOrEqual(44);
-  const emergency=page.locator('.bottom-nav a[data-nav="emergency"]');
-  await expect(emergency).toBeVisible();
-  const emergencyBox=await emergency.boundingBox();
-  expect(findBox.y+findBox.height).toBeLessThanOrEqual(emergencyBox.y);
+  expect(findBox.y).toBeLessThan(80);
   await page.locator('#update').evaluate(element=>element.classList.add('show'));
-  await expect(page.locator('.global-find-fab-wrap')).toHaveClass(/update-clearance/);
-  const shiftedFindBox=await find.boundingBox();
+  const persistentFindBox=await find.boundingBox();
   const updateBox=await page.locator('#update').boundingBox();
-  const overlapsUpdate=!(shiftedFindBox.x+shiftedFindBox.width<=updateBox.x||updateBox.x+updateBox.width<=shiftedFindBox.x||shiftedFindBox.y+shiftedFindBox.height<=updateBox.y||updateBox.y+updateBox.height<=shiftedFindBox.y);
+  const overlapsUpdate=!(persistentFindBox.x+persistentFindBox.width<=updateBox.x||updateBox.x+updateBox.width<=persistentFindBox.x||persistentFindBox.y+persistentFindBox.height<=updateBox.y||updateBox.y+updateBox.height<=persistentFindBox.y);
   expect(overlapsUpdate,'Find stays reachable while an app update is ready').toBe(false);
   await page.locator('#update').evaluate(element=>element.classList.remove('show'));
 
@@ -85,12 +104,13 @@ test('Top, Bottom, Home, and global Find fit the 390x844 mobile viewport with ac
   await waitForScroll(page);
   await expect(page.locator('#page-footer')).toBeInViewport();
   await expect(page.locator('.footer-shortcuts').getByRole('link',{name:'Top'})).toBeVisible();
-  await expect(page.locator('.footer-shortcuts').getByRole('link',{name:'Home',exact:true})).toBeVisible();
+  await expect(page.locator('.footer-shortcuts').getByRole('link',{name:'Home',exact:true})).toHaveCount(0);
+  await expect(page.locator('.footer-shortcuts button')).toHaveCount(0);
   await page.locator('.footer-shortcuts').getByRole('link',{name:'Top'}).click();
   await waitForScroll(page);
   await expect(page.locator('#home')).toBeInViewport();
 
-  await page.evaluate(()=>{document.documentElement.style.fontSize='125%'});
+  await page.evaluate(()=>{document.documentElement.style.fontSize='200%'});
   await expectNoHorizontalOverflow(page);
   await find.click();
   await expect(page.locator('#globalFindInput')).toBeFocused();
