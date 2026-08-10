@@ -86,6 +86,11 @@
   });
   byId('closeFind')?.addEventListener('click',()=>closeFind());
   overlay()?.addEventListener('click',event=>{if(event.target===overlay())closeFind()});
+  const updateBanner=byId('update'),findWrap=document.querySelector('.global-find-fab-wrap');
+  if(updateBanner&&findWrap){
+   const syncUpdateClearance=()=>findWrap.classList.toggle('update-clearance',updateBanner.classList.contains('show'));
+   new MutationObserver(syncUpdateClearance).observe(updateBanner,{attributes:true,attributeFilter:['class']});syncUpdateClearance();
+  }
   document.addEventListener('keydown',event=>{
    if(overlay()?.hidden!==false)return;
    if(event.key==='Escape'){closeFind();return}

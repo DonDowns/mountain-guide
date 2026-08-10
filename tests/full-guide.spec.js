@@ -48,6 +48,7 @@ test('Trip Intelligence, Summit Focus, Red display, and accordions remain repeat
   await expect(page.locator('#intelDetails')).toHaveAttribute('open','');
   await page.locator('.intel-return-control').click();
   await expect(page).toHaveURL(/#home$/);
+  await waitForScroll(page);
 
   const disclosure=page.locator('#tripBuildDisclosure');
   const summary=disclosure.locator('summary');
