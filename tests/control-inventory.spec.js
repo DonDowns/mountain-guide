@@ -44,6 +44,9 @@ test('dynamic control inventory has labels, usable critical targets, repeat resp
   await page.locator('[data-weather-alert-location="blanca"]').first().click();
   snapshots.push(...await inventory(page,'alert-details-open'));
   await page.locator('#closeWeatherAlerts').click();
+  await page.locator('.nav-find:visible,#openGlobalFind:visible').first().click();
+  snapshots.push(...await inventory(page,'global-find-open'));
+  await page.locator('#closeFind').click();
 
   const unique=new Map();
   for(const item of snapshots){
@@ -54,7 +57,7 @@ test('dynamic control inventory has labels, usable critical targets, repeat resp
   const unlabeled=controls.filter(item=>!item.label);
   expect(unlabeled,'all reachable controls need a visible or accessible label').toEqual([]);
 
-  const criticalIds=['campfireHero','road50My50','road50Remaining','road50All','road50BackToFilters','openFocusHero','focusCampfire','closeFocus','heroWeatherRefresh','closeWeatherAlerts','openCompanion','showCompanionQr','copyCompanionLink','crewFieldGuide','crewPocketCard'];
+  const criticalIds=['campfireHero','road50My50','road50Remaining','road50All','road50BackToFilters','openFocusHero','focusCampfire','closeFocus','heroWeatherRefresh','closeWeatherAlerts','openCompanion','showCompanionQr','copyCompanionLink','crewFieldGuide','crewPocketCard','globalFindInput','closeFind'];
   for(const id of criticalIds){
     const item=controls.find(control=>control.id===id);
     expect(item,`critical control #${id} is inventoried`).toBeTruthy();

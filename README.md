@@ -1,12 +1,21 @@
-# Don Downs Mountain Guide — Version 15.3.11
+# Don Downs Mountain Guide — Version 15.3.12
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.11 is a Crew Companion integration candidate pending physical iPhone validation.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.12 adds offline global destination finding and restrained long-page navigation, pending physical iPhone validation.
 
 ## Current release
 
-**Version 15.3.11 — Crew Companion Integration Candidate**
+**Version 15.3.12 — Navigation and Global Find Usability Pass**
 
 This release includes:
+
+- an offline, device-local global finder for screens, sections, settings, and actions;
+- a curated destination index with backup/restore, Crew/friend, emergency, readiness, gear, weather, Road to 50, Mountain Intelligence, Summit Focus, Climb Mode, display, trip-planning, turnaround, and version synonyms;
+- actionable results that scroll to and focus the real destination or hand Evans aliases to the existing Mountain Intelligence search;
+- explicit Bottom, Top, Home, Data Transfer, and footer/version shortcuts for the long full-guide page;
+- safe-area-aware 44px-or-larger controls, increased-text wrapping, keyboard focus containment, and mobile overflow coverage;
+- navigation that does not serialize local data, add query-string state, or write device state merely by moving through the guide;
+
+- all Version 15.3.11 Crew Companion behavior retained, including the public-only privacy boundary and offline Crew interface;
 
 - a native Crew navigation tab centered on the Set Up a Friend workflow;
 - public-only Open Companion, Show QR Code, Share Companion, and Copy Link actions;
@@ -157,17 +166,23 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.10 field-readiness hotfix`
+`Deploy Mountain Guide v15.3.12 navigation and global find usability pass`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.10**.
+1. Confirm the footer displays **Version 15.3.12**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.12
+Adds an offline global destination finder, actionable synonym-based navigation, state-free long-page shortcuts, and mobile/accessibility coverage without changing trip, mountain, weather, emergency, Crew, or Companion contracts.
+
+### Version 15.3.11
+Adds the native Crew navigation and public-only Set Up a Friend workflow, validated Companion contract and QR asset, per-phone offline instructions, and automated Crew privacy and layout coverage.
 
 ### Version 15.3.10
 Makes current-expedition emergency guidance location-aware, prevents failed or offline weather from appearing current, clarifies cached alert counts in Climb Mode, and restores the in-sheet Summit Focus Red-display control on 390px mobile layouts.
