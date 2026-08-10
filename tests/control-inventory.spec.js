@@ -44,7 +44,7 @@ test('dynamic control inventory has labels, usable critical targets, repeat resp
   await page.locator('[data-weather-alert-location="blanca"]').first().click();
   snapshots.push(...await inventory(page,'alert-details-open'));
   await page.locator('#closeWeatherAlerts').click();
-  await page.locator('.nav-find:visible,#openGlobalFind:visible').first().click();
+  await page.locator('#openGlobalFind:visible').click();
   snapshots.push(...await inventory(page,'global-find-open'));
   await page.locator('#closeFind').click();
 

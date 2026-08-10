@@ -15,7 +15,7 @@
 <div class="hero-brand"><span aria-hidden="true" class="brand-mark">▲</span><div class="eyebrow">Colorado Expedition Companion</div></div><h1>Don Downs<br/><span>Mountain Guide</span></h1>
 <p>A personal alpine command center for Lake Como, Blanca, Ellingwood and Mount Lindsey — live summit forecasts, first-light intelligence, formation and a long-term path toward fifty-plus summits.</p>
 <div class="actions"><button class="btn primary" id="openFocusHero" type="button"><span aria-hidden="true">⌁</span> Summit Focus</button><a class="btn ghost" href="#intelligence">Trip intelligence</a><button class="btn ghost" id="campfireHero" type="button">Red display</button></div>
-<nav aria-label="Long page shortcuts" class="long-page-shortcuts"><button class="btn ghost" data-open-find type="button"><span aria-hidden="true">⌕</span> Find</button><a class="btn ghost" href="#data-transfer-panel">Data Transfer</a><a class="btn ghost" data-page-jump="page-footer" href="#page-footer"><span aria-hidden="true">↓</span> Bottom</a></nav>
+<nav aria-label="Long page shortcuts" class="long-page-shortcuts"><a class="btn ghost" href="#data-transfer-panel">Data Transfer</a><a class="btn ghost" data-page-jump="page-footer" href="#page-footer"><span aria-hidden="true">↓</span> Bottom</a></nav>
 <div class="hero-meta"><span><b id="heroCompleted">—</b> completed</span><span><b id="heroPlanned">—</b> planned</span><span><b id="heroGoal">—</b> goal</span></div>
 </div>
 <aside aria-label="Selectable summit weather forecast" class="summit-weather" id="summitWeather">
@@ -46,7 +46,7 @@
 </div>
 </aside>
 </div></header>
-<nav class="nav"><div class="navin"><button class="nav-find" data-open-find type="button"><span aria-hidden="true">⌕</span> Find</button><a href="#home">Home</a><a href="#crew">Crew</a><a href="#trip-builder">Trips</a><a href="#mountain-intelligence">Mountains</a><a href="#command-center">Field</a><a href="#expedition-archive">Archive</a><a href="#intelligence-engine">Insights</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
+<nav aria-label="Mountain Guide navigation" class="nav"><div class="navin"><button class="nav-find" data-open-find id="openGlobalFind" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg><span>Find</span></button><a href="#home">Home</a><a href="#crew">Crew</a><a href="#trip-builder">Trips</a><a href="#mountain-intelligence">Mountains</a><a href="#command-center">Field</a><a href="#expedition-archive">Archive</a><a href="#intelligence-engine">Insights</a><a href="#intelligence">Intelligence</a><a href="#expedition">Expedition</a><a href="#routes">Routes</a><a href="#gear">Gear</a><a href="#weather">Weather</a><a href="#progress">14ers</a><a href="#formation">Formation</a><a href="#journal">Journal</a><a href="#emergency">Emergency</a></div></nav>
 <div class="install-nudge" hidden="" id="installNudge">
 <div><b>Add Mountain Guide to your iPhone</b><span>Open in Safari, tap Share, then Add to Home Screen.</span></div>
 <div class="install-nudge-actions"><a href="#install">Show steps</a><button aria-label="Dismiss installation message" id="dismissInstall" type="button">×</button></div>
@@ -1356,7 +1356,7 @@
 </section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
-<div class="footer" id="page-footer" tabindex="-1"><nav aria-label="End of page shortcuts" class="footer-shortcuts"><a data-page-jump="home" href="#home"><span aria-hidden="true">↑</span> Top</a><a href="#home">Home</a><button data-open-find type="button">Find a destination</button></nav><p>Don Downs Mountain Guide · Version <span data-app-version>—</span></p></div>
+<div class="footer" id="page-footer" tabindex="-1"><nav aria-label="End of page shortcuts" class="footer-shortcuts"><a data-page-jump="home" href="#home"><span aria-hidden="true">↑</span> Top</a></nav><p>Don Downs Mountain Guide · Version <span data-app-version>—</span></p></div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
 <div class="story-viewer-top">
@@ -1446,16 +1446,16 @@
 </section>
 </div>
 <div class="find-overlay" hidden="" id="findOverlay">
-<section aria-labelledby="findTitle" aria-modal="true" class="find-sheet" role="dialog">
-<div class="find-sheet-top"><div><div class="kicker">Navigate Mountain Guide</div><h2 id="findTitle">Find a screen or action</h2></div><button aria-label="Close Find" class="close-find" id="closeFind" type="button">Close</button></div>
-<label class="find-label" for="globalFindInput">Search screens, settings, and actions</label>
+<section aria-describedby="findDescription" aria-labelledby="findTitle" aria-modal="true" class="find-sheet" role="dialog">
+<div class="find-sheet-top"><div><div class="kicker">Navigation</div><h2 id="findTitle">FIND MOUNTAIN GUIDE</h2></div><button aria-label="Close Find" class="close-find" id="closeFind" type="button">Close</button></div>
+<p class="find-intro" id="findDescription">Search screens, settings, mountains, and actions.</p>
+<label class="find-label" for="globalFindInput">Search Mountain Guide</label>
 <input autocapitalize="none" autocomplete="off" id="globalFindInput" inputmode="search" placeholder="Try backup, friend, 911, gear, Evans, or version" spellcheck="false" type="search"/>
 <p aria-live="polite" class="find-status" id="findStatus"></p>
 <div class="find-results" id="findResults"></div>
 <p class="find-privacy">Search runs only on this device. It does not read your saved trip data or put private information in the URL.</p>
 </section>
 </div>
-<div class="global-find-fab-wrap"><button aria-label="Find a Mountain Guide screen or action" class="global-find-fab" data-open-find id="openGlobalFind" type="button"><span aria-hidden="true">⌕</span><small>Find</small></button></div>
 <div class="ai-fab-wrap"><button aria-label="Ask AI online" class="ai-fab" id="aiFab" type="button"><span aria-hidden="true">✦</span><small>Ask</small></button></div>
 <div class="focus-fab-wrap"><button aria-label="Open Summit Focus" class="focus-fab" id="focusFab" type="button"><span>⌁</span><small>Focus</small></button></div>
 <nav aria-label="Primary app navigation" class="bottom-nav">
@@ -1493,4 +1493,4 @@
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
 <div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn" type="button">Update now</button></div>
-<script defer="" src="js/version.js"></script><script defer="" src="js/companion-contract.js"></script><script defer="" src="js/crew.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/navigation.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_12.js"></script></body></html>
+<script defer="" src="js/version.js"></script><script defer="" src="js/companion-contract.js"></script><script defer="" src="js/crew.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/navigation.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_13.js"></script></body></html>

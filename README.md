@@ -1,19 +1,22 @@
-# Don Downs Mountain Guide — Version 15.3.12
+# Don Downs Mountain Guide — Version 15.3.13
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.12 adds offline global destination finding and restrained long-page navigation, pending physical iPhone validation.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.13 consolidates global Find and long-page navigation into a clearer responsive hierarchy, pending physical iPhone validation.
 
 ## Current release
 
-**Version 15.3.12 — Navigation and Global Find Usability Pass**
+**Version 15.3.13 — Navigation / Find UI Consolidation**
 
 This release includes:
 
-- an offline, device-local global finder for screens, sections, settings, and actions;
+- one persistent navigation-level Find control on desktop and mobile;
+- a native responsive Find modal with a restrained six-destination initial view and distinct, internally scrollable result cards;
+- consistent Bottom, Top, and Home semantics without duplicate Home or Find footer controls;
+- an offline, device-local global finder for screens, sections, settings, mountains, and actions;
 - a curated destination index with backup/restore, Crew/friend, emergency, readiness, gear, weather, Road to 50, Mountain Intelligence, Summit Focus, Climb Mode, display, trip-planning, turnaround, and version synonyms;
 - actionable results that scroll to and focus the real destination or hand Evans aliases to the existing Mountain Intelligence search;
-- explicit Bottom, Top, Home, Data Transfer, and footer/version shortcuts for the long full-guide page;
+- explicit Bottom, Top, Data Transfer, and footer/version shortcuts for the long full-guide page;
 - safe-area-aware 44px-or-larger controls, increased-text wrapping, keyboard focus containment, and mobile overflow coverage;
-- a mobile Find position that stays clear of both primary navigation and the ready-update banner;
+- a compact mobile header Find control that stays clear of Focus, Ask, primary navigation, and the ready-update banner;
 - navigation that does not serialize local data, add query-string state, or write device state merely by moving through the guide;
 
 - all Version 15.3.11 Crew Companion behavior retained, including the public-only privacy boundary and offline Crew interface;
@@ -167,17 +170,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.12 navigation and global find usability pass`
+`Deploy Mountain Guide v15.3.13 navigation and Find UI consolidation`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.12**.
+1. Confirm the footer displays **Version 15.3.13**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.13
+Consolidates Find into one persistent navigation-level control, removes redundant footer and floating actions, clarifies Top/Bottom/Home semantics, and redesigns the responsive offline finder without changing its destination behavior.
 
 ### Version 15.3.12
 Adds an offline global destination finder, actionable synonym-based navigation, state-free long-page shortcuts, and mobile/accessibility coverage without changing trip, mountain, weather, emergency, Crew, or Companion contracts.

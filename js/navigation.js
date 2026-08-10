@@ -1,25 +1,25 @@
 /* Global, offline destination finder and state-free long-page navigation. */
 (function(){
  const destinations=[
-  {title:'Data Transfer',description:'Back up or restore this device',target:'data-transfer-panel',aliases:['backup'],terms:'restore local data device transfer'},
+  {title:'Data Transfer',description:'Back up or restore this device',target:'data-transfer-panel',aliases:['backup'],terms:'restore local data device transfer',featured:true},
   {title:'Export this device\u2019s data',description:'Open the Data Transfer export control',target:'exportDataBtn',aliases:['export','export backup'],terms:'backup download save'},
   {title:'Import backup file',description:'Open the Data Transfer import control',target:'data-transfer-panel',focus:'label[for="importDataFile"]',aliases:['restore','import','restore backup','import backup'],terms:'upload backup'},
-  {title:'Crew',description:'Public Companion setup',target:'crew',aliases:['friend','share','companion'],terms:'set up a friend teammate'},
+  {title:'Crew',description:'Set up or share Companion',target:'crew',aliases:['friend','share','companion'],terms:'set up a friend teammate',featured:true},
   {title:'Set Up a Friend',description:'Open the Crew setup workflow',target:'crew',terms:'friend share companion crew invite'},
-  {title:'Emergency',description:'911, public contacts, and draft updates',target:'emergency',aliases:['911'],terms:'sos help rescue sheriff dispatch emergency'},
-  {title:'Readiness',description:'Saved gear and communication checks',target:'readiness-checks',aliases:['readiness'],terms:'ready preparation checklist status'},
+  {title:'Emergency',description:'911, public contacts, and emergency tools',target:'emergency',aliases:['911'],terms:'sos help rescue sheriff dispatch emergency',featured:true},
+  {title:'Readiness',description:'Gear and communication checks',target:'readiness-checks',aliases:['readiness'],terms:'ready preparation checklist status',featured:true},
   {title:'Gear',description:'Gear Locker and Smart Pack Builder',target:'gear',aliases:['gear'],terms:'equipment pack packing locker'},
   {title:'Communication',description:'Saved communication checks',target:'communicationChecksCard',terms:'inreach check ins contact messages readiness'},
   {title:'Weather',description:'Saved NOAA/NWS forecasts and reviews',target:'weather',terms:'forecast nws noaa conditions alerts'},
   {title:'Road to 50',description:'Personal summit goal filters',target:'roadTo50',terms:'summits my 50 remaining fourteeners 14ers'},
-  {title:'Mountain Intelligence',description:'Search the 58-mountain database',target:'mountain-intelligence',focus:'#mountainIntelSearch',terms:'mountains peaks routes 14ers database'},
+  {title:'Mountain Intelligence',description:'Search the mountain database',target:'mountain-intelligence',focus:'#mountainIntelSearch',terms:'mountains peaks routes 14ers database',featured:true},
   {title:'Mount Blue Sky',description:'Open the existing Mountain Intelligence alias search',target:'mountain-intelligence',focus:'#mountainIntelSearch',mountainQuery:'Evans',aliases:['evans','mt evans','mount evans'],terms:'blue sky'},
   {title:'Summit Focus',description:'Open the field summary sheet',target:'focus',focus:'#openFocusSection',terms:'focus field sheet start time objective'},
   {title:'Climb Mode',description:'Open the climb-only field page',href:'climb.html',terms:'field mode climb only'},
   {title:'Red Display',description:'Open the display control at the top of Home',target:'campfireHero',terms:'night red campfire dark display'},
   {title:'Trip setup',description:'Build or edit an expedition',target:'trip-builder',terms:'trip builder setup plan planning expedition'},
   {title:'Planning and turnaround',description:'Open Trip Intelligence planning checks',target:'intelligence',aliases:['turnaround','turn around'],terms:'planning start overdue decision'},
-  {title:'Version / About',description:'Open the Mountain Guide footer',target:'page-footer',aliases:['version','about'],terms:'release build'},
+  {title:'Version / About',description:'Version and installation information',target:'page-footer',aliases:['version','about'],terms:'release build',featured:true},
   {title:'Home',description:'Return to Mountain Guide Home',target:'home',terms:'top start dashboard'}
  ];
  const byId=id=>document.getElementById(id);
@@ -36,23 +36,26 @@
   return words.reduce((total,word)=>total+(title.includes(word)?10:3),0);
  }
  function results(query){
-  return destinations.map((entry,index)=>({entry,index,score:score(entry,query)})).filter(item=>item.score>0).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,12).map(item=>item.entry);
+  if(!normalize(query))return destinations.filter(entry=>entry.featured).slice(0,6);
+  return destinations.map((entry,index)=>({entry,index,score:score(entry,query)})).filter(item=>item.score>0).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,8).map(item=>item.entry);
  }
  function render(){
   const list=byId('findResults'),query=byId('globalFindInput')?.value||'',matches=results(query);
   if(!list)return;
-  list.innerHTML=matches.map((entry,index)=>`<button class="find-result" data-find-index="${destinations.indexOf(entry)}" type="button"><span><strong>${entry.title}</strong><small>${entry.description}</small></span><span aria-hidden="true">\u203a</span></button>`).join('');
+  list.innerHTML=matches.map((entry,index)=>`<button aria-describedby="findResultDescription${index}" aria-labelledby="findResultTitle${index}" class="find-result" data-find-index="${destinations.indexOf(entry)}" type="button"><span><strong id="findResultTitle${index}">${entry.title}</strong><small id="findResultDescription${index}">${entry.description}</small></span><span aria-hidden="true">\u203a</span></button>`).join('');
   const status=byId('findStatus');
-  if(status)status.textContent=matches.length?`${matches.length} destination${matches.length===1?'':'s'}`:'No destinations found. Try backup, friend, emergency, gear, or version.';
+  if(status)status.textContent=!normalize(query)?'Suggested destinations':matches.length?`${matches.length} destination${matches.length===1?'':'s'}`:'No destinations found. Try backup, friend, emergency, gear, or version.';
  }
  function openFind(trigger){
   const panel=overlay();if(!panel)return;
-  panel.hidden=false;panel.dataset.returnFocus=trigger?.id||'';document.body.style.overflow='hidden';
+  panel.hidden=false;panel.dataset.returnFocus=trigger?.id||'';document.body.dataset.findOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
+  [...document.body.children].forEach(child=>{if(child!==panel&&child.tagName!=='SCRIPT'&&!child.inert){child.inert=true;child.dataset.findInert='true'}});
   const input=byId('globalFindInput');if(input){input.value='';render();setTimeout(()=>input.focus(),0)}
  }
  function closeFind({restoreFocus=true}={}){
   const panel=overlay();if(!panel||panel.hidden)return;
-  const returnId=panel.dataset.returnFocus;panel.hidden=true;document.body.style.overflow='';
+  const returnId=panel.dataset.returnFocus;panel.hidden=true;document.body.style.overflow=document.body.dataset.findOverflow||'';delete document.body.dataset.findOverflow;
+  document.querySelectorAll('[data-find-inert="true"]').forEach(child=>{child.inert=false;delete child.dataset.findInert});
   if(restoreFocus&&returnId)byId(returnId)?.focus();
  }
  function revealTarget(entry){
@@ -86,11 +89,6 @@
   });
   byId('closeFind')?.addEventListener('click',()=>closeFind());
   overlay()?.addEventListener('click',event=>{if(event.target===overlay())closeFind()});
-  const updateBanner=byId('update'),findWrap=document.querySelector('.global-find-fab-wrap');
-  if(updateBanner&&findWrap){
-   const syncUpdateClearance=()=>findWrap.classList.toggle('update-clearance',updateBanner.classList.contains('show'));
-   new MutationObserver(syncUpdateClearance).observe(updateBanner,{attributes:true,attributeFilter:['class']});syncUpdateClearance();
-  }
   document.addEventListener('keydown',event=>{
    if(overlay()?.hidden!==false)return;
    if(event.key==='Escape'){closeFind();return}
