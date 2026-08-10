@@ -1356,6 +1356,14 @@
 </section>
 <section id="install"><div class="section-head"><div><div class="kicker">iPhone installation</div><h2>Carry it like an app</h2></div><p>Open this address in Safari, choose Share → Add to Home Screen, launch it once online and test in Airplane Mode.</p></div>
 <div class="card grid g3"><div><b>Install in Safari</b><p>Safari provides the iPhone Home Screen installation path.</p></div><div><b>Load the latest version</b><p>The app alerts you when a new version has finished downloading.</p></div><div><b>Keep redundancy</b><p>Store the PDF in Files and carry the printed three-page field guide.</p></div></div></section>
+<section aria-labelledby="versionAboutTitle" id="version-about" tabindex="-1"><div class="section-head"><div><div class="kicker">Version / About</div><h2 id="versionAboutTitle">Mountain Guide installation</h2></div><p>See the version on this device and check the real service-worker update state.</p></div>
+<div class="card version-about-card">
+<dl class="update-summary"><div><dt>Installed version</dt><dd id="installedVersion">—</dd></div><div><dt>Update status</dt><dd aria-live="polite" id="updateStatus">Up to date</dd></div></dl>
+<p class="update-status-detail" hidden="" id="updateStatusDetail"></p>
+<div class="origin-warning" hidden="" id="legacyOriginWarning" role="status"><strong>This installation uses an older Mountain Guide address.</strong><p>Back up this device’s data, then install Mountain Guide again from <b>mountainguide.vondadowns.com</b>.</p></div>
+<button class="check-updates" id="checkUpdatesBtn" type="button">Check for Updates</button>
+<details class="update-diagnostics" hidden="" id="updateDiagnostics"><summary>Update diagnostics</summary><dl><div><dt>Service-worker script</dt><dd id="updateDiagnosticScriptURL">unavailable</dd></div><div><dt>Registration scope</dt><dd id="updateDiagnosticScope">unavailable</dd></div><div><dt>Active</dt><dd id="updateDiagnosticActive">none</dd></div><div><dt>Waiting</dt><dd id="updateDiagnosticWaiting">none</dd></div><div><dt>Installing</dt><dd id="updateDiagnosticInstalling">none</dd></div><div><dt>Last error class</dt><dd id="updateDiagnosticErrorClass">none</dd></div></dl></details>
+</div></section>
 <div class="footer" id="page-footer" tabindex="-1"><nav aria-label="End of page shortcuts" class="footer-shortcuts"><a data-page-jump="home" href="#home"><span aria-hidden="true">↑</span> Top</a></nav><p>Don Downs Mountain Guide · Version <span data-app-version>—</span></p></div>
 </main><div class="story-overlay" hidden="" id="storyOverlay">
 <section aria-labelledby="storyTitle" aria-modal="true" class="story-viewer" role="dialog">
@@ -1492,5 +1500,5 @@
 </a>
 </nav>
 <div aria-live="polite" class="toast" id="toast" role="status"></div>
-<div class="update" id="update"><span>A new Mountain Guide version is ready.</span><button id="applyUpdateBtn" type="button">Update now</button></div>
-<script defer="" src="js/version.js"></script><script defer="" src="js/companion-contract.js"></script><script defer="" src="js/crew.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/navigation.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_13.js"></script></body></html>
+<div aria-hidden="true" aria-live="polite" class="update" id="update"><span><strong>Update downloaded</strong><small>A new Mountain Guide version is ready.</small></span><button id="applyUpdateBtn" type="button">Apply update</button></div>
+<script defer="" src="js/version.js"></script><script defer="" src="js/companion-contract.js"></script><script defer="" src="js/crew.js"></script><script defer="" src="js/shared.js"></script><script defer="" src="js/core.js"></script><script defer="" src="js/trips.js"></script><script defer="" src="js/expedition.js"></script><script defer="" src="js/mountains.js"></script><script defer="" src="js/command.js"></script><script defer="" src="js/archive.js"></script><script defer="" src="js/insights.js"></script><script defer="" src="js/navigation.js"></script><script defer="" src="js/update.js"></script><script defer="" src="js/bootstrap.js"></script><script defer="" src="js/v15_3_14.js"></script></body></html>

@@ -1,12 +1,21 @@
-# Don Downs Mountain Guide — Version 15.3.13
+# Don Downs Mountain Guide — Version 15.3.14
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.13 consolidates global Find and long-page navigation into a clearer responsive hierarchy, pending physical iPhone validation.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.14 makes installed-PWA updates visible, explicit, retryable, and diagnosable while preserving the complete offline release and device-local data.
 
 ## Current release
 
-**Version 15.3.13 — Navigation / Find UI Consolidation**
+**Version 15.3.14 — Reliable PWA Update UX**
 
 This release includes:
+
+- a single update state model driven by the real service-worker registration, including checking, downloading, installed/waiting, failure, offline, and up-to-date states;
+- proactive online checks after service-worker readiness and after meaningful foreground resumes, plus an explicit **Check for Updates** action;
+- detection of a worker already waiting at startup and workers that become waiting through `updatefound`, installation, or background activity;
+- the existing explicit, message-gated `SKIP_WAITING` activation protocol, with a one-time reload only after `controllerchange`;
+- a safe-area-aware **Update downloaded / Apply update** banner that stays clear of global Find, Summit Focus, and mobile navigation;
+- a Find-reachable Version / About destination with installed version, update status, retry, and development diagnostics;
+- an installed-PWA warning for obsolete non-development origins, including the retired `dondowns.github.io/mountain-guide/` address, without redirecting, unregistering, clearing, or migrating private state;
+- automated update-state, activation, origin, 390×844, 200%-text, device-local-data, offline-launch, and service-worker-upgrade coverage;
 
 - one persistent navigation-level Find control on desktop and mobile;
 - a native responsive Find modal with a restrained six-destination initial view and distinct, internally scrollable result cards;
@@ -138,6 +147,10 @@ npm run test:all
 
 `npm run test:all` is the complete local release gate: existing static checks, JavaScript syntax, Git whitespace checks, Chromium desktop/mobile, WebKit desktop/mobile, offline reload, service-worker upgrade, and executable safety invariants. Test expectations such as Road to 50 counts are derived from current app data rather than frozen historical totals.
 
+### Update-check policy
+
+The app asks the existing service-worker registration to check once it is ready. A foreground check is eligible only after the app was hidden for at least one minute and the previous automatic check is at least 15 minutes old. This catches meaningful resumes without turning routine visibility changes into repeated network work. A manual check bypasses the 15-minute UI throttle, while concurrent calls are still coalesced. Offline launches do not check or change field-critical behavior; a manual offline attempt reports that an internet connection is needed. Applying an update never clears or migrates storage and reloads only after the new controller takes over.
+
 GitHub Actions runs the same safety layers for pull requests targeting `main` and pushes to `main`. CI never merges automatically. Failure in version consistency, privacy, references, precache integrity, safety invariants, browser behavior, offline behavior, or unexpected console errors blocks the workflow.
 
 After a deployment, verify the public endpoints against the local release source:
@@ -170,17 +183,20 @@ Upload the contents of the clean release folder directly into the repository roo
 
 Recommended commit message:
 
-`Deploy Mountain Guide v15.3.13 navigation and Find UI consolidation`
+`Improve Mountain Guide PWA update detection and controls`
 
 After deployment:
 
-1. Confirm the footer displays **Version 15.3.13**.
+1. Confirm the footer and Version / About section display **Version 15.3.14**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.14
+Adds registration-backed update detection, throttled proactive and manual checks, explicit waiting-worker activation, a visible safe-area-aware update banner, Version / About diagnostics, and an obsolete-origin warning without changing or clearing device-local data.
 
 ### Version 15.3.13
 Consolidates Find into one persistent navigation-level control, removes redundant footer and floating actions, clarifies Top/Bottom/Home semantics, and redesigns the responsive offline finder without changing its destination behavior.

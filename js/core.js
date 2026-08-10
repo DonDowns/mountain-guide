@@ -46,7 +46,6 @@ let reviewStore=safeParse(storageGet(REVIEW_KEY),{});
 let intelCheckStore=safeParse(storageGet(INTEL_CHECK_KEY),{});
 let selectedWeatherId=storageGet(WEATHER_SELECTED_KEY)||'blanca';
 let weatherMode=storageGet(WEATHER_MODE_KEY)||'now';
-let newWorker=null;
 const weatherInflight=new Map();
 
 function safeParse(value,fallback){try{return value?JSON.parse(value):fallback}catch{return fallback}}
@@ -1210,14 +1209,6 @@ function setupBottomNav(){
  targets.forEach(target=>observer.observe(target))
 }
 
-if('serviceWorker'in navigator){
- navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{reg.addEventListener('updatefound',()=>{newWorker=reg.installing;newWorker.addEventListener('statechange',()=>{if(newWorker.state==='installed'&&navigator.serviceWorker.controller)document.getElementById('update').classList.add('show')})})});
- navigator.serviceWorker.addEventListener('controllerchange',()=>{if(window.__updateApplied)location.reload()})
-}
-function applyUpdate(){if(newWorker){window.__updateApplied=true;newWorker.postMessage({type:'SKIP_WAITING'})}}
-
-
-
 // Version 6: sunlight intelligence, Summit Focus and night-vision display
 const CAMPFIRE_KEY='ddmg-v6-campfire',FOCUS_OBJECTIVE_KEY='ddmg-v6-focus-objective';
 const FOCUS_OBJECTIVES=window.DDMG_CONFIG?.focusObjectives||{};
@@ -2247,7 +2238,6 @@ riReady=true;
    Inline handlers required these functions to stay global forever and are
    blocked outright by any Content-Security-Policy without 'unsafe-inline'. */
 function setupConvertedHandlers(){
- document.getElementById('applyUpdateBtn')?.addEventListener('click',applyUpdate);
  document.getElementById('clearJournalBtn')?.addEventListener('click',clearJournal);
  document.getElementById('clearReviewsBtn')?.addEventListener('click',clearReviews);
  document.getElementById('refreshIntelBtn')?.addEventListener('click',refreshTripIntelligence);

@@ -86,8 +86,8 @@ test('Share Companion and Copy Link transmit only the exact public payload',asyn
   expect(JSON.stringify(payload)).not.toMatch(/Vonda 555|PRIVATE-|localStorage|actual-start|journal|gear|filter/i);
 
   await page.locator('#copyCompanionLink').click();
-  expect(await page.evaluate(()=>globalThis.__crewClipboard)).toBe(HOME);
   await expect(page.locator('#crewActionStatus')).toHaveText('Companion link copied.');
+  expect(await page.evaluate(()=>globalThis.__crewClipboard)).toBe(HOME);
 });
 
 test('Copy Link remains available when native sharing is unavailable',async({page})=>{
@@ -101,6 +101,7 @@ test('Copy Link remains available when native sharing is unavailable',async({pag
   await expect(page.locator('#crewShareFallback')).toBeVisible();
   await expect(page.locator('#copyCompanionLink')).toBeVisible();
   await page.locator('#copyCompanionLink').click();
+  await expect(page.locator('#crewActionStatus')).toHaveText('Companion link copied.');
   expect(await page.evaluate(()=>globalThis.__crewClipboard)).toBe(HOME);
 });
 
