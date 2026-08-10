@@ -15,6 +15,16 @@ test('service-worker upgrade replaces the old fixture with one consistent curren
     if(!await page.evaluate(()=>Boolean(navigator.serviceWorker.controller)))await page.reload();
     await expect(page.locator('span[data-app-version]')).toHaveText('15.3.9');
 
+    const preservedLocalData={
+      'ddmg-test-imported-backup':'backup-state',
+      'ddmg-test-lake-como-trip':'lake-como-trip-state',
+      'ddmg-test-readiness':'readiness-state',
+      'ddmg-test-gear':'gear-state',
+      'ddmg-test-communication':'communication-state',
+      'ddmg-test-journal-history':'journal-history-state'
+    };
+    await page.evaluate(data=>Object.entries(data).forEach(([key,value])=>localStorage.setItem(key,value)),preservedLocalData);
+
     await setServerMode(request,'current');
     await page.evaluate(async()=>{const registration=await navigator.serviceWorker.getRegistration();await registration.update();});
     await expect(page.locator('#update')).toHaveClass(/show/);
@@ -34,6 +44,7 @@ test('service-worker upgrade replaces the old fixture with one consistent curren
     expect(state.modules).toEqual([RELEASE_MODULE]);
     expect(state.caches.some(name=>name.includes('v15-3-9'))).toBeFalsy();
     expect(state.caches.filter(name=>name.includes(`v${APP_VERSION.replaceAll('.','-')}`))).toHaveLength(1);
+    expect(await page.evaluate(keys=>Object.fromEntries(keys.map(key=>[key,localStorage.getItem(key)])),Object.keys(preservedLocalData))).toEqual(preservedLocalData);
     await expect(page.locator('#update')).not.toHaveClass(/show/);
     expect(navigationCount,'upgrade must not enter a reload loop').toBeLessThanOrEqual(4);
   }finally{

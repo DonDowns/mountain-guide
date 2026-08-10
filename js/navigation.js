@@ -19,7 +19,7 @@
   {title:'Red Display',description:'Open the display control at the top of Home',target:'campfireHero',terms:'night red campfire dark display'},
   {title:'Trip setup',description:'Build or edit an expedition',target:'trip-builder',terms:'trip builder setup plan planning expedition'},
   {title:'Planning and turnaround',description:'Open Trip Intelligence planning checks',target:'intelligence',aliases:['turnaround','turn around'],terms:'planning start overdue decision'},
-  {title:'Version / About',description:'Version and installation information',target:'page-footer',aliases:['version','about'],terms:'release build',featured:true},
+  {title:'Version / About',description:'Version, installation, and update status',target:'version-about',focus:'#checkUpdatesBtn',aliases:['version','about','update','check update','latest version'],terms:'release build updates check latest',featured:true},
   {title:'Home',description:'Return to Mountain Guide Home',target:'home',terms:'top start dashboard'}
  ];
  const byId=id=>document.getElementById(id);
