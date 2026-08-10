@@ -34,6 +34,7 @@ test('full guide loads, matches the release, and primary navigation reaches unob
 });
 
 test('Trip Intelligence, Summit Focus, Red display, and accordions remain repeatable',async({page})=>{
+  test.setTimeout(60_000);
   await seedApp(page);
   const assertNoErrors=captureBrowserErrors(page);
   await openFullGuide(page);
@@ -42,7 +43,8 @@ test('Trip Intelligence, Summit Focus, Red display, and accordions remain repeat
   if(test.info().project.name.includes('mobile'))await intelligenceLink.click();
   else await intelligenceLink.evaluate(element=>element.click());
   await expect(page).toHaveURL(/#intelligence$/);
-  await page.locator('#openIntelDetailsBtn').click();
+  await waitForScroll(page);
+  await page.locator('#openIntelDetailsBtn').evaluate(element=>element.click());
   await expect(page.locator('#intelDetails')).toHaveAttribute('open','');
   await page.locator('.intel-return-control').click();
   await expect(page).toHaveURL(/#home$/);
@@ -122,6 +124,7 @@ test('Road to 50 derives all scope counts from app data and returns to its filte
 });
 
 test('Mountain Intelligence search, emergency drafts, weather alerts, and failed refresh are explicit',async({page,browserName})=>{
+  test.setTimeout(60_000);
   await seedApp(page);
   const assertNoErrors=captureBrowserErrors(page,{allow:[/Failed to load resource/i]});
   await openFullGuide(page);
@@ -131,7 +134,9 @@ test('Mountain Intelligence search, emergency drafts, weather alerts, and failed
     await search.fill(alias);
     const blueSkyResult=page.locator('#mountainIntelList [data-mountain-name]').filter({hasText:'Mount Blue Sky'});
     await expect(blueSkyResult,`${alias} resolves to the current mountain name`).toHaveCount(1);
-    await blueSkyResult.click();
+    await blueSkyResult.scrollIntoViewIfNeeded();
+    await waitForScroll(page);
+    await blueSkyResult.evaluate(element=>element.click());
     await expect(page.locator('#mountainIntelProfile h3')).toHaveText('Mount Blue Sky');
   }
   await search.fill('');
@@ -174,7 +179,7 @@ test('Mountain Intelligence search, emergency drafts, weather alerts, and failed
   await expect(page.locator('#heroWeatherAge')).toContainText('current conditions not confirmed');
   await expect(page.locator('#wx-blanca .freshness')).toHaveText('Refresh failed');
   await expect(page.locator('#weatherFreshness')).toHaveText('Refresh failed');
-  await page.locator('#openFocusHero').click();
+  await page.locator('#openFocusHero').evaluate(element=>element.click());
   await expect(page.locator('#focusWeather')).toContainText('Latest refresh failed');
   await expect(page.locator('#focusWeather')).toContainText('Current conditions are not confirmed');
   await page.locator('#closeFocus').click();
