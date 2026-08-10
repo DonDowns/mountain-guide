@@ -2828,3 +2828,42 @@ select{min-height:46px!important}
 .weather-refresh-failure{display:grid;gap:4px;margin:0 0 12px;padding:12px 14px;border:2px solid #a94337;border-radius:13px;background:#f8dedb;color:#702c27;line-height:1.4}.weather-refresh-failure strong{font-size:14px}.weather-refresh-failure span{font-weight:750}.weather-refresh-failure small{color:inherit}.focus-weather-card{flex-wrap:wrap}.focus-weather-card .weather-refresh-failure{flex:1 0 100%;background:#4a1712;color:#ffd8ce;border-color:#ff9a77}.campfire-mode .weather-refresh-failure{background:#32100d;color:#ffd0bd;border-color:#ff6a3c}
 .emergency-call-first{padding:12px 14px;border:2px solid var(--red);border-radius:14px;background:#f8dedb;color:#702c27;line-height:1.5}.emergency-area-detail{margin-top:12px;padding:12px 0 0;border-top:1px solid var(--line)}.emergency-area-detail h4{margin:0 0 6px}.emergency-area-detail p{margin:6px 0}.emergency-primary{background:#7a2019!important;border-color:#7a2019!important;color:#fff!important}.campfire-mode .emergency-call-first{background:#32100d;color:#ffd0bd;border-color:#ff6a3c}
 @media(max-width:430px){.focus-sheet-top{align-items:flex-start}.focus-sheet-controls{flex:none}.focus-sheet-controls>button:first-child{display:inline-flex;align-items:center;justify-content:center;min-height:44px;font-size:12px;white-space:nowrap}}
+
+/* Version 15.3.11 — Crew Companion distribution */
+.crew-section{scroll-margin-top:78px}
+.crew-setup-card{padding:22px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--paper) 82%,var(--ice)),var(--paper));box-shadow:var(--shadow)}
+.crew-setup-head,.crew-flow-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.crew-setup-head h3,.crew-flow-head h3,.crew-instruction-card h3{margin:4px 0 7px;font-size:clamp(22px,3vw,30px);line-height:1.1}
+.crew-setup-head p{max-width:680px;margin:0;color:var(--muted)}
+.crew-release-status{flex:none;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--muted);font-size:12px;font-weight:850}
+.crew-primary-grid{display:grid;grid-template-columns:minmax(280px,.9fr) minmax(300px,1.1fr);gap:18px;margin-top:20px}
+.crew-qr-card,.crew-action-card{min-width:0;padding:18px;border:1px solid var(--line);border-radius:19px;background:var(--paper)}
+.crew-qr-card:focus-visible{outline:3px solid color-mix(in srgb,var(--gold) 75%,white);outline-offset:3px}
+.crew-qr-card img{display:block;width:min(100%,360px);height:auto;margin:12px auto;padding:9px;border:1px solid var(--line);border-radius:16px;background:white}
+.crew-url{margin:10px 0 4px;text-align:center;overflow-wrap:anywhere}.crew-url a{font-weight:900}
+.crew-qr-note{margin:4px 0 0;color:var(--muted);font-size:12px;text-align:center}
+.crew-action-card{display:flex;flex-direction:column;justify-content:center}.crew-action-card h4{margin:4px 0 14px;font-size:24px}
+.crew-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crew-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:11px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font-weight:900;text-align:center;text-decoration:none;cursor:pointer}
+.crew-button[hidden]{display:none}
+.crew-button.crew-primary{border-color:transparent;background:var(--gold);color:#17242b}
+.crew-fallback,.crew-action-status{min-height:21px;margin:12px 0 0;color:var(--muted);font-size:13px;font-weight:800}
+.crew-privacy-note{margin:14px 0 0;padding:13px 14px;border-left:4px solid var(--sage);border-radius:12px;background:var(--ice);color:var(--muted);font-size:13px;line-height:1.5}.crew-privacy-note b{color:var(--ink)}
+.crew-instruction-grid,.crew-artifact-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.crew-instruction-card h3{font-size:24px}.crew-instruction-card ol,.crew-instruction-card ul{margin:12px 0;padding-left:24px}.crew-instruction-card li{margin:7px 0}.crew-instruction-card>p{color:var(--muted)}
+.crew-each-phone{padding:11px 13px;border-radius:12px;background:var(--ice)}
+.crew-checklist{list-style:"✓  "}.crew-checklist li::marker{color:var(--sage);font-weight:950}
+.crew-flow-card{margin-top:14px}.crew-flow-head>span{flex:none;padding:6px 9px;border-radius:999px;background:var(--ice);color:var(--muted);font-size:12px;font-weight:900}
+.crew-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;counter-reset:crew-step;margin:16px 0 0;padding:0;list-style:none}.crew-flow li{position:relative;min-height:58px;padding:12px 12px 12px 48px;border:1px solid var(--line);border-radius:14px;background:var(--ice);counter-increment:crew-step}.crew-flow li:before{content:counter(crew-step);position:absolute;left:12px;top:11px;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:var(--navy);color:white;font-size:12px;font-weight:950}
+.crew-artifact{display:flex;flex-direction:column;min-height:132px;justify-content:center;color:var(--ink);text-decoration:none}.crew-artifact strong{margin:5px 0;font-size:22px}.crew-artifact small{color:var(--muted)}.crew-pocket-card{border-left:6px solid var(--gold)}
+.crew-boundary{margin:14px 0 0;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--muted)}.crew-boundary b{color:var(--ink)}
+.campfire-mode .crew-setup-card,.campfire-mode .crew-qr-card,.campfire-mode .crew-action-card,.campfire-mode .crew-flow li,.campfire-mode .crew-privacy-note,.campfire-mode .crew-boundary{background:#1b0705!important;border-color:rgba(255,106,60,.28)!important;color:#ffd9cb!important}
+@media(max-width:780px){
+ .bottom-nav{grid-template-columns:repeat(7,minmax(0,1fr))}
+ .crew-setup-card{padding:15px}.crew-setup-head{display:block}.crew-release-status{display:inline-flex;margin-top:12px}
+ .crew-primary-grid,.crew-instruction-grid,.crew-artifact-grid,.crew-flow{grid-template-columns:1fr}
+ .crew-actions{grid-template-columns:1fr}.crew-button{width:100%}
+ .crew-qr-card img{width:min(100%,330px)}
+}
+@media(max-width:420px){.crew-qr-card,.crew-action-card{padding:14px}.crew-flow li{padding-right:10px}.bottom-nav a,.bottom-nav a:nth-child(2),.bottom-nav a:nth-child(3){font-size:8px}}
+@media print{.crew-actions,.crew-action-status,.crew-fallback,.crew-release-status{display:none!important}.crew-primary-grid,.crew-instruction-grid,.crew-artifact-grid{grid-template-columns:1fr 1fr}.crew-flow{grid-template-columns:1fr 1fr}}

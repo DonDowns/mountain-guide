@@ -25,6 +25,18 @@ test('installed full guide and Climb Mode reload offline without mixed-version s
     await page.locator('#heroWeatherRefresh').click();
     await expect(page.locator('#heroWeatherAge')).toContainText(/Saved offline|not confirmed current|current conditions not confirmed/i);
     await expect(page.locator('#emergency')).toContainText('Call 911 first');
+    await expect(page.locator('#crew')).toContainText('Set Up a Friend');
+    await expect(page.locator('#crew')).toContainText('EACH PHONE');
+    await expect(page.locator('#crew')).toContainText('Offline Check on each phone');
+    await expect(page.locator('#companionQr')).toBeVisible();
+    await expect(page.locator('#companionUrlText')).toHaveText('https://companion.vondadowns.com/');
+    await expect(page.locator('#openCompanion')).toHaveAttribute('href','https://companion.vondadowns.com/');
+    await expect(page.locator('#crewFieldGuide')).toHaveAttribute('href','https://companion.vondadowns.com/generated/field-guide.pdf');
+    await expect(page.locator('#crewPocketCard')).toHaveAttribute('href','https://companion.vondadowns.com/generated/pocket-card.pdf');
+    await expect(page.locator('#companionReleaseStatus')).toHaveText('Companion status unavailable while offline.');
+    const cachedRequests=await page.evaluate(async()=>{const entries=[];for(const name of await caches.keys()){const cache=await caches.open(name);entries.push(...(await cache.keys()).map(request=>request.url))}return entries});
+    expect(cachedRequests.some(url=>url.includes('companion.vondadowns.com'))).toBe(false);
+    expect(cachedRequests.some(url=>url.endsWith('/companion-qr.png'))).toBe(true);
 
     await page.goto('/climb.html',{waitUntil:'domcontentloaded'});
     await expect(page.locator('#version')).toHaveText(APP_VERSION);

@@ -9,6 +9,7 @@ const checks=[
   'check-sw-cache.mjs',
   'check-references.mjs',
   'check-privacy.mjs',
+  'check-companion.mjs',
   'check-safety-language.mjs',
   'check-cleanliness.mjs',
   'check-git-diff.mjs'

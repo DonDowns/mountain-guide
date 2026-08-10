@@ -1,12 +1,22 @@
-# Don Downs Mountain Guide — Version 15.3.10
+# Don Downs Mountain Guide — Version 15.3.11
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.10 is the current field-readiness hotfix candidate.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.11 is a Crew Companion integration candidate pending physical iPhone validation.
 
 ## Current release
 
-**Version 15.3.10 — Lake Como Field-Readiness Hotfix**
+**Version 15.3.11 — Crew Companion Integration Candidate**
 
 This release includes:
+
+- a native Crew navigation tab centered on the Set Up a Friend workflow;
+- public-only Open Companion, Show QR Code, Share Companion, and Copy Link actions;
+- a validated single-source Companion URL contract for the home app, 3-Page Field Guide, Emergency Pocket Card, and optional release metadata;
+- a deterministic repository-local QR PNG that encodes only `https://companion.vondadowns.com/`;
+- per-phone iPhone installation, Offline Check, and physical Airplane Mode instructions;
+- a seven-step friend setup flow with public artifacts and an explicit device-local privacy boundary;
+- optional, nonblocking Companion release metadata with neutral offline/failure states;
+- service-worker caching of only the local Crew interface and QR asset, never cross-origin Companion resources;
+- automated Chromium/WebKit coverage for Crew navigation, sharing, clipboard privacy, QR decoding, offline rendering, accessibility, and iPhone layout;
 
 - cautious, location-aware emergency wording for Lake Como / Blanca / Ellingwood and Mount Lindsey, with Alamosa, Costilla, and Huerfano public contacts retained;
 - draft-message wording that tells the user to call 911 and provide an exact location without asserting a single definitive county;
@@ -52,6 +62,8 @@ This release includes:
 
 Personal emergency-contact phone numbers and email addresses are **not stored in this repository**. They are entered separately on each device and saved only in that browser's local storage.
 
+Crew shares only the public Companion URL and intentionally public explanatory copy. It does not read or transmit Mountain Guide local storage, trip state, emergency contacts, journal/history, gear completion, notes, filters, search state, or device location.
+
 The public source contains official county sheriff and dispatch numbers used for trip-aware emergency reference. The app does not claim that a message was sent, that help was requested, or that rescue was activated.
 
 ## Production structure
@@ -69,7 +81,7 @@ Do not move files out of the `js` directory. Relative paths are required by the 
 
 ## Static release-safety checks
 
-The repository includes dependency-free Node checks for release consistency, offline-cache completeness, local references, privacy, safety-language review, and repository cleanliness. No `npm install` is required.
+The repository includes Node checks for release consistency, offline-cache completeness, local references, privacy, safety-language review, Crew contract/QR determinism, and repository cleanliness. Install the locked development dependencies before running them.
 
 Run the complete gate:
 
