@@ -13,6 +13,7 @@ This release includes:
 - actionable results that scroll to and focus the real destination or hand Evans aliases to the existing Mountain Intelligence search;
 - explicit Bottom, Top, Home, Data Transfer, and footer/version shortcuts for the long full-guide page;
 - safe-area-aware 44px-or-larger controls, increased-text wrapping, keyboard focus containment, and mobile overflow coverage;
+- a mobile Find position that stays clear of both primary navigation and the ready-update banner;
 - navigation that does not serialize local data, add query-string state, or write device state merely by moving through the guide;
 
 - all Version 15.3.11 Crew Companion behavior retained, including the public-only privacy boundary and offline Crew interface;

@@ -73,6 +73,13 @@ test('Top, Bottom, Home, and global Find fit the 390x844 mobile viewport with ac
   await expect(emergency).toBeVisible();
   const emergencyBox=await emergency.boundingBox();
   expect(findBox.y+findBox.height).toBeLessThanOrEqual(emergencyBox.y);
+  await page.locator('#update').evaluate(element=>element.classList.add('show'));
+  await expect(page.locator('.global-find-fab-wrap')).toHaveClass(/update-clearance/);
+  const shiftedFindBox=await find.boundingBox();
+  const updateBox=await page.locator('#update').boundingBox();
+  const overlapsUpdate=!(shiftedFindBox.x+shiftedFindBox.width<=updateBox.x||updateBox.x+updateBox.width<=shiftedFindBox.x||shiftedFindBox.y+shiftedFindBox.height<=updateBox.y||updateBox.y+updateBox.height<=shiftedFindBox.y);
+  expect(overlapsUpdate,'Find stays reachable while an app update is ready').toBe(false);
+  await page.locator('#update').evaluate(element=>element.classList.remove('show'));
 
   await page.locator('[data-page-jump="page-footer"]').click();
   await waitForScroll(page);
