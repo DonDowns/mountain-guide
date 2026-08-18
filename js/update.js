@@ -16,6 +16,15 @@ let registration=null;
 let waitingWorker=null;
 let status='up-to-date';
 let statusDetail='';
+const UPDATE_CONFIRMATION_KEY='__ddmg_update_installed';
+let updateInstalledNotice=false;
+try{
+ if(sessionStorage.getItem(UPDATE_CONFIRMATION_KEY)==='1'){
+  sessionStorage.removeItem(UPDATE_CONFIRMATION_KEY);
+  updateInstalledNotice=true;
+  statusDetail='Update successfully installed.';
+ }
+}catch(_){}
 let lastError=null;
 let lastCheckAt=0;
 let hiddenAt=0;
@@ -197,7 +206,11 @@ async function checkForUpdates({manual=false,reason=manual?'manual':'automatic'}
   if(registration.installing){
    observeWorker(registration.installing);
    if(registration.active||serviceWorkers?.controller)setStatus('downloading');
-  }else setStatus('up-to-date');
+  }else{
+   const detail=updateInstalledNotice?'Update successfully installed.':'';
+   updateInstalledNotice=false;
+   setStatus('up-to-date',{detail});
+  }
   return true;
  }).catch(error=>{
   logUpdateFailure(error,`${reason} update check failed`);
@@ -238,6 +251,7 @@ function handleControllerChange(){
  if(!applyRequested||controllerReloadIssued)return;
  controllerReloadIssued=true;clearTimeout(activationTimer);activationTimer=0;
  applying=false;waitingWorker=null;setStatus('up-to-date');
+ try{sessionStorage.setItem(UPDATE_CONFIRMATION_KEY,'1')}catch(_){}
  location.reload();
 }
 
@@ -256,6 +270,9 @@ async function handleVisibilityChange(){
 function bindControls(){
  byId('applyUpdateBtn')?.addEventListener('click',applyUpdate);
  byId('checkUpdatesBtn')?.addEventListener('click',()=>checkForUpdates({manual:true}));
+ if(updateInstalledNotice&&typeof globalThis.toast==='function'){
+  globalThis.toast('Update successfully installed.');
+ }
  render();
 }
 

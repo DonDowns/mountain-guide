@@ -130,6 +130,7 @@ test('successful activation reloads once, exactly after controllerchange',async(
  await navigation;
  await expect.poll(()=>page.evaluate(()=>Number(sessionStorage.getItem('__updateApplyMessages')||0))).toBe(1);
  await expect(page.locator('#updateStatus')).toHaveText('Up to date');
+ await expect(page.locator('#updateStatusDetail')).toHaveText('Update successfully installed.');
  await page.waitForTimeout(150);
  expect(navigations,'controllerchange causes one coherent reload').toBe(1);
 });
