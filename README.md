@@ -1,13 +1,14 @@
-# Don Downs Mountain Guide — Version 15.3.14
+# Don Downs Mountain Guide — Version 15.3.15
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.14 makes installed-PWA updates visible, explicit, retryable, and diagnosable while preserving the complete offline release and device-local data.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.15 hardens the master release baseline and makes installed-PWA updates visible, explicit, retryable, and diagnosable with persistent post-activation confirmation across reload while preserving the complete offline release and device-local data.
 
 ## Current release
 
-**Version 15.3.14 — Reliable PWA Update UX**
+**Version 15.3.15 — Master Hardening and PWA Update Confirmation**
 
 This release includes:
 
+- persistent post-activation update installation confirmation across reload, displaying "Update successfully installed." and toast notification before returning to normal "Up to date" state;
 - a single update state model driven by the real service-worker registration, including checking, downloading, installed/waiting, failure, offline, and up-to-date states;
 - proactive online checks after service-worker readiness and after meaningful foreground resumes, plus an explicit **Check for Updates** action;
 - detection of a worker already waiting at startup and workers that become waiting through `updatefound`, installation, or background activity;
@@ -187,13 +188,16 @@ Recommended commit message:
 
 After deployment:
 
-1. Confirm the footer and Version / About section display **Version 15.3.14**.
+1. Confirm the footer and Version / About section display **Version 15.3.15**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
 5. Relaunch both pages in Airplane Mode.
 
 ## Release history
+
+### Version 15.3.15
+Hardens the master v1 release baseline, persists post-activation update installation confirmation across controllerchange reload, displays explicit installation confirmation before returning to the normal Up to date state, and verifies all 58 Colorado 14er summits, Climb Mode, and safety invariants across the full test matrix.
 
 ### Version 15.3.14
 Adds registration-backed update detection, throttled proactive and manual checks, explicit waiting-worker activation, a visible safe-area-aware update banner, Version / About diagnostics, and an obsolete-origin warning without changing or clearing device-local data.

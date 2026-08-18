@@ -1,4 +1,4 @@
-/* Version 15.3.14 — reliable, explicit installed-PWA update lifecycle. */
+/* Version 15.3.15 — reliable, explicit installed-PWA update lifecycle. */
 (()=>{
 'use strict';
 
