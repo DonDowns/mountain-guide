@@ -126,6 +126,7 @@ test('successful activation reloads once, exactly after controllerchange',async(
  let navigations=0;
  page.on('framenavigated',frame=>{if(frame===page.mainFrame())navigations+=1});
  const navigation=page.waitForEvent('framenavigated',frame=>frame===page.mainFrame());
+ await page.evaluate(()=>{globalThis.DDMG_VERSION='0.0.0-old'});
  await page.locator('#applyUpdateBtn').click();
  await navigation;
  await expect.poll(()=>page.evaluate(()=>Number(sessionStorage.getItem('__updateApplyMessages')||0))).toBe(1);
@@ -133,6 +134,48 @@ test('successful activation reloads once, exactly after controllerchange',async(
  await expect(page.locator('#updateStatusDetail')).toHaveText('Update successfully installed.');
  await page.waitForTimeout(150);
  expect(navigations,'controllerchange causes one coherent reload').toBe(1);
+});
+
+test('success confirmation requires a durable version transition and survives session destruction',async({page})=>{
+ await openWithHarness(page);
+ await page.evaluate(()=>{
+  localStorage.setItem('__ddmg_update_attempt',JSON.stringify({version:'0.0.0-old',time:globalThis.__DDMG_UPDATE_CLOCK.now()}));
+  sessionStorage.clear();
+  sessionStorage.setItem('__mountainGuideE2ESeeded', '1');
+ });
+ await page.reload();
+ await expect(page.locator('#updateStatusDetail')).toHaveText('Update successfully installed.');
+ await page.reload();
+ await expect(page.locator('#updateStatusDetail')).not.toHaveText('Update successfully installed.');
+});
+
+test('no success confirmation if the loaded version matches the pre-update version',async({page})=>{
+ await openWithHarness(page);
+ await page.evaluate((v)=>{
+  localStorage.setItem('__ddmg_update_attempt',JSON.stringify({version:v,time:globalThis.__DDMG_UPDATE_CLOCK.now()}));
+ },APP_VERSION);
+ await page.reload();
+ await expect(page.locator('#updateStatusDetail')).not.toHaveText('Update successfully installed.');
+});
+
+test('expired update records are cleaned up without falsely confirming success',async({page})=>{
+ await openWithHarness(page);
+ await page.evaluate(()=>{
+  localStorage.setItem('__ddmg_update_attempt',JSON.stringify({version:'0.0.0-old',time:globalThis.__DDMG_UPDATE_CLOCK.now()-10*60*1000}));
+ });
+ await page.reload();
+ await expect(page.locator('#updateStatusDetail')).not.toHaveText('Update successfully installed.');
+ expect(await page.evaluate(()=>localStorage.getItem('__ddmg_update_attempt'))).toBeNull();
+});
+
+test('storage access errors do not crash initialization and safely degrade',async({page})=>{
+ await useFakeServiceWorker(page);
+ await page.addInitScript(()=>{
+  Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Access denied')}});
+ });
+ await seedApp(page);
+ await page.goto('/index.html');
+ await expect(page.locator('#updateStatus')).toHaveText('Up to date');
 });
 
 test('foreground checks require meaningful time away and obey the automatic throttle',async({page})=>{
