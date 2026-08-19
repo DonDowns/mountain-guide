@@ -16,13 +16,20 @@ let registration=null;
 let waitingWorker=null;
 let status='up-to-date';
 let statusDetail='';
-const UPDATE_CONFIRMATION_KEY='__ddmg_update_installed';
+const UPDATE_CONFIRMATION_KEY='__ddmg_update_attempt';
 let updateInstalledNotice=false;
 try{
- if(sessionStorage.getItem(UPDATE_CONFIRMATION_KEY)==='1'){
-  sessionStorage.removeItem(UPDATE_CONFIRMATION_KEY);
-  updateInstalledNotice=true;
-  statusDetail='Update successfully installed.';
+ const attemptStr=localStorage.getItem(UPDATE_CONFIRMATION_KEY);
+ if(attemptStr){
+  const attempt=JSON.parse(attemptStr);
+  if(attempt.version!==globalThis.DDMG_VERSION){
+   const ageMinutes=(clock.now()-attempt.time)/60000;
+   if(ageMinutes<5){
+    updateInstalledNotice=true;
+    statusDetail='Update successfully installed.';
+   }
+  }
+  localStorage.removeItem(UPDATE_CONFIRMATION_KEY);
  }
 }catch(_){}
 let lastError=null;
@@ -238,6 +245,7 @@ function applyUpdate(){
  if(applying||!worker||worker!==waitingWorker||worker.state!=='installed')return false;
  applying=true;applyRequested=true;setStatus('applying');
  try{
+  localStorage.setItem(UPDATE_CONFIRMATION_KEY,JSON.stringify({version:globalThis.DDMG_VERSION,time:clock.now()}));
   worker.postMessage({type:'SKIP_WAITING'});
   activationTimer=setTimeout(()=>activationFailed(new Error('ActivationTimeout')),ACTIVATION_TIMEOUT_MS);
   return true;
@@ -251,7 +259,6 @@ function handleControllerChange(){
  if(!applyRequested||controllerReloadIssued)return;
  controllerReloadIssued=true;clearTimeout(activationTimer);activationTimer=0;
  applying=false;waitingWorker=null;setStatus('up-to-date');
- try{sessionStorage.setItem(UPDATE_CONFIRMATION_KEY,'1')}catch(_){}
  location.reload();
 }
 

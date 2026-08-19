@@ -1,10 +1,10 @@
-# Don Downs Mountain Guide — Version 15.3.15
+# Don Downs Mountain Guide — Version 15.3.16
 
-A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.15 hardens the master release baseline and makes installed-PWA updates visible, explicit, retryable, and diagnosable with persistent post-activation confirmation across reload while preserving the complete offline release and device-local data.
+A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.16 hardens the master release baseline and makes installed-PWA updates visible, explicit, retryable, and diagnosable with persistent post-activation confirmation across reload while preserving the complete offline release and device-local data.
 
 ## Current release
 
-**Version 15.3.15 — Master Hardening and PWA Update Confirmation**
+**Version 15.3.16 — Master Hardening and PWA Update Confirmation**
 
 This release includes:
 
@@ -188,7 +188,7 @@ Recommended commit message:
 
 After deployment:
 
-1. Confirm the footer and Version / About section display **Version 15.3.15**.
+1. Confirm the footer and Version / About section display **Version 15.3.16**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
@@ -196,7 +196,7 @@ After deployment:
 
 ## Release history
 
-### Version 15.3.15
+### Version 15.3.16
 Hardens the master v1 release baseline, persists post-activation update installation confirmation across controllerchange reload, displays explicit installation confirmation before returning to the normal Up to date state, and verifies all 58 Colorado 14er summits, Climb Mode, and safety invariants across the full test matrix.
 
 ### Version 15.3.14
