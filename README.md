@@ -1,12 +1,14 @@
-# Don Downs Mountain Guide — Version 15.3.16
+# Don Downs Mountain Guide — Version 15.3.17
 
 A private-use, offline-capable Colorado mountain planning and summit-history web app. Version 15.3.16 hardens the master release baseline and makes installed-PWA updates visible, explicit, retryable, and diagnosable with persistent post-activation confirmation across reload while preserving the complete offline release and device-local data.
 
 ## Current release
 
-**Version 15.3.16 — Master Hardening and PWA Update Confirmation**
+**Version 15.3.17 — Mountain Memories heading**
 
-This release includes:
+Renames the personal summit memories section to **Mountain Memories**. All behavior from Version 15.3.16 is retained.
+
+The prior master hardening and PWA update confirmation release includes:
 
 - persistent post-activation update installation confirmation across reload, displaying "Update successfully installed." and toast notification before returning to normal "Up to date" state;
 - a single update state model driven by the real service-worker registration, including checking, downloading, installed/waiting, failure, offline, and up-to-date states;
