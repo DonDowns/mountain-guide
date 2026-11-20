@@ -190,7 +190,7 @@ Recommended commit message:
 
 After deployment:
 
-1. Confirm the footer and Version / About section display **Version 15.3.16**.
+1. Confirm the footer and Version / About section display **Version 15.3.17**.
 2. Open Climb Mode and confirm the selected objective and forecast state are correct.
 3. Enter the personal emergency contact locally on the intended phone.
 4. Confirm SMS and email drafts open correctly.
