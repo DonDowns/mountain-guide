@@ -10,6 +10,7 @@ test('full guide loads, matches the release, and primary navigation reaches unob
   const assertNoErrors=captureBrowserErrors(page);
   await openFullGuide(page);
   await expect(page.locator(`script[src="${RELEASE_MODULE}"]`)).toHaveCount(1);
+  await expect(page.locator('#stories').getByRole('heading',{level:2,name:'Mountain Memories',exact:true})).toHaveCount(1);
 
   const destinations={Home:{id:'home',nav:'home'},Plan:{id:'expedition',nav:'expedition'},Crew:{id:'crew',nav:'crew'},Weather:{id:'intelligence',nav:'intelligence'},Summits:{id:'summits',nav:'summits'},Gear:{id:'gear',nav:'gear'},Emergency:{id:'emergency',nav:'emergency'}};
   for(const [label,{id,nav}] of Object.entries(destinations)){
